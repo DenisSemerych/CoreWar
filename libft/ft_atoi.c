@@ -6,7 +6,7 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 12:32:50 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/24 13:26:08 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/03/13 16:12:55 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static int		ft_isspace(char c)
 	return (0);
 }
 
-int			ft_atoi(const char *str)
+int				ft_atoi(const char *str)
 {
 	unsigned long int	nb;
-	int			digit;
-	int			n;
+	int					digit;
+	int					n;
 
 	n = 0;
 	nb = 0;

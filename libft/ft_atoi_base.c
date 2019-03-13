@@ -6,7 +6,7 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 16:26:18 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/29 16:05:42 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/03/13 16:11:54 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	ft_getnum(char num, char *base)
 int			ft_atoi_base(char *num, char *base)
 {
 	int			bs;
-	long int		nb;
+	long int	nb;
 	int			sign;
 
 	sign = 1;

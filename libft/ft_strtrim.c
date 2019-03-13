@@ -6,7 +6,7 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 15:42:54 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/25 17:32:05 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/03/13 16:09:21 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ char		*ft_strtrim(char const *s)
 {
 	char	*p;
 	char	*fresh;
-	int	m;
-	int	n;
+	int		m;
+	int		n;
 
 	m = 0;
 	n = 0;
