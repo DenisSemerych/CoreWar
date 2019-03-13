@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <errno.h>
-# define BUFF_SIZE 1
+# define BUFF_SIZE 128
 
 typedef struct		s_list
 {

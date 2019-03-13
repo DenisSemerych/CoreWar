@@ -10,7 +10,7 @@ typedef struct s_lable
     char *name;
     t_list *instruction;
 }              t_lable;
-t_list    *read_from_file(char *file_name);
+char *read_from_file(char *file_name);
 t_list    *tokenize(t_list *file);
 
 #endif

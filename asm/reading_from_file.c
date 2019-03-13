@@ -9,54 +9,50 @@ void      check_filename(char *path)
     name = ft_strdup(splited[count_size(splited) - 1]);
     free_str_arr(splited, count_size(splited));
     splited = ft_strsplit(name, '.');
-    if (count_size(splited) == 1)
+    if (count_size(splited) == 1 || ft_strcmp(splited[1], "s"))
     {
-        ft_printf("%s%s invalid. ", RED, name);
-        put_err_msg_exit(" File extension must be .s");
+        ft_printf("%s%s invalid. ",RED, name);
+        put_err_msg_exit("File extension must be .s");
     }
-    if (count_size(splited) != 2)
+    else if (count_size(splited) != 2)
     {
         ft_printf("%s%s invalid. ",RED, name);
         put_err_msg_exit(" File can have only one '.'(dot) in name");
     }
-    if (ft_strcmp(splited[1], "s"))
-    {
-        ft_printf("%s invalid. ",RED, name);
-        put_err_msg_exit("File extension must be .s");
-    }
     free_str_arr(splited, count_size(splited));
+    free(name);
 }
+//
+//void      set_elem(t_list **crawler, int line_nbr, char *line)
+//{
+//    (*crawler)->content = line;
+//    (*crawler)->content_size = line_nbr;
+//    (*crawler)->next = ft_lstnew(NULL, 0);
+//    (*crawler) = (*crawler)->next;
+//}
 
-
-t_list    *read_from_file(char *file_name)
+char *read_from_file(char *file_name)
 {
     int fd;
-    char *line;
-    t_list *file;
-    t_list *crawler;
-    int    line_nbr;
+    char *file;
+    char  buff[BUFF_SIZE + 1];
+    int   rd;
+    char *tmp;
 
     check_filename(file_name);
     if ((fd = open(file_name, O_RDONLY)) < 0)
     {
         SRC_NOT_READ(file_name);
     }
-    line = NULL;
-    file = ft_lstnew(NULL, 0);
-    crawler = file;
-    line_nbr = 1;
-    while (get_next_line(fd, &line) > 0 )
+    file = NULL;
+    if (read(fd, buff, 0) != 0)
+        put_err_msg_exit("Error in reading file");
+    while ((rd = read(fd, buff, BUFF_SIZE)) > 0)
     {
-        if (ft_strcmp(line,""))
-        {
-            crawler->content = line;
-            crawler->content_size = line_nbr;
-            crawler->next = ft_lstnew(NULL, 0);
-            crawler = crawler->next;
-        }
-        line_nbr++;
+        buff[rd] = '\0';
+        file = (char *)realloc(file, rd);
+        ft_strcat(file, buff);
     }
-    crawler->content = "EOF";
-    crawler->content_size = line_nbr;
+    ft_putstr(file);
     return (file);
 }
