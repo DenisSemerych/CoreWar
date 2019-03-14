@@ -6,7 +6,7 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 16:12:13 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/29 17:05:37 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/03/13 16:09:34 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	ft_strrev(char *str)
 {
-	int	n;
-	int	m;
-	int	len;
+	int		n;
+	int		m;
+	int		len;
 	char	buf;
 
 	if (str)

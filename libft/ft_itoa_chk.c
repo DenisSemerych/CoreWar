@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   ft_itoa_chk.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/24 11:52:02 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/24 11:57:55 by dzaporoz         ###   ########.fr       */
+/*   Created: 2019/02/06 13:25:29 by dzaporoz          #+#    #+#             */
+/*   Updated: 2019/02/06 13:26:53 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_isalpha(int c)
+int		ft_itoa_chk(char *string, int number)
 {
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	return (0);
+	char *test;
+
+	test = ft_itoa(number);
+	number = (!ft_strcmp(string, test)) ? 1 : 0;
+	free(test);
+	return (number);
 }

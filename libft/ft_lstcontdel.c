@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   ft_lstcontdel.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/24 11:52:02 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/24 11:57:55 by dzaporoz         ###   ########.fr       */
+/*   Created: 2019/01/12 15:43:24 by dzaporoz          #+#    #+#             */
+/*   Updated: 2019/01/12 15:45:12 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_isalpha(int c)
+void	ft_lstcontdel(void *p, size_t size)
 {
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	return (0);
+	if (!p)
+		return ;
+	ft_bzero(p, size);
+	free(p);
 }

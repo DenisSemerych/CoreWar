@@ -18,5 +18,7 @@ char	*ft_strnew(size_t size)
 
 	if ((p = (char*)malloc(size + 1)))
 		ft_bzero((void*)p, size + 1);
+	else
+		return (NULL);
 	return (p);
 }
