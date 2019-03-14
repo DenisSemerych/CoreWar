@@ -1,6 +1,7 @@
 #include "vm.h"
 
-int main() {
+int main(int argc, char** argv)
+{
 	ft_putstr("test");
-	return 0;
+	return (0);
 }
