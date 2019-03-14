@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   ft_lstcount.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/24 11:52:02 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/24 11:57:55 by dzaporoz         ###   ########.fr       */
+/*   Created: 2019/01/29 14:37:12 by dzaporoz          #+#    #+#             */
+/*   Updated: 2019/01/29 14:49:48 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_isalpha(int c)
+size_t		ft_lstcount(t_list *lst)
 {
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	return (0);
+	size_t counter;
+
+	counter = 0;
+	while (lst)
+	{
+		counter++;
+		lst = lst->next;
+	}
+	return (counter);
 }

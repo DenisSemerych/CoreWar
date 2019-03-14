@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   ft_splitdel.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/24 11:52:02 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/24 11:57:55 by dzaporoz         ###   ########.fr       */
+/*   Created: 2019/02/06 13:37:02 by dzaporoz          #+#    #+#             */
+/*   Updated: 2019/02/06 13:37:33 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_isalpha(int c)
+void	ft_splitdel(char **chrarr)
 {
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	return (0);
+	int n;
+
+	n = 0;
+	while (chrarr[n])
+		free(chrarr[n++]);
+	free(chrarr);
 }

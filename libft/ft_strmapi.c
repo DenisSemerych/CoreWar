@@ -6,7 +6,7 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 14:19:27 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/10/25 14:51:56 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/03/13 16:10:37 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
 	unsigned int	n;
-	char		*fresh;
+	char			*fresh;
 
 	n = 0;
 	if (!s || !f)
