@@ -6,18 +6,11 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 15:42:54 by dzaporoz          #+#    #+#             */
-/*   Updated: 2019/03/13 16:09:21 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2018/10/25 17:32:05 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static int	ft_isspace(char c)
-{
-	if (c == ' ' || c == '\n' || c == '\t')
-		return (1);
-	return (0);
-}
 
 char		*ft_strtrim(char const *s)
 {

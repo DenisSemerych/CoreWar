@@ -6,17 +6,11 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 16:26:18 by dzaporoz          #+#    #+#             */
-/*   Updated: 2019/03/13 16:11:54 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/01/12 13:52:37 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static int	ft_isspace(char c)
-{
-	if (c == ' ' || c == '\n' || c == '\t' || c == '\f' || c == '\r' ||
-			c == '\v')
-		return (1);
-	return (0);
-}
+#include "libft.h"
 
 static int	ft_check_base(char *base)
 {

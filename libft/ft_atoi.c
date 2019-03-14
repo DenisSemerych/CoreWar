@@ -6,21 +6,13 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 12:32:50 by dzaporoz          #+#    #+#             */
-/*   Updated: 2019/03/13 16:12:55 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2018/10/24 13:26:08 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		ft_isspace(char c)
-{
-	if (c == ' ' || c == '\n' || c == '\t' || c == '\v'
-			|| c == '\r' || c == '\f')
-		return (1);
-	return (0);
-}
-
-int				ft_atoi(const char *str)
+int			ft_atoi(const char *str)
 {
 	unsigned long int	nb;
 	int					digit;

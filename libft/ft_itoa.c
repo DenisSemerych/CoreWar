@@ -22,9 +22,12 @@ char	*ft_itoa(int n)
 		return (ft_strdup("-2147483648"));
 	ft_bzero(nb, 12);
 	c = 10;
-	sign = (n < 0) ? 1 : 0;
-	if (sign)
+	sign = 0;
+	if (n < 0)
+	{
 		n *= -1;
+		sign = 1;
+	}
 	while (n || c == 10)
 	{
 		nb[c] = n % 10 + '0';
