@@ -11,6 +11,7 @@
 	unsigned int	op_code;
 }					t_process; */
 
-
+void	error_msg(char *str);
+int		parse_int(char *str);
 
 #endif
