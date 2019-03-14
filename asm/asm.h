@@ -5,6 +5,8 @@
 #include "libft/includes/libft.h"
 #include "printf.h"
 #define SRC_NOT_READ(name) ft_printf("%sCan't read source file %s%s\n",CYN, RED, name, RESET); exit(0)
+#define NAME 1
+#define COMMENT 2
 typedef struct s_lable
 {
     char *name;
