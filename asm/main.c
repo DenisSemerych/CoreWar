@@ -6,6 +6,7 @@ int main(int argc, char **argv)
 {
     int i;
     char *file;
+    t_list *arguments_list;
 
     i = 0;
     file = NULL;
@@ -15,12 +16,6 @@ int main(int argc, char **argv)
     while (++i < argc)
     {
         file = read_from_file(argv[i]);
-//        ft_printf(file);
-//        while (file)
-//        {
-//            ft_printf("line #%d %s\n", file->content_size, file->content);
-//            file = file->next;
-//        }
-       // file = tokenize(file);
+        arguments_list = tokenize(file);
     }
 }

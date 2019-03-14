@@ -8,9 +8,15 @@
 typedef struct s_lable
 {
     char *name;
-    t_list *instruction;
+    t_list *opp;
 }              t_lable;
+typedef struct s_opp
+{
+    char *name;
+    void *arg_1;
+    void *arg_2;
+    void *arg_3;
+}               t_opp;
 char *read_from_file(char *file_name);
-t_list    *tokenize(t_list *file);
-
+t_list    *tokenize(char *file);
 #endif

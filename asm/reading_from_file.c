@@ -53,6 +53,5 @@ char *read_from_file(char *file_name)
         file = (char *)realloc(file, rd);
         ft_strcat(file, buff);
     }
-    ft_putstr(file);
     return (file);
 }
