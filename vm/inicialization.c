@@ -12,56 +12,30 @@
 
 #include "vm.h"
 
-typedef struct		s_carriage
-{
-	int				position;
-	int				carry_flag;
-	int				live_flag;
-	int				parent_number;
-	unsigned int	reg[16];
-	int				current_command;
-	int				cycles_to_go;
-}					t_carriage;
-
-
-void	inicialization(t_list *players, t_list **carriages, unsigned char *mem_board)
+void	initialization(t_data *data)
 {
 	unsigned char	*p;
 	int				pos;	
-	t_carriage		new_carriage;
+	t_process		new_carriage;
+	t_list			*player_p;
 
-	if (!(mem_board = (unsigned char*)malloc(MEM_SIZE)))
+	if (!(data->board = (unsigned char*)malloc(MEM_SIZE)))
 		error_msg("Malloc error while initialization");
-	ft_bzero(mem_board, MEM_SIZE);
-	pos = MEM_SIZE / ft_lstcount(players);
-	p = mem_board;
-	while (players)
+	ft_bzero(data->board, MEM_SIZE);
+	data->cycle_to_die = CYCLE_TO_DIE;
+	data->playing = 1;
+	pos = MEM_SIZE / data->champs_amount;
+	p = data->board;
+	player_p = data->champs;
+	while (player_p)
 	{
-		ft_bzero(&new_carriage, sizeof(t_carriage));
-		new_carriage.position = p - mem_board;
-		new_carriage.live_flag = 1;
-		new_carriage.parent_number = ((t_champ*)players->content)->number;
-		ft_memcpy(p, ((t_champ*)players->content)->exec_code, CHAMP_MAX_SIZE);
-		ft_lstadd(carriages, ft_lstnew(&new_carriage, sizeof(new_carriage)));
+		ft_bzero(&new_carriage, sizeof(t_process));
+		new_carriage.position = p - data->board;
+		new_carriage.live = 1;
+		new_carriage.parent_number = ((t_champ*)player_p->content)->number;
+		ft_memcpy(p, ((t_champ*)player_p->content)->exec_code, CHAMP_MAX_SIZE);
+		ft_lstadd(&data->processes, ft_lstnew(&new_carriage, sizeof(t_process)));
 		p += pos;
-		players = players->next;
+		player_p = player_p->next;
 	}
-}
-
-void	play()
-{
-
-
-
-
-
-
-}
-
-void	turn()
-{
-
-
-
-
 }

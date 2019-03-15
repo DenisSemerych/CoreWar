@@ -6,9 +6,11 @@ int main(int argc, char** argv)
 {
 	t_data data;
 
-	int i = 1;
+	int i = 0;
 	ft_bzero(&data, sizeof(t_data));
 	process_champ(argc, argv, &i, &data);
-//	ft_putstr("test");
+	initialization(&data);
+	while (data.playing)
+		do_turn(&data);
 	return (0);
 }
