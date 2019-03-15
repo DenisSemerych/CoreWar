@@ -4,6 +4,7 @@
 # include "../libft/libft.h"
 # include "../includes/op.h"
 # include <fcntl.h>
+
 /*typedef struct		s_process
 {
 	unsigned int	uniq_number;
