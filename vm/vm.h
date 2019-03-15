@@ -39,5 +39,6 @@ unsigned int	*get_champ_4_bytes(int fd);
 void	print_champ(t_champ * champ);
 unsigned char	*get_champ_exec(int fd, int code_size);
 void			arg_valid(int argc, char** argv, t_data *data);
+void			reserve_numbers(int argc, char **argv, t_data *data);
 
 #endif
