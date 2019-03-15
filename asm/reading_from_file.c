@@ -11,12 +11,12 @@ void      check_filename(char *path)
     splited = ft_strsplit(name, '.');
     if (count_size(splited) == 1 || ft_strcmp(splited[1], "s"))
     {
-        ft_printf("%s%s invalid. ",RED, name);
+        printf("%s%s invalid. ",RED, name);
         put_err_msg_exit("File extension must be .s");
     }
     else if (count_size(splited) != 2)
     {
-        ft_printf("%s%s invalid. ",RED, name);
+        printf("%s%s invalid. ",RED, name);
         put_err_msg_exit(" File can have only one '.'(dot) in name");
     }
     free_str_arr(splited, count_size(splited));

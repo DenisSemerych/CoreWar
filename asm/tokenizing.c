@@ -17,8 +17,8 @@ void    save_info(char **file, t_list **info, int *line_nbr)
         command->content_size = NAME;
     else if (!ft_strncmp(*file, COMMENT_CMD_STRING, 8) && *file + 8)
         command->content_size = COMMENT;
-    else
-        error(line_nbr, *file);
+   // else
+     //   error(line_nbr, *file);
 }
 
 void    save_instruction(char **file, t_list **instructions, t_list **info, int *line_nbr)
