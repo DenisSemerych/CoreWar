@@ -1,12 +1,13 @@
 #include "vm.h"
 
-unsigned int	process_n(int argc, char** argv, int *i, t_data *data)
+unsigned int	fl_process(int argc, char** argv, int *i, int op)
 {
-	int		n;
+	int	n;
 
-	*i + 1 >= argc ? error_msg("-n without number!") : 0;
+	*i + 1 >= argc ? error_msg("Flag without number!") : 0;
 	n = parse_int(argv[++(*i)]);
-	n < 1 || n > MAX_PLAYERS ? error_msg("Player number less then 0 or more then MAX_PLAYERS!") : 0;
+	op == 1 && (n < 1 || n > MAX_PLAYERS) ? error_msg("Player number less then 0 or more then MAX_PLAYERS!") : 0;
+	op == 2 && n <= 0 ? error_msg("Number of cycles cannot be negative or zero!") : 0;
 	return ((unsigned int)n);
 }
 
@@ -20,7 +21,7 @@ void	reserve_numbers(int argc, char **argv, t_data *data)
 	{
 		if (ft_strcmp(argv[i], "-n") == 0)
 		{
-			n = process_n(argc, argv, &i, data);
+			n = fl_process(argc, argv, &i, 1);
 			data->pl_numbers[n - 1] = 2;
 		}
 		i++;
@@ -53,8 +54,6 @@ void	set_champ_num(t_data *data, t_champ *champ)
 	}
 }
 
-//void	process_dump(int argc, char** argv, int *i, t_data *data);
-
 void	process_champ(int argc, char** argv, int *i, t_data *data)
 {
 	int	fd;
@@ -76,19 +75,20 @@ void	process_champ(int argc, char** argv, int *i, t_data *data)
 	tmp = ft_lstnew(0, 0);
 	tmp->content = champ;
 	ft_lstadd(&(data->champs), tmp);
+	data->champs_amount++;
 }
 
 void	arg_valid(int argc, char** argv, t_data *data)
 {
-	int 			i;
+	int i;
 
 	i = 1;
 	while (i < argc)
 	{
 		if (ft_strcmp(argv[i], "-n") == 0)
-			data->next_p_num = process_n(argc, argv, &i, data);
-//		else if (ft_strcmp(argv[i], "-dump"))
-//			process_dump(argc, argv, &i, data);
+			data->next_p_num = fl_process(argc, argv, &i, 1);
+		else if (ft_strcmp(argv[i], "-dump") == 0)
+			data->dump_flag = fl_process(argc, argv, &i, 2);
 		else
 			process_champ(argc, argv, &i, data);
 		i++;

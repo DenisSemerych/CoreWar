@@ -28,6 +28,7 @@ typedef struct 		s_data
 	unsigned int	next_p_num;
 	t_list			*champs;
 	int 			champs_amount;
+	int 			dump_flag;
 }					t_data;
 
 void	error_msg(char *str);
@@ -37,9 +38,10 @@ char	*get_champ_name(int fd);
 char	*get_champ_comment(int fd);
 //char	*get_champ_code(int fd);
 unsigned int	*get_champ_4_bytes(int fd);
-void	print_champ(t_champ * champ);
+void	print_champ(t_champ * champ, int pr_memory);
 unsigned char	*get_champ_exec(int fd, int code_size);
 void			arg_valid(int argc, char** argv, t_data *data);
 void			reserve_numbers(int argc, char **argv, t_data *data);
+void			print_data(t_data *data);
 
 #endif

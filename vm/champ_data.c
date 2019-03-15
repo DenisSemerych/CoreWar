@@ -18,7 +18,7 @@ char	*get_champ_name(int fd)
 	char	name[PROG_NAME_LENGTH + 1];
 
 	read(fd, &name, PROG_NAME_LENGTH);
-	name[PROG_NAME_LENGTH + 1] = 0;
+	name[PROG_NAME_LENGTH] = 0;
 	return (ft_strdup(name));
 }
 
@@ -27,13 +27,12 @@ char	*get_champ_comment(int fd)
 	char	comment[COMMENT_LENGTH + 1];
 
 	read(fd, &comment, COMMENT_LENGTH);
-	comment[COMMENT_LENGTH + 1] = 0;
+	comment[COMMENT_LENGTH] = 0;
 	return (ft_strdup(comment));
 }
 
 unsigned char	*get_champ_exec(int fd, int code_size)
 {
-	unsigned char	code[CHAMP_MAX_SIZE];
 	unsigned char	BUFF[1];
 	unsigned char	*tmp;
 	int				i;
