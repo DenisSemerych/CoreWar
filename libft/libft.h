@@ -6,7 +6,7 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 14:16:45 by dzaporoz          #+#    #+#             */
-/*   Updated: 2019/02/06 13:39:03 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/03/15 13:35:55 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,6 @@ int				ft_count_words(char *str, char c);
 int				ft_isspace(char c);
 void			ft_lstcontdel(void *p, size_t size);
 int				get_next_line(const int fd, char **line);
+int				ft_printf(const char *format, ...);
 
 #endif
