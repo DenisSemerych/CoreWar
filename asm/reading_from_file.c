@@ -37,21 +37,21 @@ char *read_from_file(char *file_name)
     char *file;
     char  buff[BUFF_SIZE + 1];
     int   rd;
-    char *tmp;
 
     check_filename(file_name);
     if ((fd = open(file_name, O_RDONLY)) < 0)
     {
         SRC_NOT_READ(file_name);
     }
-    file = NULL;
+    file = ft_memalloc(1);
     if (read(fd, buff, 0) != 0)
         put_err_msg_exit("Error in reading file");
-    while ((rd = read(fd, buff, BUFF_SIZE)) > 0)
+    while ((rd = read(fd, buff, BUFF_SIZE)))
     {
         buff[rd] = '\0';
-        file = (char *)realloc(file, rd);
+        file = (char *)realloc(file, ft_strlen(file) + rd + 1);
         ft_strcat(file, buff);
     }
+    printf("%s\n", file);
     return (file);
 }
