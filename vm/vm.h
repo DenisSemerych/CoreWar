@@ -44,19 +44,18 @@ typedef struct 		s_data
 	int 			cycle_to_die;
 }					t_data;
 
-void	error_msg(char *str);
-int		parse_int(char *str);
-
-char	*get_champ_name(int fd);
-char	*get_champ_comment(int fd);
-//char	*get_champ_code(int fd);
-unsigned int	*get_champ_4_bytes(int fd);
-void	print_champ(t_champ * champ, int pr_memory);
-unsigned char	*get_champ_exec(int fd, int code_size);
-void			arg_valid(int argc, char** argv, t_data *data);
-void			reserve_numbers(int argc, char **argv, t_data *data);
-void			print_data(t_data *data);
-void	initialization(t_data *data);
-void	do_turn(t_data *data);
+void				error_msg(char *str);
+int					parse_int(char *str);
+char 				*get_champ_name(int fd);
+char				*get_champ_comment(int fd);
+unsigned int		get_champ_4_bytes(int fd);
+void				print_champ(t_champ * champ, int pr_memory);
+unsigned char		*get_champ_exec(int fd, int code_size);
+void				arg_valid(int argc, char** argv, t_data *data);
+void				reserve_numbers(int argc, char **argv, t_data *data);
+void				print_data(t_data *data);
+void				initialization(t_data *data);
+void				do_turn(t_data *data);
+//void				introduce_champs(t_list *champs);
 
 #endif
