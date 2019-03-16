@@ -1,6 +1,6 @@
 #include "vm.h"
 
-unsigned int	*get_champ_4_bytes(int fd)
+unsigned int	get_champ_4_bytes(int fd)
 {
 	unsigned char bytes[4];
 	unsigned int res;

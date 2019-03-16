@@ -6,7 +6,7 @@
 /*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/22 17:46:28 by dzaporoz          #+#    #+#             */
-/*   Updated: 2018/12/04 19:40:06 by dzaporoz         ###   ########.fr       */
+/*   Updated: 2019/03/16 15:52:32 by mmyslyvy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <stddef.h>
-# include "../libft/libft.h"
+# include "../libft.h"
 
 typedef struct				s_format {
 	unsigned int			minus: 1;

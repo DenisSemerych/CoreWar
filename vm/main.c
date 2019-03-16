@@ -4,7 +4,6 @@ int main(int argc, char** argv)
 {
 	t_data data;
 
-	int i = 0;
 	ft_bzero(&data, sizeof(t_data));
 	reserve_numbers(argc, argv, &data);
 	arg_valid(argc, argv, &data);
@@ -15,7 +14,9 @@ int main(int argc, char** argv)
 		print_champ((t_champ *)(tmp->content), 0);
 		tmp = tmp->next;
 	}
-	
+
+//	introduce_champs(data.champs);
+
 	initialization(&data);
 	while (data.playing)
 		do_turn(&data);
