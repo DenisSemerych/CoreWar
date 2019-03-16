@@ -16,7 +16,7 @@ void	initialization(t_data *data)
 {
 	unsigned char	*p;
 	int				pos;	
-	t_process		new_carriage;
+	t_process		new_process;
 	t_list			*player_p;
 
 	if (!(data->board = (unsigned char*)malloc(MEM_SIZE)))
@@ -29,12 +29,12 @@ void	initialization(t_data *data)
 	player_p = data->champs;
 	while (player_p)
 	{
-		ft_bzero(&new_carriage, sizeof(t_process));
-		new_carriage.position = p - data->board;
-		new_carriage.live = 1;
-		new_carriage.parent_number = ((t_champ*)player_p->content)->number;
+		ft_bzero(&new_process, sizeof(t_process));
+		new_process.position = p - data->board;
+		new_process.live = 1;
+		new_process.parent_number = ((t_champ*)player_p->content)->number;
 		ft_memcpy(p, ((t_champ*)player_p->content)->exec_code, CHAMP_MAX_SIZE);
-		ft_lstadd(&data->processes, ft_lstnew(&new_carriage, sizeof(t_process)));
+		ft_lstadd(&data->processes, ft_lstnew(&new_process, sizeof(t_process)));
 		p += pos;
 		player_p = player_p->next;
 	}

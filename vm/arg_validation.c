@@ -63,7 +63,7 @@ void	process_champ(int argc, char** argv, int *i, t_data *data)
 	champ = (t_champ *)malloc(sizeof(t_champ));
 	fd = open(argv[*i], O_RDONLY);
 	champ->magic_header = get_champ_4_bytes(fd);
-	champ->magic_header != 0xEA83F3 ? error_msg("Champion have false magic header!") : 0;
+	champ->magic_header != COREWAR_EXEC_MAGIC ? error_msg("Champion have false magic header!") : 0;
 	champ->name = get_champ_name(fd);
 	get_champ_4_bytes(fd) != 0 ? error_msg("Null zones isn't nulled!") : 0;
 	champ->exec_size = get_champ_4_bytes(fd);
