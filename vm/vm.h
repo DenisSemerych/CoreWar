@@ -31,17 +31,21 @@ typedef struct 		s_champ
 
 typedef struct 		s_data
 {
-	unsigned int	playing: 1;
-	unsigned char	*board;
+	t_list			*champs;
+	int 			champs_amount;
 	unsigned int	pl_numbers[MAX_PLAYERS];
 	unsigned int	next_p_num;
+
+	int 			dump_flag : 1;
+
+	unsigned int	playing: 1;
+	unsigned char	*board;
 	unsigned int	cycle;
-	unsigned int	last_check_cycle;
-	t_list			*champs;
+	unsigned int 	cycle_to_die;
+	unsigned int	cycles_fr_lst_check;
+	unsigned int	live_op_amount;
+
 	t_list			*processes;
-	int 			champs_amount;
-	int 			dump_flag;
-	int 			cycle_to_die;
 }					t_data;
 
 void				error_msg(char *str);
