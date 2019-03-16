@@ -48,11 +48,30 @@ void    save_info(char **file, t_list **info, int *line_nbr)
     ft_lstadd(info, command);
 }
 
-void    save_instruction(char **file, t_list **instructions, t_list **info, int *line_nbr)
+void    save_instruction(char **file, t_list **instructions, t_list **lables, int *line_nbr)
 {
+    int i;
+    t_op *op;
+    char *line;
+    char *crawler;
 
+
+    i = -1;
+    op = NULL;
+    line = ft_strsub(*file, 0,ft_strchr(*file, '\n') - *file);
+    crawler = line;
+    if (ft_strchr(crawler, ':'))
+       crawler += validate_lable(lables, line, line_nbr);
+    while (i++ < 16)
+        if (ft_strstr(OP(i).name, crawler))
+            op = &OP(i);
+    if (!op)
+    {
+        free(line);
+        return ;
+    }
+   *instructions = add_to_the_end_of_list(*instructions,validate_command(lables, op, line_nbr, crawler));
 }
-
 
 t_list *tokenize(char *file)
 {
@@ -69,13 +88,12 @@ t_list *tokenize(char *file)
     {
         if (*file == '.')
            save_info(&file, &info, &line_nbr);
-        if (*file == '#')
+        if (*file == COMMENT_CHAR | ALT_COMMENT_CHAR)
             while (*file != '\n')
                 file++;
         if (*file == '\n' && *file++)
             line_nbr++;
-        save_instruction(&file, &instructions, &info, &line_nbr);
-        printf("%s\n", file);
+        info ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
     }
     return (create_arg_list(lables, instructions, info));
 }

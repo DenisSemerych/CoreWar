@@ -6,6 +6,19 @@ void		put_err_msg_exit(char *str)
     exit(0);
 }
 
+t_list		*add_to_the_end_of_list(t_list *head, t_list *new)
+{
+    t_list	*crawler;
+
+    crawler = head;
+    if (!crawler)
+        return (new);
+    while (crawler->next)
+        crawler = crawler->next;
+    crawler->next = new;
+    return (head);
+}
+
 int						count_size(char **arr)
 {
     char				**tmp;

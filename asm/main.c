@@ -16,7 +16,6 @@ int main(int argc, char **argv)
     while (++i < argc)
     {
         file = read_from_file(argv[i]);
-        free(file);
-        //arguments_list = tokenize(file);
+        arguments_list = tokenize(file);
     }
 }
