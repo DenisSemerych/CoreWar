@@ -75,12 +75,30 @@ void	to_die_check(t_data *data)
 	data->live_op_amount = 0;
 }
 
+void	read_operations(t_data *data)
+{
+	t_list	*process;
+
+	process = data->processes;
+	while (process)
+	{
+		if (!((t_process*)process->content)->live)
+			continue;
+		if (!((t_process*)process->content)->waiting_cycles)
+			((t_process*)process->content)->op_code = data->board[((t_process*)process->content)->position];
+		else
+			((t_process*)process->content)->waiting_cycles--;
+		process = process->next;
+	}
+}
+
 void	do_turn(t_data *data)
 {
 	t_list	*process;
 
 	while (data->playing)
 	{
+		read_operations(data);
 		process = data->processes;
 		while (process)
 		{
