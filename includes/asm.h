@@ -30,16 +30,7 @@ typedef struct s_lable
     char *name;
     t_inst *opp;
 }              t_lable;
-typedef struct s_op
-{
-    char			*name;
-    unsigned char	nb_arg;
-    t_arg_type		args[3];
-    unsigned char	opcode;
-    unsigned int	cycle;
-    char			*description;
-    unsigned char	octal;
-}               t_op;
+
 extern t_op			g_op_tab[17];
 char *read_from_file(char *file_name);
 t_list    *tokenize(char *file);
