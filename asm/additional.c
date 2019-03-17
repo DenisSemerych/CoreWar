@@ -1,10 +1,51 @@
 #include "asm.h"
+
+t_list		*find_last(t_list *head)
+{
+    t_list *crawler;
+
+    crawler = head;
+    while (crawler->next)
+        crawler = crawler->next;
+    return (crawler);
+}
 void		put_err_msg_exit(char *str)
 {
     printf("%s", MAG);
     ft_putendl_fd(str, 2);
     exit(0);
 }
+
+int						list_count(t_list *list)
+{
+    int count;
+
+    count = 0;
+    while (list)
+    {
+        count++;
+        list = list->next;
+    }
+    return (count);
+}
+
+int         full(t_list *info)
+{
+    int check;
+
+    check = 0;
+    while (info)
+    {
+        if (info->content_size == NAME)
+            check++;
+        else if (info->content_size == COMMENT)
+            check++;
+        info = info->next;
+    }
+    return (check == 2 ? 1 : 0);
+}
+
+
 
 t_list		*add_to_the_end_of_list(t_list *head, t_list *new)
 {

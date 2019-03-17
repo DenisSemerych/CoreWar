@@ -14,10 +14,21 @@
 #define SRC_NOT_READ(name) printf("%sCan't read source file %s%s\n",CYN, RED, name, RESET); exit(0)
 #define OP(index)	g_op_tab[index]
 
+typedef struct s_lable t_lable;
+typedef struct s_inst
+{
+    char *name;
+    unsigned char nb_arg;
+    void    *arg1;
+    void    *arg2;
+    void    *arg3;
+    t_lable *lable;
+
+}          t_inst;
 typedef struct s_lable
 {
     char *name;
-    t_list *opp;
+    t_inst *opp;
 }              t_lable;
 typedef struct s_op
 {
@@ -29,13 +40,6 @@ typedef struct s_op
     char			*description;
     unsigned char	octal;
 }               t_op;
-
-typedef struct s_inst
-{
-    char *name;
-
-} t_inst;
-
 extern t_op			g_op_tab[17];
 char *read_from_file(char *file_name);
 t_list    *tokenize(char *file);
@@ -44,5 +48,8 @@ int						count_size(char **arr);
 void		put_err_msg_exit(char *str);
 t_list		*add_to_the_end_of_list(t_list *head, t_list *new);
 t_list *validate_command(t_list **lables, t_op *op, int *line_nbr, char *crawler);
-int validate_lable(t_list **lables, char *line, int *line_nbr);
+size_t validate_lable(t_list **lables, char *line, int *line_nbr);
+int         full(t_list *info);
+t_list		*find_last(t_list *head);
+void    give_op_lable(t_list *op, t_list **lables);
 #endif
