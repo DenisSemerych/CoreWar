@@ -85,5 +85,5 @@ typedef struct		s_op
 	unsigned int	cycles;
 	char			description[50];
 	unsigned char	octal;
-	unsigned int	label
+	unsigned int	label;
 }					t_op;
