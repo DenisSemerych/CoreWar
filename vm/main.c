@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 		tmp = tmp->next;
 	}
 
-//	introduce_champs(data.champs);
+	introduce_champs(data.champs);
 
 	initialization(&data);
 	while (data.playing)

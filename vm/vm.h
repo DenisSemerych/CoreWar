@@ -61,6 +61,6 @@ void				reserve_numbers(int argc, char **argv, t_data *data);
 void				print_data(t_data *data);
 void				initialization(t_data *data);
 void				do_turn(t_data *data);
-//void				introduce_champs(t_list *champs);
+void				introduce_champs(t_list *champs);
 
 #endif
