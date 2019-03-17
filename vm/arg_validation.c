@@ -54,6 +54,29 @@ void	set_champ_num(t_data *data, t_champ *champ)
 	}
 }
 
+void	insert_champ(t_data *data, t_champ *champ)
+{
+	t_list	*new_lst;
+	t_list	*tmp;
+	t_list	*prev_next;
+
+	new_lst = ft_lstnew(0, 0);
+	new_lst->content = champ;
+	if (data->champs == NULL)
+	{
+		ft_lstadd(&(data->champs), new_lst);
+		return ;
+	}
+	tmp = data->champs;
+	while (tmp && ((t_champ *)(tmp->content))->number < champ->number)
+		tmp = tmp->next;
+	prev_next = tmp->next;
+	tmp->next = new_lst;
+	new_lst->next = prev_next;
+	new_lst->content = tmp->content;
+	tmp->content = champ;
+}
+
 void	process_champ(int argc, char** argv, int *i, t_data *data)
 {
 	int	fd;
@@ -72,9 +95,10 @@ void	process_champ(int argc, char** argv, int *i, t_data *data)
 	get_champ_4_bytes(fd) != 0 ? error_msg("Null zones isn't nulled!") : 0;
 	champ->exec_code = get_champ_exec(fd, champ->exec_size);
 	set_champ_num(data, champ);
-	tmp = ft_lstnew(0, 0);
-	tmp->content = champ;
-	ft_lstadd(&(data->champs), tmp);
+//	tmp = ft_lstnew(0, 0);
+//	tmp->content = champ;
+//	ft_lstadd(&(data->champs), tmp);
+	insert_champ(data, champ);
 	data->champs_amount++;
 }
 
