@@ -44,7 +44,7 @@ void    save_info(char **file, t_list **info, int *line_nbr)
         (*file)++;
     *(*file) != '\"' ? put_err_msg_exit("Error expected \"") : ((*file)++);
     *file = *file + write_string_tokken(command, file, line_nbr);
-  //  printf("Here is in command %s\n", command->content);
+    printf("Here is in command %s\n", command->content);
     ft_lstadd(info, command);
 }
 
@@ -55,16 +55,23 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
     char *line;
     char *crawler;
 
-
     i = -1;
     op = NULL;
     line = ft_strsub(*file, 0,ft_strchr(*file, '\n') - *file);
     crawler = line;
-    if (ft_strchr(crawler, ':'))
+    if (is_lable(crawler))
        crawler += validate_lable(lables, crawler, line_nbr);
-    while (i++ < 16)
-        if (ft_strstr(OP(i).name, crawler))
-            op = &OP(i);
+    if (is_free(crawler))
+    {
+        *file += crawler - line;
+        return ;
+    }
+    while (i++ < 15)
+    {
+        printf("%s haystack looking for %s\n", crawler, g_op_tab[i].name);
+        if (ft_strstr(crawler, g_op_tab[i].name))
+            op = &g_op_tab[i];
+    }
     if (!op)
     {
         free(line);
@@ -90,11 +97,13 @@ t_list *tokenize(char *file)
         if (*file == '.')
            save_info(&file, &info, &line_nbr);
         if (IS_COMMENT(*file))
+        {
             while (*file != '\n')
                 file++;
+        }
         if (*file == '\n' && *file++)
             line_nbr++;
-        full(info) ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
+        full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
     }
     return (create_arg_list(lables, instructions, info));
 }

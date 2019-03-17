@@ -1,5 +1,28 @@
 #include "asm.h"
 
+int         is_lable(char *line)
+{
+    while (*line)
+    {
+        if (!ft_strchr(LABEL_CHARS, *line))
+            break ;
+        line++;
+    }
+    return (*line == LABEL_CHAR ? 1 : 0);
+}
+
+
+int         is_free(char *line)
+{
+    while (*line)
+    {
+        if (!IS_SEPARATOR(*line))
+            return (0);
+        line++;
+    }
+    return (1);
+}
+
 t_list		*find_last(t_list *head)
 {
     t_list *crawler;
