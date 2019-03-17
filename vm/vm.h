@@ -38,6 +38,7 @@ typedef struct 		s_data
 
 	int 			dump_flag : 1;
 
+	int 			checks_amount;
 	unsigned int	playing: 1;
 	unsigned char	*board;
 	unsigned int	cycle;
