@@ -13,6 +13,7 @@ typedef struct		s_process
 	unsigned int	carry: 1;
 	unsigned int	live: 1;
 	unsigned int	op_code;
+	unsigned int	op_args[3];
 	int				position;
 	unsigned int	reg[REG_NUMBER];
 	int				current_command;
@@ -62,5 +63,6 @@ void				print_data(t_data *data);
 void				initialization(t_data *data);
 void				do_turn(t_data *data);
 void				introduce_champs(t_list *champs);
+void				codage_proc(t_process *process, unsigned char codage);
 
 #endif
