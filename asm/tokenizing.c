@@ -89,7 +89,7 @@ t_list *tokenize(char *file)
     {
         if (*file == '.')
            save_info(&file, &info, &line_nbr);
-        if (*file == COMMENT_CHAR | ALT_COMMENT_CHAR)
+        if (IS_COMMENT(*file))
             while (*file != '\n')
                 file++;
         if (*file == '\n' && *file++)

@@ -10,11 +10,13 @@
 # define CYN   "\x1B[36m"
 # define RESET "\x1B[0m"
 # define MAG   "\x1B[35m"
-#define IS_SEPARATOR(a) (a == ' ' || a == '\t' || a == '\v')
+#define IS_SEPARATOR(a) (a == ' ' | '\t' | '\v')
 #define SRC_NOT_READ(name) printf("%sCan't read source file %s%s\n",CYN, RED, name, RESET); exit(0)
 #define OP(index)	g_op_tab[index]
+#define IS_COMMENT(file) (file == COMMENT_CHAR || file ==  ALT_COMMENT_CHAR)
 
 typedef struct s_lable t_lable;
+
 typedef struct s_inst
 {
     char *name;

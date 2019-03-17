@@ -1,5 +1,16 @@
 #include "asm.h"
 
+void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
+{
+    char **args;
+    t_arg_type type;
+
+    args = ft_strsplit(crawler, ',');
+    if (count_size(args) != op->nb_arg)
+        put_err_msg_exit("Error in number of arguments");
+
+}
+
 void    give_op_lable(t_list *op, t_list **lables)
 {
     t_inst *inst;
@@ -57,8 +68,16 @@ t_list *validate_command(t_list **lables, t_op *op, int *line_nbr, char *line)
     inst = (t_inst *)malloc(sizeof(t_inst));
     inst->lable = NULL;
     inst->name = op->name;
+    op_name_crawler = op->name;
     while (IS_SEPARATOR(*crawler))
         crawler++;
-
+    while (*crawler == *op_name_crawler)
+    {
+        op_name_crawler++;
+        crawler++;
+    }
+    while (IS_SEPARATOR(*crawler))
+        crawler++;
+    parse_arg(&inst, op, line_nbr, crawler);
     return (NULL);
 }
