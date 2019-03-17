@@ -33,6 +33,7 @@ void	initialization(t_data *data)
 		new_process.position = p - data->board;
 		new_process.live = 1;
 		new_process.parent_number = ((t_champ*)player_p->content)->number;
+		new_process.reg[0] = ((t_champ*)player_p->content)->number * -1;
 		ft_memcpy(p, ((t_champ*)player_p->content)->exec_code, CHAMP_MAX_SIZE);
 		ft_lstadd(&data->processes, ft_lstnew(&new_process, sizeof(t_process)));
 		p += pos;

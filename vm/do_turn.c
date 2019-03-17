@@ -12,6 +12,8 @@
 
 #include "vm.h"
 
+extern t_op	op_tab[];
+
 void		is_playing_check(t_data *data)
 {
 	t_list	*process;
@@ -77,34 +79,78 @@ void	to_die_check(t_data *data)
 
 void	read_operations(t_data *data)
 {
-	t_list	*process;
+	t_list	*proc_p;
+	t_process *process;
 
-	process = data->processes;
-	while (process)
+	proc_p = data->processes;
+	while (proc_p)
 	{
-		if (!((t_process*)process->content)->live)
+		process = proc_p;
+		if (!process->live)
 			continue;
-		if (!((t_process*)process->content)->waiting_cycles)
-			((t_process*)process->content)->op_code = data->board[((t_process*)process->content)->position];
+		if (!process->waiting_cycles)
+		{
+			(process->op_code = data->board[process->position];
+			if (process->op_code > 0 && process->op_code < 0x10)
+				process->waiting_cycles = op_tab[process->op_code].cycles;
+		}
 		else
-			((t_process*)process->content)->waiting_cycles--;
-		process = process->next;
+			process->waiting_cycles--;
+		proc_p = proc_p->next;
+	}
+}
+
+int 	check_process_arg(t_process *process, t_data *data)
+{
+	int n;
+
+	n = 0;
+	while (process->op_args[n] == T_REG)
+
+}
+
+int 	check_process(t_process *process, t_data *data)
+{
+	if (process->op_code < 0 || process->op_code > 0x10)
+		process->position++;
+//	else if (!check_process_args(process, data))
+//		a = 0;
+	else
+		return (1);
+	return (0);
+
+}
+
+void	execute_operations(t_data *data)
+{
+	t_list	*proc_p;
+	t_process *process;
+
+	proc_p = data->processes;
+	while (proc_p)
+	{
+		process = proc_p->content;
+		if (!process->waiting_cycles)
+		{
+			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
+			check_process(process, data);
+			//if (process->op_code < 0 || process->op_code > 0x10)
+
+
+
+
+
+		}
+		proc_p = proc_p->next;
 	}
 }
 
 void	do_turn(t_data *data)
 {
-	t_list	*process;
-
 	while (data->playing)
 	{
 		read_operations(data);
-		process = data->processes;
-		while (process)
-		{
-
-			process = process->next;
-		}
+		execute_operations(data);
 
 		if (data->cycles_fr_lst_check >= data->cycle_to_die)
 			to_die_check(data);
