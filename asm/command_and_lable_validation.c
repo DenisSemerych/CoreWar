@@ -8,7 +8,7 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
     args = ft_strsplit(crawler, ',');
     if (count_size(args) != op->nb_arg)
         put_err_msg_exit("Error in number of arguments");
-
+    
 }
 
 void    give_op_lable(t_list *op, t_list **lables)

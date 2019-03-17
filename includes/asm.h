@@ -33,7 +33,6 @@ typedef struct s_lable
     t_inst *opp;
 }              t_lable;
 
-extern t_op			g_op_tab[16];
 char *read_from_file(char *file_name);
 t_list    *tokenize(char *file);
 void	free_str_arr(char **arr, int size);
