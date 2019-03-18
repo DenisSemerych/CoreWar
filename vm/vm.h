@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vm.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yochered <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/18 11:34:26 by yochered          #+#    #+#             */
+/*   Updated: 2019/03/18 11:34:27 by yochered         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VM_H
 # define VM_H
 
-# include "../libft/libft.h"
-# include "../includes/op.h"
+# include "libft.h"
+# include "op.h"
 # include <fcntl.h>
 
 typedef struct		s_process
@@ -25,6 +37,7 @@ typedef struct 		s_champ
 	unsigned int	number;
 	char			*name;
 	char			*comment;
+	unsigned int	champ_color;
 	unsigned int	exec_size;
 	unsigned int	magic_header;
 	unsigned char	*exec_code;
