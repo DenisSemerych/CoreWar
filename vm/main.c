@@ -12,8 +12,6 @@ int main(int argc, char** argv)
 
 	introduce_champs(data.champs);
 
-	unsigned char test[3];
-	test = codage_proc(0x90);
 	initialization(&data);
 	while (data.playing)
 		do_turn(&data);
