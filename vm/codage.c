@@ -27,23 +27,31 @@ void	codage_proc(t_process *process, unsigned char codage)
 	{
 		process->op_args_type[0] = T_DIR;
 		process->op_args_type[1] = 0;
-		process->op_args_type[1] = 0;
+		process->op_args_type[2] = 0;
 	}
 }
 
-//int		write_args(t_process *process)
-//{
-//	int	offset;
-//	int i;
-//
-//	offset = 1;
-//	i = 0;
-//	while (i < g_op_tab[process->op_code].nb_arg)
-//	{
-//		if (!(process->op_args_type[i] & g_op_tab[process->op_code].args[i]))
-//			return (0);
-//		if (process->op_args_type[i] & g_op_tab[process->op_code].args[i])
-//			process->op_args[i] =
-//	}
-//}
+int		write_args(t_data *data, t_process *process)
+{
+	int	offset;
+	int	to_skip;
+	int pos;
+	int i;
+
+	offset = 1;
+	to_skip = 1 + process->op_args_type[0] + process->op_args_type[1] + process->op_args_type[2];
+	i = 0;
+	while (i < g_op_tab[process->op_code].nb_arg)
+	{
+		if (!(process->op_args_type[i] & g_op_tab[process->op_code].args[i]))
+			return (to_skip);
+		if (process->op_args_type[i] & g_op_tab[process->op_code].args[i])
+		{
+			pos = get_absolute_cord(process->position, offset);
+			process->op_args_pointers[i] = &(data->board[pos]);
+			offset = pos - process->position + process->op_args_type[i];
+		}
+	}
+	return (offset);
+}
 

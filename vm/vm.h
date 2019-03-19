@@ -14,7 +14,7 @@ typedef struct		s_process
 	unsigned int	live: 1;
 	unsigned int	op_code;
 	unsigned int	op_args_type[3];
-	unsigned int	op_args[3];
+	void			*op_args_pointers[3];
 	int				position;
 	unsigned int	reg[REG_NUMBER];
 	int				current_command;
