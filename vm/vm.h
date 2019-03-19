@@ -14,8 +14,11 @@
 # define VM_H
 
 # include "libft.h"
+# include "visu.h"
 # include "op.h"
 # include <fcntl.h>
+
+typedef struct s_vs	t_vs;
 
 typedef struct		s_process
 {
@@ -37,10 +40,10 @@ typedef struct 		s_champ
 	unsigned int	number;
 	char			*name;
 	char			*comment;
-	unsigned int	champ_color;
 	unsigned int	exec_size;
 	unsigned int	magic_header;
 	unsigned char	*exec_code;
+	t_list			*processes;
 }					t_champ;
 
 typedef struct 		s_data
@@ -55,11 +58,12 @@ typedef struct 		s_data
 	int 			checks_amount;
 	unsigned int	playing: 1;
 	unsigned char	*board;
+	unsigned char	owners[MEM_SIZE];
 	unsigned int	cycle;
 	unsigned int 	cycle_to_die;
 	unsigned int	cycles_fr_lst_check;
 	unsigned int	live_op_amount;
-
+	t_vs			*vs;
 	t_list			*processes;
 }					t_data;
 

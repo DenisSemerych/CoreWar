@@ -29,7 +29,8 @@ VISU_SRCDIR = $(VM_SRCDIR)visu/
 VISU_SRC_LIST = \
 	visu.c\
 	window_funcs.c\
-	draw_board.c
+	draw_board.c\
+	draw_info.c
 VISU_SRC = $(addprefix $(VISU_SRCDIR), $(VISU_SRC_LIST))
 
 OBJDIR = ./obj/
@@ -43,7 +44,8 @@ LIBDIR = ./libft/
 
 INCLUDES = \
 	-I $(LIBDIR)\
-	-I ./includes/
+	-I ./includes/\
+	-I ./vm/
 
 FLAGS = 
 GREEN = \033[92m
@@ -68,12 +70,12 @@ $(VISU_OBJDIR):
 	@echo "$(GREEN)$(VISU_OBJDIR): was created$(RESET)"
 
 $(VM_OBJDIR)%.o: $(VM_SRCDIR)%.c
-	@echo "Compiling Virtual Machine Objects"
-	gcc $(FLAGS) -c $< -o $@ $(INCLUDES)
+	@echo "Compiling Virtual Machine's Objects..."
+	@gcc $(FLAGS) -c $< -o $@ $(INCLUDES)
 
 $(VISU_OBJDIR)%.o: $(VISU_SRCDIR)%.c
-	@echo "Compiling Virtual Machine Objects"
-	gcc $(FLAGS) -c $< -o $@ $(INCLUDES)
+	@echo "Compiling Visualizer's Objects..."
+	@gcc $(FLAGS) -c $< -o $@ $(INCLUDES)
 
 $(LIB):
 	@echo "Compiling Libft..."

@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "visu.h"
+#include "vm.h"
 
 void	set_border(WINDOW *win)
 {
-	wattron(win, COLOR_PAIR(RED));
+	wattron(win, COLOR_PAIR(CYAN));
 	box(win, 0, 0);
-	wattroff(win, COLOR_PAIR(RED));
+	wattroff(win, COLOR_PAIR(CYAN));
 }
 
 WINDOW	*create_newwin(int height, int width, int y, int x)
