@@ -67,5 +67,6 @@ void				do_turn(t_data *data);
 void				introduce_champs(t_list *champs);
 void				codage_proc(t_process *process, unsigned char codage);
 int 				get_absolute_cord(int cord, int relative_cord);
+void				execute_opeartion(t_process *process, t_data *data);
 
 #endif

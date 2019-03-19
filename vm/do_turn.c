@@ -12,7 +12,7 @@
 
 #include "vm.h"
 
-extern t_op	op_tab[];
+extern t_op	g_op_tab[];
 
 void		is_playing_check(t_data *data)
 {
@@ -85,14 +85,14 @@ void	read_operations(t_data *data)
 	proc_p = data->processes;
 	while (proc_p)
 	{
-		process = proc_p;
+		process = proc_p->content;
 		if (!process->live)
 			continue;
 		if (!process->waiting_cycles)
 		{
-			(process->op_code = data->board[process->position];
+			process->op_code = data->board[process->position];
 			if (process->op_code > 0 && process->op_code < 0x10)
-				process->waiting_cycles = op_tab[process->op_code].cycles;
+				process->waiting_cycles = g_op_tab[process->op_code].cycles;
 		}
 		else
 			process->waiting_cycles--;
@@ -125,7 +125,7 @@ int 	check_process_args(t_process *process, t_data *data)
 
 	n = -1;
 	while (++n < 3)
-		if (process->op_args_type[n] == T_REG && process->op_args[n] >= REG_NUMBER)
+//		if (process->op_args_type[n] == T_REG && process->op_args[n] >= REG_NUMBER)
 			return (0);
 	return (1);
 
@@ -155,10 +155,13 @@ void	execute_operations(t_data *data)
 		if (!process->waiting_cycles)
 		{
 			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
-			if (check_process(process, data))
-			{
-
-			}
+            if (process->op_code < 0 || process->op_code > 0x10)
+                process->position++;
+            else
+            {
+                execute_opeartion(proc_p->content, data);
+                process->position += 1 + g_op_tab[process->op_code].octal + op_args_size(process);
+            }
 		}
 		proc_p = proc_p->next;
 	}
