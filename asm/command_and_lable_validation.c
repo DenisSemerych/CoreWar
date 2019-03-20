@@ -74,7 +74,7 @@ size_t validate_lable(t_list **lables, char *line, int *line_nbr)
 }
 
 
-t_list *validate_command(t_list **lables, t_op *op, int *line_nbr, char *line)
+t_list *validate_command(t_op *op, int *line_nbr, char *line)
 {
     char *crawler;
     t_inst *inst;
@@ -93,6 +93,8 @@ t_list *validate_command(t_list **lables, t_op *op, int *line_nbr, char *line)
         crawler++;
     }
     skip_separators(&crawler);
+    if (*crawler == 'r' && !IS_SEPARATOR(*(crawler - 1)))
+        put_err_msg_exit("missing separator");
     parse_arg(&inst, op, line_nbr, crawler);
     inst->lable = NULL;
     command = ft_lstnew(NULL, 0);

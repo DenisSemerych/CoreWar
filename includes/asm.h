@@ -37,7 +37,7 @@ void	free_str_arr(char **arr, int size);
 int						count_size(char **arr);
 void		put_err_msg_exit(char *str);
 t_list		*add_to_the_end_of_list(t_list *head, t_list *new);
-t_list *validate_command(t_list **lables, t_op *op, int *line_nbr, char *crawler);
+t_list *validate_command(t_op *op, int *line_nbr, char *line);
 size_t validate_lable(t_list **lables, char *line, int *line_nbr);
 int         full(t_list *info);
 t_list		*find_last(t_list *head);
