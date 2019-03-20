@@ -40,8 +40,7 @@ void    save_info(char **file, t_list **info, int *line_nbr)
         command->content_size = COMMENT;
     else
         put_err_msg_exit("here");
-    while (IS_SEPARATOR(*(*file)))
-        (*file)++;
+    skip_separators(file);
     *(*file) != '\"' ? put_err_msg_exit("Error expected \"") : ((*file)++);
     *file = *file + write_string_tokken(command, file, line_nbr);
     printf("Here is in command %s\n", command->content);
@@ -79,6 +78,7 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
     }
    *instructions = add_to_the_end_of_list(*instructions,validate_command(lables, op, line_nbr, crawler));
     give_op_lable(find_last(*instructions), lables);
+    *file += ft_strlen(line);
 }
 
 t_list *tokenize(char *file)
@@ -92,15 +92,11 @@ t_list *tokenize(char *file)
     lables = NULL;
     info = NULL;
     line_nbr = 1;
-    while (file)
+    while (*file)
     {
         if (*file == '.')
            save_info(&file, &info, &line_nbr);
-        if (IS_COMMENT(*file))
-        {
-            while (*file != '\n')
-                file++;
-        }
+        skip_comment(&file);
         if (*file == '\n' && *file++)
             line_nbr++;
         full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;

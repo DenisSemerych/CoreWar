@@ -30,6 +30,8 @@ typedef struct s_lable
 }              t_lable;
 void g_op_test();
 char *read_from_file(char *file_name);
+void        skip_comment(char **file);
+void        skip_separators(char **file);
 t_list    *tokenize(char *file);
 void	free_str_arr(char **arr, int size);
 int						count_size(char **arr);
