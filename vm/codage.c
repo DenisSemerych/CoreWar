@@ -31,20 +31,29 @@ void	codage_proc(t_process *process, unsigned char codage)
 	}
 }
 
-int		write_args(t_data *data, t_process *process)
+int		get_offset(t_process *process)
 {
 	int	offset;
-	int	to_skip;
+
+	if (ft_strcmp(g_op_tab[process->op_code].name, "zjmp") == 0)
+		return (0);
+	offset = 1 + g_op_tab[process->op_code].octal +
+			process->op_args_type[0] + process->op_args_type[1] + process->op_args_type[2];
+	return (offset);
+}
+
+void	write_args_pointers(t_data *data, t_process *process)
+{
+	int	offset;
 	int pos;
 	int i;
 
 	offset = 1;
-	to_skip = 1 + process->op_args_type[0] + process->op_args_type[1] + process->op_args_type[2];
 	i = 0;
 	while (i < g_op_tab[process->op_code].nb_arg)
 	{
 		if (!(process->op_args_type[i] & g_op_tab[process->op_code].args[i]))
-			return (to_skip);
+			return ;
 		if (process->op_args_type[i] & g_op_tab[process->op_code].args[i])
 		{
 			pos = get_absolute_cord(process->position, offset);
@@ -52,6 +61,5 @@ int		write_args(t_data *data, t_process *process)
 			offset = pos - process->position + process->op_args_type[i];
 		}
 	}
-	return (offset);
 }
 
