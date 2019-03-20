@@ -58,7 +58,6 @@ typedef struct 		s_data
 	int 			checks_amount;
 	unsigned int	playing: 1;
 	unsigned char	*board;
-	unsigned char	owners[MEM_SIZE];
 	unsigned int	cycle;
 	unsigned int 	cycle_to_die;
 	unsigned int	cycles_fr_lst_check;

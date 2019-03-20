@@ -27,12 +27,20 @@ int				check_process(t_data *data, int index)
 }
 
 /*Sets attributes to recognize player's color and carry color*/
-unsigned int	get_attributes(t_data *data, int i, int j)
+unsigned int	get_attributes(t_data *data, t_map *map, int pos)
 {
-	if (data->owners[i * 64 + j] && check_process(data, i * 64 + j))
-		return (COLOR_PAIR(data->owners[i * 64 + j] + 6));	//Current color background
-	else if (data->owners[i * 64 + j])
-		return (COLOR_PAIR(data->owners[i * 64 + j]));
+	if (map[pos].cycles_after_st > 0)
+		map[pos].cycles_after_st--;
+	else if (map[pos].cycles_after_live > 0)
+		map[pos].cycles_after_live--;
+	if (map[pos].cycles_after_live > 0)
+		return (COLOR_PAIR(map[pos].owner + 7) | A_BOLD);
+	else if (map[pos].owner && check_process(data, pos))
+		return (COLOR_PAIR(map[pos].owner + 7));	//Current color background
+	else if (map[pos].cycles_after_st > 0)
+		return (COLOR_PAIR(map[pos].owner | A_BOLD));
+	else
+		return (COLOR_PAIR(map[pos].owner));
 }
 
 void			draw_board(t_data *data, t_vs *vs)
@@ -51,7 +59,7 @@ void			draw_board(t_data *data, t_vs *vs)
 		wmove(vs->board, i + 2, j + IDENT + 1);
 		while (++j < BOARD_SIZE)
 		{
-			attr = get_attributes(data, i, j);
+			attr = get_attributes(data, data->vs->map, i * 64 + j);
 			wattron(vs->board, attr);
 			wprintw(vs->board, "%2x", data->board[i * BOARD_SIZE + j]);
 			wattroff(vs->board, attr);
