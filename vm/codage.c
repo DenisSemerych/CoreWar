@@ -86,7 +86,7 @@ int		write_args_pointers(t_data *data, t_process *process)
 		{
 			pos = get_absolute_cord(process->position, offset);
 			process->op_args_pointers[i] = &(data->board[pos]);
-			offset = pos - process->position + process->op_args_type[i];
+			offset = pos - process->position + get_type_size(process, process->op_args_type[i]);
 		}
 		else
 			return (0);
