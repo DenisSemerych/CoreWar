@@ -61,15 +61,17 @@ int		get_offset(t_process *process)
 	return (offset);
 }
 
-void	*get_t_ind_pointer(t_data *data, void *address)
+void	*get_t_ind_pointer(t_data *data, t_process *process, int arg_num)
 {
 	unsigned int	new_pos;
+	unsigned char	*address;
 	void			*pos;
 
-	new_pos = *((unsigned char *)address);
+	address = process->op_args_pointers[arg_num];
+	new_pos = *address;
 	address++;
-	new_pos = (new_pos << 2) + *((unsigned char *)address);
-	return (&data->board[new_pos]);
+	new_pos = (new_pos << 2) + *address;
+	return (&data->board[process->position + new_pos]);
 }
 
 int		write_args_pointers(t_data *data, t_process *process)
