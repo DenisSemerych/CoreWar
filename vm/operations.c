@@ -83,7 +83,7 @@ void	ld_lld(t_process *process, t_data *data)
 	int reg_num;
 
 	value = read_arg(process, 0, data);
-	reg_num = read_arg(process, 1, data);
+	reg_num = *((char*)process->op_args_pointers[1]);
 	if (data->v_4)
 		ft_printf("P%5d | %s %d R%d\n", process->uniq_number, (process->op_code == 2) ? "ld" : "lld", value, reg_num);
 	process->reg[reg_num] = value;
