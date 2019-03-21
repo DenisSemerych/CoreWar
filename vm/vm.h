@@ -16,7 +16,7 @@ typedef struct		s_process
 	unsigned int	op_args_type[3];
 	void			*op_args_pointers[3];
 	int				position;
-	int				reg[REG_NUMBER];
+	int				reg[REG_NUMBER + 1];
 	int				current_command;
 	int				waiting_cycles;
 }					t_process;
@@ -47,7 +47,7 @@ typedef struct 		s_data
 	int 			v_8 : 1;
 
 
-
+	unsigned int	max_process_num;
 	int 			last_alive_champ;
 	int 			checks_amount;
 	unsigned int	playing: 1;

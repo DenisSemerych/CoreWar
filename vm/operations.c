@@ -53,9 +53,12 @@ void	live(t_process *process, t_data *data)
 	int		champ_num;
 	t_list	*champ_p;
 
-	champ_num = read_arg(process, 0, data) * -1;
+	champ_num = read_arg(process, 0, data);
 	process->alive_cycle = data->cycle;
 	champ_p = data->champs;
+	if (data->v_4)
+		ft_printf("P%5d | live %d\n", process->uniq_number, champ_num);
+	champ_num *= -1;
 	while (champ_p)
 	{
 		if (((t_champ*)champ_p->content)->number == champ_num)
@@ -76,7 +79,14 @@ void	st(t_process *process, t_data *data)
 
 void	ld_lld(t_process *process, t_data *data)
 {
-	write_arg(process, 1, read_arg(process, 0, data), data);
+	int value;
+	int reg_num;
+
+	value = read_arg(process, 0, data);
+	reg_num = read_arg(process, 1, data);
+	if (data->v_4)
+		ft_printf("P%5d | %s %d R%d\n", process->uniq_number, (process->op_code == 2) ? "ld" : "lld", value, reg_num);
+	process->reg[reg_num] = value;
 	process->carry = (read_arg(process, 1, data) == 0);
 	//dobavit` lld (ne usekat po modulu)
 }
@@ -123,6 +133,7 @@ void	fork_lfork(t_process *process, t_data *data)
 
 	ft_bzero(&new_process, sizeof(t_process));
 	ft_memcpy(&new_process.reg, process->reg, sizeof(process->reg));
+	new_process.uniq_number = ++data->max_process_num;
 	new_process.carry = process->carry;
 	new_process.alive_cycle = process->alive_cycle;
 	new_process.position = (process->op_code == 12) ? (read_arg(process, 0, data) % IDX_MOD) : read_arg(process, 0, data);
