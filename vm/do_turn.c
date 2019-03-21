@@ -61,7 +61,7 @@ void	to_die_check(t_data *data)
 	process = data->processes;
 	while (process)
 	{
-		if (((t_process *)process->content)->alive_cycle - data->cycle_to_die > 0)
+		if (data->cycle - ((t_process *)process->content)->alive_cycle > data->cycle_to_die)
 			ft_lstdelcrt(&data->processes, process, NULL);
 		process = process->next;
 	}

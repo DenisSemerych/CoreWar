@@ -5,6 +5,9 @@
 # include "../includes/op.h"
 # include <fcntl.h>
 
+# define DIRECT 0
+# define INDIRECT 1
+
 typedef struct		s_process
 {
 	unsigned int	uniq_number;
