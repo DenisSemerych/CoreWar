@@ -56,6 +56,7 @@ int		get_offset(t_process *process)
 			offset += g_op_tab[process->op_code].label;
 		else
 			offset += get_type_size(process, process->op_args_type[i]);
+		i++;
 	}
 	return (offset);
 }
@@ -77,7 +78,7 @@ int		write_args_pointers(t_data *data, t_process *process)
 	int pos;
 	int i;
 
-	offset = 2;
+	offset = (g_op_tab[process->op_code].octal) ? 2 : 1;
 	i = 0;
 	while (i < g_op_tab[process->op_code].nb_arg)
 	{

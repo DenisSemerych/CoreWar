@@ -131,13 +131,14 @@ void	execute_operations(t_data *data)
 		if (!process->waiting_cycles)
 		{
 			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
-            if (process->op_code < 0 || process->op_code > 0x10)
+            if (process->op_code <= 0 || process->op_code > 0x10)
                 process->position++;
             else
             {
             	write_args_pointers(data, process);
                 execute_opeartion(proc_p->content, data);
-                process->position += 1 + g_op_tab[process->op_code].octal + op_args_size(process);
+                if (process->op_code != 9)
+                	process->position += get_offset(process);
             }
 		}
 		proc_p = proc_p->next;

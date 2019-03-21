@@ -160,6 +160,5 @@ void	execute_opeartion(t_process *process, t_data *data)
 		exec_op[15] = fork_lfork;
 		exec_op[16] = aff;
 	}
-	if (process->op_code > 0 && process->op_code <= 16)
-		exec_op[process->op_code](process, data);
+	exec_op[process->op_code](process, data);
 }
