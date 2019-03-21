@@ -80,6 +80,6 @@ int					write_args_pointers(t_data *data, t_process *process);
 int					get_offset(t_process *process);
 void				*get_t_ind_pointer(t_data *data, t_process *process, int arg_num);
 int 				get_type_size(t_process *process, int arg_type);
-
+void				print_board(const void *addr, size_t size);
 
 #endif
