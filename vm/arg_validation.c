@@ -67,6 +67,14 @@ void	insert_champ(t_data *data, t_champ *champ)
 		ft_lstadd(&(data->champs), new_lst);
 		return ;
 	}
+	else if (data->champs->next == NULL)
+	{
+		if (((t_champ *)(data->champs->content))->number > champ->number)
+			ft_lstadd(&(data->champs), new_lst);
+		else
+			data->champs->next = new_lst;
+		return ;
+	}
 	tmp = data->champs;
 	while (tmp && ((t_champ *)(tmp->content))->number < champ->number)
 		tmp = tmp->next;
