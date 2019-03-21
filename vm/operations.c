@@ -28,7 +28,7 @@ int 	read_arg(t_process *process, int argnum, t_data *data)
 	n = 0;
 	arg = 0;
 	p = process->op_args_pointers[argnum];
-	size = (process->op_args_type[argnum] == T_DIR) ? g_op_tab[process->op_code].label : process->op_args_type[argnum];
+	size = get_type_size(process, process->op_args_type[argnum]);
 	while (n < size && n < sizeof(int))
 	{
 		arg <<= 8;
@@ -37,7 +37,25 @@ int 	read_arg(t_process *process, int argnum, t_data *data)
 			p = data->board;
 		n++;
 	}
-	return ((process->op_args_type[argnum] == T_REG) ? process->reg[arg] : arg);
+	return ((process->op_args_type[argnum] == T_IND) ? (short)arg : arg);
+}
+
+int 	read_larg(t_process *process, int argnum, t_data *data)
+{
+	int index;
+
+	if (process->op_args_type[argnum] == T_REG)
+		return (process->reg[((char*)process->op_args_pointers[argnum])[0]]);
+	else if (process->op_args_type[argnum] == T_DIR)
+		return (read_arg(process, argnum, data));
+	else
+	{
+		index = read_arg(process, argnum, data);
+		if (process->op_code < 13 && process->op_code > 15)
+			index %= IDX_MOD;
+		process->op_args_pointers[argnum] = get_t_ind_pointer(data, process, argnum);
+		return (read_arg(process, argnum, data));
+	}
 }
 
 void 	write_arg(t_process *process, int argnum, int value, t_data *data)
@@ -53,7 +71,7 @@ void	live(t_process *process, t_data *data)
 	int		champ_num;
 	t_list	*champ_p;
 
-	champ_num = read_arg(process, 0, data);
+	champ_num = read_larg(process, 0, data);
 	process->alive_cycle = data->cycle;
 	champ_p = data->champs;
 	if (data->v_4)
@@ -74,77 +92,105 @@ void	live(t_process *process, t_data *data)
 
 void	st(t_process *process, t_data *data)
 {
-	write_arg(process, 1, read_arg(process, 0, data), data);
+	int value;
+	int arg;
+
+	value = read_arg(process, 0, data);
+	arg = read_larg(process, 0, data);
+
+	write_arg(process, 1, arg, data);
+	if (data->v_4)
+		ft_printf("P%5d | st r%d %s%d\n", process->uniq_number, value, (process->op_args_type[1] == T_REG) ? "r" : "", value);
 }
 
 void	ld_lld(t_process *process, t_data *data)
 {
 	int value;
-	int reg_num;
+	int ind;
 
 	value = read_arg(process, 0, data);
-	reg_num = *((char*)process->op_args_pointers[1]);
+	ind = read_larg(process, 1, data);
+
+
+	process->carry = ((process->reg[ind] = value) == 0);
 	if (data->v_4)
-		ft_printf("P%5d | %s %d R%d\n", process->uniq_number, (process->op_code == 2) ? "ld" : "lld", value, reg_num);
-	process->reg[reg_num] = value;
-	process->carry = (read_arg(process, 1, data) == 0);
-	//dobavit` lld (ne usekat po modulu)
+		ft_printf("P%5d | %s %d r%d\n", process->uniq_number, (process->op_code == 2) ? "ld" : "lld", value, ind);
 }
 
 void	sub_add(t_process *process, t_data *data)
 {
 	if (process->op_code == 3)
-		write_arg(process, 2, read_arg(process, 0, data) + read_arg(process, 1, data), data);
+		write_arg(process, 2, read_larg(process, 0, data) +
+				read_larg(process, 1, data), data);
 	else
-		write_arg(process, 2, read_arg(process, 0, data) - read_arg(process, 1, data), data);
-	process->carry = (read_arg(process, 2, data) == 0);
+		write_arg(process, 2, read_larg(process, 0, data) -
+				read_larg(process, 1, data), data);
+	process->carry = (read_larg(process, 2, data) == 0);
 }
 
 void	and_or_xor(t_process *process, t_data *data)
 {
 	if (process->op_code == 5)
-		write_arg(process, 2, read_arg(process, 0, data) & read_arg(process, 1, data), data);
+		write_arg(process, 2, read_larg(process, 0, data) &
+				read_larg(process, 1, data), data);
 	else if (process->op_code == 6)
-		write_arg(process, 2, read_arg(process, 0, data) | read_arg(process, 1, data), data);
+		write_arg(process, 2, read_larg(process, 0, data) |
+				read_larg(process, 1, data), data);
 	else
-		write_arg(process, 2, read_arg(process, 0, data) ^ read_arg(process, 1, data), data);
-	process->carry = (read_arg(process, 2, data) == 0);
+		write_arg(process, 2, read_larg(process, 0, data) ^
+				read_larg(process, 1, data), data);
+	process->carry = (read_larg(process, 2, data) == 0);
 }
 
 void	zjmp(t_process *process, t_data *data)
 {
+	int value;
+
+	value = read_larg(process, 0, data) % IDX_MOD;
 	if (process->carry)
-		process->position = (process->position + read_arg(process, 0, data) % IDX_MOD) % MEM_SIZE;
+		process->position = (process->position + value) % MEM_SIZE;
+	if (data->v_4)
+		ft_printf("P%5d | zjmp %d %s\n", process->uniq_number, value, (process->carry) ? "OK" : "FAIL");
 }
 
 void	ldi_lldi(t_process *process, t_data *data)
 {
-	write_arg(process, 2, process->position + (read_arg(process, 0, data) + read_arg(process, 1, data)) % IDX_MOD, data);
+	write_arg(process, 2, process->position + (read_larg(process, 0, data) +
+			read_larg(process, 1, data)) % IDX_MOD, data);
 }
 
 void	sti(t_process *process, t_data *data)
 {
-	write_data(process->position + (read_arg(process, 1, data) + read_arg(process, 2, data)) % IDX_MOD, read_arg(process, 0, data), data);
+	write_data(process->position + (read_larg(process, 1, data) +
+					   read_larg(process, 2, data)) % IDX_MOD,
+			   read_larg(process, 0, data), data);
 }
 
 void	fork_lfork(t_process *process, t_data *data)
 {
-	t_process new_process;
+	t_process	new_process;
+	int 		value;
 
+	value = read_larg(process, 0, data);
+	value = (process->op_code == 12) ? (value % IDX_MOD) : value;
 	ft_bzero(&new_process, sizeof(t_process));
 	ft_memcpy(&new_process.reg, process->reg, sizeof(process->reg));
 	new_process.uniq_number = ++data->max_process_num;
 	new_process.carry = process->carry;
 	new_process.alive_cycle = process->alive_cycle;
-	new_process.position = (process->op_code == 12) ? (read_arg(process, 0, data) % IDX_MOD) : read_arg(process, 0, data);
+	new_process.position = process->position + value;
+	new_process.live = 1;
 	ft_lstadd(&data->processes, ft_lstnew(&new_process, sizeof(t_process)));
+	if (data->v_4)
+		ft_printf("P%5d | %s %d (%d)\n", process->uniq_number, (process->op_code == 12) ? "fork" : "lfork", value, new_process.position);
+
 }
 
 void	aff(t_process *process, t_data *data)
 {
 	char c;
 
-	c = read_arg(process, 0, data);
+	c = read_larg(process, 0, data);
 	ft_printf("%c", c);
 }
 
