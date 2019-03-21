@@ -17,6 +17,7 @@ int main(int argc, char** argv)
 //	data.v_0 = 1;
 //	data.v_2 = 1;
 	data.v_4 = 1;
+//	data.v_16 = 1;
 	initialization(&data);
 	while (data.playing)
 		do_turn(&data);

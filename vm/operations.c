@@ -10,8 +10,8 @@ void	write_data(void *position, int value, t_data *data)
 	p = position;
 	while (n < 4)
 	{
-		*p++ = (value << 24) >> 24;
-		value >>= 8;
+		*p++ = (value & 0xFF000000) >> 24;
+		value <<= 8;
 		if (p - data->board > MEM_SIZE)
 			p = data->board;
 		n++;
@@ -172,8 +172,6 @@ void	sti(t_process *process, t_data *data)
 		ft_printf("P%5d | sti r%d %d %d\n       | -> store to %d + %d = %d (with pc and mod %d)\n", process->uniq_number, from, pos1, pos2, pos1, pos2, sum, mod);
 
 	write_data(&data->board[mod % MEM_SIZE], read_arg(process, 0, data, INDIRECT), data);
-	if (data->v_4)
-		ft_printf("P%5d | sti r%d %d %d\n", process->uniq_number, from, pos1, pos2);
 }
 
 void	fork_lfork(t_process *process, t_data *data)

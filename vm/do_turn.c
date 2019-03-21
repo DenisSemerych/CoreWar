@@ -100,29 +100,12 @@ void	read_operations(t_data *data)
 	}
 }
 
-int 	op_args_size(t_process *process)
-{
-	int size;
-	int i;
-
-	size = 0;
-	i = -1;
-	while (++i < 3)
-	{
-		if (process->op_args_type[i] == T_REG)
-			size++;
-		else if (process->op_args_type[i] == T_IND)
-			size += 2;
-		else if (process->op_args_type[i] == T_DIR)
-			size += g_op_tab[process->op_code].label;
-	}
-	return (size);
-}
-
 void	execute_operations(t_data *data)
 {
 	t_list	*proc_p;
 	t_process *process;
+	int			offset;
+	int			n;
 
 	proc_p = data->processes;
 	while (proc_p)
@@ -137,7 +120,18 @@ void	execute_operations(t_data *data)
             {
                 execute_opeartion(proc_p->content, data);
                 if (process->op_code != 9)
+				{
+                	offset = get_offset(process);
+                	if (data->v_16)
+					{
+                		ft_printf("ADV %d (%#06x -> %#06x)", offset, process->position, (process->position + offset) % IDX_MOD);
+                		n = -1;
+                		while (++n < offset)
+                			ft_printf(" %02x", data->board[(process->position + n) % MEM_SIZE]);
+                		ft_printf("\n");
+					}
                 	process->position += get_offset(process);
+				}
             }
 		}
 		proc_p = proc_p->next;

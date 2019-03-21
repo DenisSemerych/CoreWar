@@ -48,6 +48,7 @@ typedef struct 		s_data
 	int 			v_2 : 1;
 	int 			v_4 : 1;
 	int 			v_8 : 1;
+	int 			v_16 : 1;
 
 
 	unsigned int	max_process_num;
