@@ -22,6 +22,7 @@ void	reserve_numbers(int argc, char **argv, t_data *data)
 		if (ft_strcmp(argv[i], "-n") == 0)
 		{
 			n = fl_process(argc, argv, &i, 1);
+			data->pl_numbers[n - 1] == 2 ? error_msg("There can not be players with same numbers!") : 0;
 			data->pl_numbers[n - 1] = 2;
 		}
 		i++;
@@ -76,13 +77,11 @@ void	insert_champ(t_data *data, t_champ *champ)
 		return ;
 	}
 	tmp = data->champs;
-	while (tmp && ((t_champ *)(tmp->content))->number < champ->number)
+	while (tmp->next && ((t_champ *)(tmp->next->content))->number < champ->number)
 		tmp = tmp->next;
 	prev_next = tmp->next;
 	tmp->next = new_lst;
 	new_lst->next = prev_next;
-	new_lst->content = tmp->content;
-	tmp->content = champ;
 }
 
 void	process_champ(int argc, char** argv, int *i, t_data *data)
