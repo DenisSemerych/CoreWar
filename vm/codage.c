@@ -10,9 +10,9 @@ void	codage_proc(t_process *process, unsigned char codage)
 	process->op_args_type[2] = 0;
 	if (g_op_tab[process->op_code].octal)
 	{
-		args[0] = codage & (unsigned char)0b11000000 >> 6;
-		args[1] = codage & (unsigned char)0b00110000 >> 4;
-		args[2] = codage & (unsigned char)0b00001100 >> 2;
+		args[0] = (codage & (unsigned char)0b11000000) >> 6;
+		args[1] = (codage & (unsigned char)0b00110000) >> 4;
+		args[2] = (codage & (unsigned char)0b00001100) >> 2;
 		i = -1;
 		while (++i < g_op_tab[process->op_code].nb_arg)
 		{
