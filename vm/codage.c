@@ -89,6 +89,7 @@ int		write_args_pointers(t_data *data, t_process *process)
 		}
 		else
 			return (0);
+		i++;
 	}
 	return (1);
 }

@@ -12,8 +12,6 @@
 
 #include "vm.h"
 
-extern t_op	g_op_tab[];
-
 void		is_playing_check(t_data *data)
 {
 	t_list	*process;
@@ -72,6 +70,8 @@ void	to_die_check(t_data *data)
 	{
 		data->cycle_to_die -= CYCLE_DELTA;
 		data->checks_amount = 0;
+		if (data->v_2)
+			ft_printf("Cycle to die is now %d\n", data->cycle_to_die);
 	}
 	data->cycles_fr_lst_check = 0;
 	data->live_op_amount = 0;
@@ -119,30 +119,6 @@ int 	op_args_size(t_process *process)
 	return (size);
 }
 
-int 	check_process_args(t_process *process, t_data *data)
-{
-	int n;
-
-	n = -1;
-	while (++n < 3)
-//		if (process->op_args_type[n] == T_REG && process->op_args[n] >= REG_NUMBER)
-			return (0);
-	return (1);
-
-}
-
-int 	check_process(t_process *process, t_data *data)
-{
-	if (process->op_code < 0 || process->op_code > 0x10)
-		process->position++;
-	else if (!check_process_args(process, data))
-		process->position += 1 + g_op_tab[process->op_code].octal + op_args_size(process);
-	else
-		return (1);
-	return (0);
-
-}
-
 void	execute_operations(t_data *data)
 {
 	t_list	*proc_p;
@@ -159,6 +135,7 @@ void	execute_operations(t_data *data)
                 process->position++;
             else
             {
+            	write_args_pointers(data, process);
                 execute_opeartion(proc_p->content, data);
                 process->position += 1 + g_op_tab[process->op_code].octal + op_args_size(process);
             }
@@ -169,15 +146,14 @@ void	execute_operations(t_data *data)
 
 void	do_turn(t_data *data)
 {
-	while (data->playing)
-	{
-		read_operations(data);
-		execute_operations(data);
 
-		if (data->cycles_fr_lst_check >= data->cycle_to_die)
-			to_die_check(data);
-		is_playing_check(data);
-		data->cycles_fr_lst_check++;
-		data->cycle++;
-	}
+	if (data->v_2)
+		ft_printf("It is now cycle %d\n", data->cycle);
+	read_operations(data);
+	execute_operations(data);
+	if (data->cycles_fr_lst_check >= data->cycle_to_die)
+		to_die_check(data);
+	is_playing_check(data);
+	data->cycles_fr_lst_check++;
+	data->cycle++;
 }

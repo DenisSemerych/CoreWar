@@ -16,7 +16,7 @@ typedef struct		s_process
 	unsigned int	op_args_type[3];
 	void			*op_args_pointers[3];
 	int				position;
-	unsigned int	reg[REG_NUMBER];
+	int				reg[REG_NUMBER];
 	int				current_command;
 	int				waiting_cycles;
 }					t_process;
@@ -40,7 +40,15 @@ typedef struct 		s_data
 
 	int 			dump_flag : 1;
 	int 			v_flag : 1;
+	int 			v_0 : 1;
+	int 			v_1 : 1;
+	int 			v_2 : 1;
+	int 			v_4 : 1;
+	int 			v_8 : 1;
 
+
+
+	int 			last_alive_champ;
 	int 			checks_amount;
 	unsigned int	playing: 1;
 	unsigned char	*board;
@@ -70,5 +78,6 @@ int 				get_absolute_cord(int cord, int relative_cord);
 void				execute_opeartion(t_process *process, t_data *data);
 int					write_args_pointers(t_data *data, t_process *process);
 int					get_offset(t_process *process);
+
 
 #endif

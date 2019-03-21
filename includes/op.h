@@ -88,4 +88,4 @@ typedef struct		s_op
 	unsigned int	label;
 }					t_op;
 
-extern t_op			g_op_tab[16];
+extern t_op			g_op_tab[17];
