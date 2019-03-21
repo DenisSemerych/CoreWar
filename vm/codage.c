@@ -71,9 +71,9 @@ void	*get_t_ind_pointer(t_data *data, t_process *process, int arg_num)
 	address++;
 	new_pos = (new_pos << 2) + *address;
 	if (process->op_code >= 13 && process->op_code <= 15)
-		return (&data->board[get_absolute_cord(process->position, new_pos % IDX_MOD)]);
-	else
 		return (&data->board[get_absolute_cord(process->position, new_pos)]);
+	else
+		return (&data->board[get_absolute_cord(process->position, new_pos % IDX_MOD)]);
 }
 
 int		write_args_pointers(t_data *data, t_process *process)
