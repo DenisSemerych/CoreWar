@@ -71,7 +71,7 @@ void	*get_t_ind_pointer(t_data *data, t_process *process, int arg_num)
 	new_pos = *address;
 	address++;
 	new_pos = (new_pos << 2) + *address;
-	return (&data->board[process->position + new_pos]);
+	return (&data->board[get_absolute_cord(process->position, new_pos)]);
 }
 
 int		write_args_pointers(t_data *data, t_process *process)
