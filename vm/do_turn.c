@@ -100,12 +100,34 @@ void	read_operations(t_data *data)
 	}
 }
 
-int 	check_process_arg(t_process *process, t_data *data)
+int 	op_args_size(t_process *process)
+{
+	int size;
+	int i;
+
+	size = 0;
+	i = -1;
+	while (++i < 3)
+	{
+		if (process->op_args_type[i] == T_REG)
+			size++;
+		else if (process->op_args_type[i] == T_IND)
+			size += 2;
+		else if (process->op_args_type[i] == T_DIR)
+			size += g_op_tab[process->op_code].label;
+	}
+	return (size);
+}
+
+int 	check_process_args(t_process *process, t_data *data)
 {
 	int n;
 
-	n = 0;
-	while (process->op_args[n] == T_REG)
+	n = -1;
+	while (++n < 3)
+		if (process->op_args_type[n] == T_REG && process->op_args[n] >= REG_NUMBER)
+			return (0);
+	return (1);
 
 }
 
@@ -113,8 +135,8 @@ int 	check_process(t_process *process, t_data *data)
 {
 	if (process->op_code < 0 || process->op_code > 0x10)
 		process->position++;
-//	else if (!check_process_args(process, data))
-//		a = 0;
+	else if (!check_process_args(process, data))
+		process->position += 1 + g_op_tab[process->op_code].octal + op_args_size(process);
 	else
 		return (1);
 	return (0);
@@ -133,13 +155,10 @@ void	execute_operations(t_data *data)
 		if (!process->waiting_cycles)
 		{
 			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
-			check_process(process, data);
-			//if (process->op_code < 0 || process->op_code > 0x10)
+			if (check_process(process, data))
+			{
 
-
-
-
-
+			}
 		}
 		proc_p = proc_p->next;
 	}

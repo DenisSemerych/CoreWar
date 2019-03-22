@@ -14,20 +14,36 @@ void	codage_proc(t_process *process, unsigned char codage)
 		while (++i < 3)
 		{
 			if (args[i] == 0b10)
-				process->op_args[i] = T_DIR;
+				process->op_args_type[i] = T_DIR;
 			else if (args[i] == 0b01)
-				process->op_args[i] = T_REG;
+				process->op_args_type[i] = T_REG;
 			else if (args[i] == 0b11)
-				process->op_args[i] = T_IND;
+				process->op_args_type[i] = T_IND;
 			else
-				process->op_args[i] = 0;
+				process->op_args_type[i] = 0;
 		}
 	}
 	else
 	{
-		process->op_args[0] = T_DIR;
-		process->op_args[1] = 0;
-		process->op_args[1] = 0;
-
+		process->op_args_type[0] = T_DIR;
+		process->op_args_type[1] = 0;
+		process->op_args_type[1] = 0;
 	}
 }
+
+//int		write_args(t_process *process)
+//{
+//	int	offset;
+//	int i;
+//
+//	offset = 1;
+//	i = 0;
+//	while (i < g_op_tab[process->op_code].nb_arg)
+//	{
+//		if (!(process->op_args_type[i] & g_op_tab[process->op_code].args[i]))
+//			return (0);
+//		if (process->op_args_type[i] & g_op_tab[process->op_code].args[i])
+//			process->op_args[i] =
+//	}
+//}
+

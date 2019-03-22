@@ -113,6 +113,8 @@ void	arg_valid(int argc, char** argv, t_data *data)
 			data->next_p_num = fl_process(argc, argv, &i, 1);
 		else if (ft_strcmp(argv[i], "-dump") == 0)
 			data->dump_flag = fl_process(argc, argv, &i, 2);
+		else if (ft_strcmp(argv[i], "-v") == 0)
+			data->v_flag = 1;
 		else
 			process_champ(argc, argv, &i, data);
 		i++;

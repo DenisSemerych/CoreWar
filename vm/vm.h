@@ -28,6 +28,7 @@ typedef struct		s_process
 	unsigned int	carry: 1;
 	unsigned int	live: 1;
 	unsigned int	op_code;
+	unsigned int	op_args_type[3];
 	unsigned int	op_args[3];
 	int				position;
 	unsigned int	reg[REG_NUMBER];
@@ -54,6 +55,7 @@ typedef struct 		s_data
 	unsigned int	next_p_num;
 
 	int 			dump_flag : 1;
+	int 			v_flag : 1;
 
 	int 			checks_amount;
 	unsigned int	playing: 1;
@@ -80,5 +82,6 @@ void				initialization(t_data *data);
 void				do_turn(t_data *data);
 void				introduce_champs(t_list *champs);
 void				codage_proc(t_process *process, unsigned char codage);
+int 				get_absolute_cord(int cord, int relative_cord);
 
 #endif
