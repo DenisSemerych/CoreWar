@@ -5,6 +5,7 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
     char **args;
     t_arg_type type;
     int  count;
+    char *trimed;
 
     args = ft_strsplit(crawler, ',');
     count = 0;
@@ -12,13 +13,14 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
         put_err_msg_exit("Error in number of arguments");
     while (count < count_size(args))
     {
-        if (*args[count] == '%')
+        trimed = ft_strtrim(args[count]);
+        if (*trimed == '%')
             type = T_DIR;
-        else if (*args[count] == 'r')
+        else if (*trimed == 'r')
             type = T_REG;
         else
             type = T_IND;
-        if (op->args[0] & type)
+        if (op->args[count] & type)
             (*inst)->args[count] = args[count];
         else
             put_err_msg_exit("Wrong argument type for command");
@@ -72,27 +74,30 @@ size_t validate_lable(t_list **lables, char *line, int *line_nbr)
 }
 
 
-t_list *validate_command(t_list **lables, t_op *op, int *line_nbr, char *line)
+t_list *validate_command(t_op *op, int *line_nbr, char *line)
 {
     char *crawler;
     t_inst *inst;
     char *op_name_crawler;
+    t_list *command;
 
     crawler = line;
     inst = (t_inst *)malloc(sizeof(t_inst));
     inst->lable = NULL;
     inst->name = op->name;
     op_name_crawler = op->name;
-    while (IS_SEPARATOR(*crawler))
-        crawler++;
+    skip_separators(&crawler);
     while (*crawler == *op_name_crawler)
     {
         op_name_crawler++;
         crawler++;
     }
-    while (IS_SEPARATOR(*crawler))
-        crawler++;
+    skip_separators(&crawler);
+    if (*crawler == 'r' && !IS_SEPARATOR(*(crawler - 1)))
+        put_err_msg_exit("missing separator");
     parse_arg(&inst, op, line_nbr, crawler);
     inst->lable = NULL;
-    return (NULL);
+    command = ft_lstnew(NULL, 0);
+    command->content = inst;
+    return (command);
 }

@@ -1,5 +1,21 @@
 #include "asm.h"
 
+void        skip_separators(char **file)
+{
+    while (IS_SEPARATOR(*(*file)))
+        (*file)++;
+}
+
+void        skip_comment(char **file)
+{
+    if (IS_COMMENT(*(*file)))
+    {
+        while (*(*file) != '\n')
+            (*file)++;
+    }
+}
+
+
 int         is_lable(char *line)
 {
     while (*line)
@@ -28,7 +44,7 @@ t_list		*find_last(t_list *head)
     t_list *crawler;
 
     crawler = head;
-    while (crawler->next)
+    while (crawler && crawler->next)
         crawler = crawler->next;
     return (crawler);
 }

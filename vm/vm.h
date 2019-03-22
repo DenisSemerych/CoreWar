@@ -6,7 +6,7 @@
 /*   By: yochered <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:34:26 by yochered          #+#    #+#             */
-/*   Updated: 2019/03/18 11:34:27 by yochered         ###   ########.fr       */
+/*   Updated: 2019/03/22 13:29:20 by yochered         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,12 @@
 # include "op.h"
 # include <fcntl.h>
 
+<<<<<<< HEAD
 typedef struct s_vs	t_vs;
+=======
+# define DIRECT 0
+# define INDIRECT 1
+>>>>>>> master
 
 typedef struct		s_process
 {
@@ -29,9 +34,9 @@ typedef struct		s_process
 	unsigned int	live: 1;
 	unsigned int	op_code;
 	unsigned int	op_args_type[3];
-	unsigned int	op_args[3];
+	void			*op_args_pointers[3];
 	int				position;
-	unsigned int	reg[REG_NUMBER];
+	int				reg[REG_NUMBER + 1];
 	int				current_command;
 	int				waiting_cycles;
 }					t_process;
@@ -56,7 +61,14 @@ typedef struct 		s_data
 
 	int 			dump_flag : 1;
 	int 			v_flag : 1;
-
+	int 			v_0 : 1;
+	int 			v_1 : 1;
+	int 			v_2 : 1;
+	int 			v_4 : 1;
+	int 			v_8 : 1;
+	int 			v_16 : 1;
+	unsigned int	max_process_num;
+	int 			last_alive_champ;
 	int 			checks_amount;
 	unsigned int	playing: 1;
 	unsigned char	*board;
@@ -83,5 +95,11 @@ void				do_turn(t_data *data);
 void				introduce_champs(t_list *champs);
 void				codage_proc(t_process *process, unsigned char codage);
 int 				get_absolute_cord(int cord, int relative_cord);
+void				execute_opeartion(t_process *process, t_data *data);
+int					write_args_pointers(t_data *data, t_process *process);
+int					get_offset(t_process *process);
+void				*get_t_ind_pointer(t_data *data, t_process *process, int arg_num);
+int 				get_type_size(t_process *process, int arg_type);
+void				print_board(const void *addr, size_t size);
 
 #endif

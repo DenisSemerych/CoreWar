@@ -25,7 +25,29 @@ int    write_string_tokken(t_list *command, char **file, int *line_nbr)
 
 t_list *create_arg_list(t_list *lables, t_list *instructions, t_list *info)
 {
-    return NULL;
+    while (lables)
+    {
+        t_lable *to_print = lables->content;
+        printf("%s\n", to_print->name);
+        t_inst *inst = to_print->opp;
+        printf("%s %s\n", inst->name, inst->lable->name);
+        lables = lables->next;
+    }
+    while (instructions)
+    {
+        t_inst *pr = instructions->content;
+        printf("%s%s\n%s", MAG, pr->name, RESET);
+        printf("\nNumber:%d\n", pr->nb_arg);
+        int i = 0;
+        while (i < pr->nb_arg)
+            printf(" argument:%s", pr->args[i++]);
+        instructions = instructions->next;
+        printf("\n");
+    }
+//    while (info)
+//    {
+//
+//    }
 }
 
 
@@ -40,8 +62,7 @@ void    save_info(char **file, t_list **info, int *line_nbr)
         command->content_size = COMMENT;
     else
         put_err_msg_exit("here");
-    while (IS_SEPARATOR(*(*file)))
-        (*file)++;
+    skip_separators(file);
     *(*file) != '\"' ? put_err_msg_exit("Error expected \"") : ((*file)++);
     *file = *file + write_string_tokken(command, file, line_nbr);
     printf("Here is in command %s\n", command->content);
@@ -75,10 +96,11 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
     if (!op)
     {
         free(line);
-        return ;
+        put_err_msg_exit("Error in line");
     }
-   *instructions = add_to_the_end_of_list(*instructions,validate_command(lables, op, line_nbr, crawler));
+   *instructions = add_to_the_end_of_list(*instructions,validate_command(op, line_nbr, crawler));
     give_op_lable(find_last(*instructions), lables);
+    *file += ft_strlen(line);
 }
 
 t_list *tokenize(char *file)
@@ -92,19 +114,18 @@ t_list *tokenize(char *file)
     lables = NULL;
     info = NULL;
     line_nbr = 1;
-    while (file)
+    while (*file)
     {
         if (*file == '.')
            save_info(&file, &info, &line_nbr);
-        if (IS_COMMENT(*file))
-        {
-            while (*file != '\n')
-                file++;
-        }
+        skip_separators(&file);
         if (*file == '\n' && *file++)
             line_nbr++;
-        full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
+        skip_comment(&file);
+        if (*file != '\0')
+            full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
     }
+    printf("Lines = %d\n", line_nbr);
     return (create_arg_list(lables, instructions, info));
 }
 
