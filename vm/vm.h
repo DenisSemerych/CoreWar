@@ -18,12 +18,9 @@
 # include "op.h"
 # include <fcntl.h>
 
-<<<<<<< HEAD
 typedef struct s_vs	t_vs;
-=======
 # define DIRECT 0
 # define INDIRECT 1
->>>>>>> master
 
 typedef struct		s_process
 {

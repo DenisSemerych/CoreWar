@@ -18,18 +18,17 @@
 # include "stdbool.h"
 # include "libft.h"
 # include "locale.h"
+# include "time.h"
 # define WHITE 0
 # define RED 1
 # define GREEN 2
 # define YELLOW 3
-# define BLUE 4
-# define MAGENTA 5
-# define CYAN 6
-# define WHITE_BG 7
-# define RED_BG 8
-# define GREEN_BG 9
-# define YELLOW_BG 10
-# define BLUE_BG 11
+# define CYAN 4
+# define WHITE_BG 5
+# define RED_BG 6
+# define GREEN_BG 7
+# define YELLOW_BG 8
+# define CYAN_BG 9
 
 # define IDENT 3
 # define BOARD_SIZE 64
@@ -48,9 +47,9 @@
 
 typedef struct	s_map
 {
-	size_t	owner : 1;
-	size_t	cycles_after_st : 1;
-	size_t	cycles_after_live: 1;
+	size_t	owner;
+	size_t	cycles_after_st;
+	size_t	cycles_after_live;
 }				t_map;
 
 typedef struct	s_vs
@@ -58,7 +57,8 @@ typedef struct	s_vs
 	int				ch;
 	int				width;
 	int				heigth;
-	unsigned int	speed;
+	unsigned int	delay;
+	clock_t			time;
 	bool			stop;
 	t_map			*map;
 	WINDOW			*board;

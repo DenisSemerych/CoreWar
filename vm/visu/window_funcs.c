@@ -24,7 +24,6 @@ WINDOW	*create_newwin(int height, int width, int y, int x)
 	WINDOW *win;
 
 	win = newwin(height, width, y, x);
-	set_border(win);
 	wrefresh(win);
 	return (win);
 }

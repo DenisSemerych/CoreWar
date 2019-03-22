@@ -20,10 +20,12 @@ VM_SRC_LIST = \
 	champ_data.c\
 	codage.c\
 	debug_funcs.c\
+	do_turn.c\
 	initialization.c\
 	intro_champs.c\
-	op.c
-	#do_turn.c\
+	op.c\
+	operations.c\
+	print_board.c
 
 VISU_SRCDIR = $(VM_SRCDIR)visu/
 VISU_SRC_LIST = \
@@ -47,7 +49,7 @@ INCLUDES = \
 	-I ./includes/\
 	-I ./vm/
 
-FLAGS = 
+FLAGS = -O3
 GREEN = \033[92m
 RESET = \033[0m
 
@@ -98,4 +100,4 @@ re: fclean all
 
 run: all
 	clear
-	./corewar
+	./corewar katchup.cor katchup.cor katchup.cor katchup.cor

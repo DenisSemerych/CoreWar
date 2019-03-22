@@ -34,9 +34,9 @@ unsigned int	get_attributes(t_data *data, t_map *map, int pos)
 	else if (map[pos].cycles_after_live > 0)
 		map[pos].cycles_after_live--;
 	if (map[pos].cycles_after_live > 0)
-		return (COLOR_PAIR(map[pos].owner + 7) | A_BOLD);
+		return (COLOR_PAIR(map[pos].owner + 5) | A_BOLD);
 	else if (map[pos].owner && check_process(data, pos))
-		return (COLOR_PAIR(map[pos].owner + 7));	//Current color background
+		return (COLOR_PAIR(map[pos].owner + 5));
 	else if (map[pos].cycles_after_st > 0)
 		return (COLOR_PAIR(map[pos].owner | A_BOLD));
 	else
@@ -59,9 +59,9 @@ void			draw_board(t_data *data, t_vs *vs)
 		wmove(vs->board, i + 2, j + IDENT + 1);
 		while (++j < BOARD_SIZE)
 		{
-			attr = get_attributes(data, data->vs->map, i * 64 + j);
+			attr = get_attributes(data, data->vs->map, i * BOARD_SIZE + j);
 			wattron(vs->board, attr);
-			wprintw(vs->board, "%2x", data->board[i * BOARD_SIZE + j]);
+			wprintw(vs->board, "%02x", data->board[i * BOARD_SIZE + j]);
 			wattroff(vs->board, attr);
 			waddch(vs->board, ' ');
 		}
