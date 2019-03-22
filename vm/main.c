@@ -1,8 +1,10 @@
 #include "vm.h"
 
+
 int main(int argc, char** argv)
 {
 	t_data data;
+	t_list	*p;
 
 	ft_bzero(&data, sizeof(t_data));
 	reserve_numbers(argc, argv, &data);
@@ -13,13 +15,15 @@ int main(int argc, char** argv)
 	introduce_champs(data.champs);
 
 
-//	data.v_1 = 1;
-//	data.v_0 = 1;
-//	data.v_2 = 1;
-	data.v_4 = 1;
-//	data.v_16 = 1;
+	data.n_flag = 31;
+	data.cycle = 1;
 	initialization(&data);
 	while (data.playing)
 		do_turn(&data);
+
+	p = data.champs;
+	while (p && ((t_champ*)p->content)->number != data.last_alive_champ)
+		p = p->next;
+	ft_printf("Contestant %d, \"%s\", has won!\n", data.last_alive_champ, ((t_champ*)p->content)->name);
 	return (0);
 }
