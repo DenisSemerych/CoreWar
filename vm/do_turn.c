@@ -16,7 +16,7 @@ void		is_playing_check(t_data *data)
 {
 	t_list	*process;
 
-	if (data->cycle_to_die <= 0)
+	if (data->cycle_to_die <= 0 || !data->processes)
 		data->playing = 0;
 	else
 	{
@@ -62,7 +62,11 @@ void	to_die_check(t_data *data)
 	while (process)
 	{
 		if (data->cycle - ((t_process *)process->content)->alive_cycle > data->cycle_to_die)
+		{
+			if (data->n_flag & 8)
+				ft_printf("Process %d hasn't lived for %d cycles (CTD %d)\n", ((t_process*)process->content)->uniq_number, data->cycle - ((t_process*)process->content)->alive_cycle, data->cycle_to_die);
 			ft_lstdelcrt(&data->processes, process, NULL);
+		}
 		process = process->next;
 	}
 	data->checks_amount++;
@@ -70,7 +74,7 @@ void	to_die_check(t_data *data)
 	{
 		data->cycle_to_die -= CYCLE_DELTA;
 		data->checks_amount = 0;
-		if (data->v_2)
+		if (data->n_flag & 2)
 			ft_printf("Cycle to die is now %d\n", data->cycle_to_die);
 	}
 	data->cycles_fr_lst_check = 0;
@@ -86,15 +90,13 @@ void	read_operations(t_data *data)
 	while (proc_p)
 	{
 		process = proc_p->content;
-		if (!process->live)
-			continue;
-		if (!process->waiting_cycles)
+		if (!process->waiting_cycles && process->live)
 		{
 			process->op_code = data->board[process->position];
 			if (process->op_code > 0 && process->op_code < 0x10)
 				process->waiting_cycles = g_op_tab[process->op_code].cycles;
 		}
-		else
+		else if (process->live)
 			process->waiting_cycles--;
 		proc_p = proc_p->next;
 	}
@@ -115,14 +117,14 @@ void	execute_operations(t_data *data)
 		{
 			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
             if (process->op_code <= 0 || process->op_code > 0x10 || !write_args_pointers(data, process))
-                process->position++;
+                process->position = (process->position + 1) % MEM_SIZE;
             else
             {
                 execute_opeartion(proc_p->content, data);
                 if (process->op_code != 9)
 				{
                 	offset = get_offset(process);
-                	if (data->v_16)
+                	if (data->n_flag & 16)
 					{
                 		ft_printf("ADV %d (%#06x -> %#06x)", offset, process->position, (process->position + offset) % IDX_MOD);
                 		n = -1;
@@ -140,7 +142,7 @@ void	execute_operations(t_data *data)
 
 void	do_turn(t_data *data)
 {
-	if (data->v_2)
+	if (data->n_flag & 2)
 		ft_printf("It is now cycle %d\n", data->cycle);
 	read_operations(data);
 	execute_operations(data);

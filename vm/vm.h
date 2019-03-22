@@ -58,12 +58,11 @@ typedef struct 		s_data
 
 	int 			dump_flag : 1;
 	int 			v_flag : 1;
-	int 			v_0 : 1;
-	int 			v_1 : 1;
-	int 			v_2 : 1;
-	int 			v_4 : 1;
-	int 			v_8 : 1;
-	int 			v_16 : 1;
+	int 			n_flag;
+
+
+
+>>>>>>> master
 	unsigned int	max_process_num;
 	int 			last_alive_champ;
 	int 			checks_amount;
