@@ -12,7 +12,7 @@ void	write_data(void *position, int value, t_data *data)
 	{
 		*p++ = (value & 0xFF000000) >> 24;
 		value <<= 8;
-		if (p - data->board > MEM_SIZE)
+		if (p - data->board >= MEM_SIZE)
 			p = data->board;
 		n++;
 	}
@@ -38,7 +38,7 @@ int 	read_arg(t_process *process, int argnum, t_data *data, int dir_flag)
 	{
 		arg <<= 8;
 		arg |= (int)*p++;
-		if (p - data->board > MEM_SIZE)
+		if (p - data->board >= MEM_SIZE)
 			p = data->board;
 		n++;
 	}

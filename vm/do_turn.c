@@ -96,7 +96,7 @@ void	read_operations(t_data *data)
 			if (process->op_code > 0 && process->op_code < 0x10)
 				process->waiting_cycles = g_op_tab[process->op_code].cycles;
 		}
-		else if (process->live)
+		if (process->live)
 			process->waiting_cycles--;
 		proc_p = proc_p->next;
 	}
@@ -120,6 +120,11 @@ void	execute_operations(t_data *data)
                 process->position = (process->position + 1) % MEM_SIZE;
             else
             {
+            	//test
+            	if (data->cycle == 7475)
+            		process = process; //end of test
+
+
                 execute_opeartion(proc_p->content, data);
                 if (process->op_code != 9)
 				{
@@ -132,7 +137,7 @@ void	execute_operations(t_data *data)
                 			ft_printf(" %02x", data->board[(process->position + n) % MEM_SIZE]);
                 		ft_printf("\n");
 					}
-                	process->position += get_offset(process);
+                	process->position = (process->position + offset) % MEM_SIZE;
 				}
             }
 		}
@@ -143,7 +148,7 @@ void	execute_operations(t_data *data)
 void	do_turn(t_data *data)
 {
 
-	if (data->n_flag & 2)
+	if (data->n_flag & 2 && data->cycle)
 		ft_printf("It is now cycle %d\n", data->cycle);
 	read_operations(data);
 	execute_operations(data);
