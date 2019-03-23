@@ -12,7 +12,7 @@
 
 #include "vm.h"
 
-void		is_playing_check(t_data *data)
+int		is_playing_check(t_data *data)
 {
 	t_list	*process;
 
@@ -24,14 +24,12 @@ void		is_playing_check(t_data *data)
 		while (process)
 		{
 			if (((t_process *)process->content)->live)
-			{
-				data->playing = 1;
-				return;
-			}
+				return (data->playing = 1);
 			process = process->next;
 		}
 		data->playing = 0;
 	}
+	return (data->playing);
 }
 
 void	ft_lstdelcrt(t_list **list, t_list *to_delete, void (*del)(void *, size_t))
@@ -96,7 +94,7 @@ void	read_operations(t_data *data)
 			if (process->op_code > 0 && process->op_code < 0x10)
 				process->waiting_cycles = g_op_tab[process->op_code].cycles;
 		}
-		if (process->live)
+		if (process->live && process->op_code > 0 && process->op_code <= 0x10)
 			process->waiting_cycles--;
 		proc_p = proc_p->next;
 	}
@@ -109,6 +107,14 @@ void	execute_operations(t_data *data)
 	int			offset;
 	int			n;
 
+
+	if (data->cycle >= 525)
+	{
+		int i = 25;
+		process = process;
+	}
+
+
 	proc_p = data->processes;
 	while (proc_p)
 	{
@@ -120,11 +126,6 @@ void	execute_operations(t_data *data)
                 process->position = (process->position + 1) % MEM_SIZE;
             else
             {
-            	//test
-            	if (data->cycle == 7475)
-            		process = process; //end of test
-
-
                 execute_opeartion(proc_p->content, data);
                 if (process->op_code != 9)
 				{
@@ -147,14 +148,14 @@ void	execute_operations(t_data *data)
 
 void	do_turn(t_data *data)
 {
-
+	if (data->cycles_fr_lst_check >= data->cycle_to_die)
+		to_die_check(data);
 	if (data->n_flag & 2 && data->cycle)
 		ft_printf("It is now cycle %d\n", data->cycle);
 	read_operations(data);
 	execute_operations(data);
-	if (data->cycles_fr_lst_check >= data->cycle_to_die)
-		to_die_check(data);
-	is_playing_check(data);
+	if (!is_playing_check(data))
+		return ;
 	data->cycles_fr_lst_check++;
 	data->cycle++;
 }

@@ -31,7 +31,7 @@ int 	get_absolute_cord(int cord, int relative_cord)
 {
 	int 	res;
 
-	if (cord + relative_cord < MEM_SIZE && cord + relative_cord > 0)
+	if (cord + relative_cord < MEM_SIZE && cord + relative_cord >= 0)
 		res = cord + relative_cord;
 	else if (cord + relative_cord >= MEM_SIZE)
 		res = (cord + relative_cord) % MEM_SIZE;

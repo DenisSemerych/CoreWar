@@ -53,7 +53,7 @@ typedef struct 		s_data
 	unsigned int	playing: 1;
 	unsigned char	*board;
 	unsigned int	cycle;
-	unsigned int 	cycle_to_die;
+	int			 	cycle_to_die;
 	unsigned int	cycles_fr_lst_check;
 	unsigned int	live_op_amount;
 

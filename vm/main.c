@@ -15,8 +15,9 @@ int main(int argc, char** argv)
 	introduce_champs(data.champs);
 
 
-	data.n_flag = 31;
+	data.n_flag = 2;
 	data.cycle = 1;
+	data.cycles_fr_lst_check = 1;
 	initialization(&data);
 	while (data.playing)
 		do_turn(&data);
