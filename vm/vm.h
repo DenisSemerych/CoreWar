@@ -1,10 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vm.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yochered <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/18 11:34:26 by yochered          #+#    #+#             */
+/*   Updated: 2019/03/22 13:29:20 by yochered         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VM_H
 # define VM_H
 
-# include "../libft/libft.h"
-# include "../includes/op.h"
+# include "libft.h"
+# include "visu.h"
+# include "op.h"
 # include <fcntl.h>
 
+typedef struct s_vs	t_vs;
 # define DIRECT 0
 # define INDIRECT 1
 
@@ -32,6 +46,7 @@ typedef struct 		s_champ
 	unsigned int	exec_size;
 	unsigned int	magic_header;
 	unsigned char	*exec_code;
+	t_list			*processes;
 }					t_champ;
 
 typedef struct 		s_data
@@ -56,7 +71,7 @@ typedef struct 		s_data
 	int			 	cycle_to_die;
 	unsigned int	cycles_fr_lst_check;
 	unsigned int	live_op_amount;
-
+	t_vs			*vs;
 	t_list			*processes;
 }					t_data;
 

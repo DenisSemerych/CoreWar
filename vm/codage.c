@@ -100,4 +100,3 @@ int		write_args_pointers(t_data *data, t_process *process)
 	}
 	return (1);
 }
-

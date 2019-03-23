@@ -1,6 +1,5 @@
 #include "vm.h"
 
-
 void	write_data(void *position, int value, t_data *data)
 {
 	int n;
@@ -15,6 +14,21 @@ void	write_data(void *position, int value, t_data *data)
 		if (p - data->board >= MEM_SIZE)
 			p = data->board;
 		n++;
+	}
+}
+
+void	mark_data(t_data *data, int pos, int owner)
+{
+	int i;
+
+	i = -1;
+	while (++i < 4)
+	{
+		data->vs->map[pos].owner = owner;
+		data->vs->map[pos].cycles_after_st = data->cycle + 50;
+		if (pos >= MEM_SIZE)
+			pos = 0;
+		pos++;
 	}
 }
 
@@ -66,6 +80,8 @@ void	live(t_process *process, t_data *data)
 	champ_p = data->champs;
 	if (data->n_flag & 4)
 		ft_printf("P%5d | live %d\n", process->uniq_number, champ_num);
+	else if (data->v_flag && data->vs)
+		data->vs->map[process->position].cycles_after_live = data->cycle + 50;
 	champ_num *= -1;
 	while (champ_p)
 	{
@@ -82,18 +98,23 @@ void	live(t_process *process, t_data *data)
 
 void	st(t_process *process, t_data *data)
 {
-	int what;
-	int from;
-	int where;
+	int				what;
+	int				from;
+	int				where;
+	unsigned char	*pos;
 
 	what = read_arg(process, 0, data, INDIRECT);
 	from = read_arg(process, 0, data, DIRECT);
 	where = read_arg(process, 1, data, DIRECT);
-
 	if (process->op_args_type[1] == T_REG)
 		process->reg[where] = what;
 	else
-		write_data(get_t_ind_pointer(data, process, 1), what, data);
+	{
+		pos = get_t_ind_pointer(data, process, 1);
+		if (pos && data->v_flag && data->vs)
+			mark_data(data, pos - data->board, process->parent_number);
+		write_data(pos, what, data);
+	}
 	if (data->n_flag & 4)
 		ft_printf("P%5d | st r%d %s%d\n", process->uniq_number, from, (process->op_args_type[1] == T_REG) ? "r" : "", where);
 }
@@ -161,6 +182,7 @@ void	sti(t_process *process, t_data *data)
 	int pos1;
 	int pos2;
 	int mod;
+	int pos;
 
 	from = read_arg(process, 0, data, DIRECT);
 	pos1 = read_arg(process, 1, data, INDIRECT);
@@ -170,8 +192,10 @@ void	sti(t_process *process, t_data *data)
 
 	if (data->n_flag & 4)
 		ft_printf("P%5d | sti r%d %d %d\n       | -> store to %d + %d = %d (with pc and mod %d)\n", process->uniq_number, from, pos1, pos2, pos1, pos2, sum, mod);
-
-	write_data(&data->board[get_absolute_cord(process->position, sum)], read_arg(process, 0, data, INDIRECT), data);
+	pos = get_absolute_cord(process->position, sum);
+	if (data->v_flag && data->vs)
+		mark_data(data, pos, process->parent_number);
+	write_data(&data->board[pos], read_arg(process, 0, data, INDIRECT), data);
 }
 
 void	fork_lfork(t_process *process, t_data *data)
@@ -187,6 +211,7 @@ void	fork_lfork(t_process *process, t_data *data)
 	new_process.carry = process->carry;
 	new_process.alive_cycle = process->alive_cycle;
 	new_process.position = process->position + value;
+	new_process.parent_number = process->parent_number;
 	new_process.live = 1;
 	ft_lstadd(&data->processes, ft_lstnew(&new_process, sizeof(t_process)));
 	if (data->n_flag & 4)
