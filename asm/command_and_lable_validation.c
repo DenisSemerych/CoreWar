@@ -20,10 +20,9 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
             type = T_REG;
         else
             type = T_IND;
-        if (op->args[count] & type)
-            (*inst)->args[count] = args[count];
-        else
-            put_err_msg_exit("Wrong argument type for command");
+        op->args[count] & type ? ((*inst)->args[count] = args[count]) :
+        put_err_msg_exit("Wrong argument type for command");
+        (*inst)->types[count] = type;
         count++;
     }
     (*inst)->nb_arg = op->nb_arg;

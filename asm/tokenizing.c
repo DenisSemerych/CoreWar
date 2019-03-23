@@ -25,29 +25,19 @@ int    write_string_tokken(t_list *command, char **file, int *line_nbr)
 
 t_list *create_arg_list(t_list *lables, t_list *instructions, t_list *info)
 {
-    while (lables)
-    {
-        t_lable *to_print = lables->content;
-        printf("%s\n", to_print->name);
-        t_inst *inst = to_print->opp;
-        printf("%s %s\n", inst->name, inst->lable->name);
-        lables = lables->next;
-    }
-    while (instructions)
-    {
-        t_inst *pr = instructions->content;
-        printf("%s%s\n%s", MAG, pr->name, RESET);
-        printf("\nNumber:%d\n", pr->nb_arg);
-        int i = 0;
-        while (i < pr->nb_arg)
-            printf(" argument:%s", pr->args[i++]);
-        instructions = instructions->next;
-        printf("\n");
-    }
-//    while (info)
-//    {
-//
-//    }
+    t_list *new;
+
+
+    new = ft_lstnew(NULL, 0);
+    new->next = ft_lstnew(NULL, 0);
+    new->next->next = ft_lstnew(NULL, 0);
+    new->content = instructions;
+    new->content_size = 1;
+    new->next->content = lables;
+    new->next->content_size = 2;
+    new->next->next->content = info;
+    new->next->next->content_size = 3;
+    return (new);
 }
 
 
@@ -65,7 +55,6 @@ void    save_info(char **file, t_list **info, int *line_nbr)
     skip_separators(file);
     *(*file) != '\"' ? put_err_msg_exit("Error expected \"") : ((*file)++);
     *file = *file + write_string_tokken(command, file, line_nbr);
-    printf("Here is in command %s\n", command->content);
     ft_lstadd(info, command);
 }
 
@@ -76,7 +65,7 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
     char *line;
     char *crawler;
 
-    i = -1;
+    i = 0;
     op = NULL;
     line = ft_strsub(*file, 0,ft_strchr(*file, '\n') - *file);
     crawler = line;
@@ -87,7 +76,7 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
         *file += crawler - line;
         return ;
     }
-    while (i++ < 15)
+    while (i++ < 16)
     {
         printf("%s haystack looking for %s\n", crawler, g_op_tab[i].name);
         if (ft_strstr(crawler, g_op_tab[i].name))
