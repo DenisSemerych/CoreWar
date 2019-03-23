@@ -23,7 +23,6 @@ VM_SRC_LIST = \
 	do_turn.c\
 	initialization.c\
 	intro_champs.c\
-	op.c\
 	operations.c\
 	print_board.c
 
@@ -57,7 +56,7 @@ RESET = \033[0m
 all: $(NAME)
 
 $(NAME): $(LIB) $(OBJDIR) $(VM_OBJDIR) $(VISU_OBJDIR) $(VM_OBJ) $(VISU_OBJ)
-	gcc $(FLAGS) -o $(NAME) $(VM_OBJ) $(VISU_OBJ) -L $(LIBDIR) -lft -lncurses
+	gcc $(FLAGS) -o $(NAME) $(VM_OBJ) $(VISU_OBJ) ./includes/op.c -L $(LIBDIR) -lft -lncurses
 	@echo "$(GREEN)[Compilation Done]$(RESET)"
 
 $(OBJDIR):
@@ -101,4 +100,4 @@ re: fclean all
 
 run: all
 	clear
-	./corewar katchup.cor katchup.cor katchup.cor katchup.cor
+	./corewar -v katchup.cor katchup.cor katchup.cor katchup.cor
