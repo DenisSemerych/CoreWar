@@ -11,7 +11,7 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
     count = 0;
     if (count_size(args) != op->nb_arg)
         put_err_msg_exit("Error in number of arguments");
-    while (count < count_size(args))
+    while (count < op->nb_arg)
     {
         trimed = ft_strtrim(args[count]);
         if (*trimed == '%')

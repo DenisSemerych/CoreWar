@@ -48,5 +48,6 @@ int         is_free(char *line);
 int         is_lable(char *line);
 void    save_instruction(char **file, t_list **instructions, t_list **lables, int *line_nbr);
 void    write_binary(t_list *arguments);
-unsigned int		reverse_byte(unsigned int x);
+unsigned int		reverse_byte(unsigned int byte);
+int     give_op_index(char *op_name);
 #endif

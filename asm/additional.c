@@ -19,6 +19,19 @@
 //printf("\n");
 //}
 
+int     give_op_index(char *op_name)
+{
+    int   count;
+
+    count = 0;
+    while (count++ < 16)
+    {
+        if (ft_strequ(op_name, g_op_tab[count].name))
+            break;
+    }
+    return (count);
+}
+
 unsigned int		reverse_byte(unsigned int byte)
 {
     return (((byte >> 24) & 0x000000ff) |
