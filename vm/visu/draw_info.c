@@ -43,7 +43,8 @@ void	draw_usage(t_vs *vs)
 	mvwprintw(vs->usage, 0, x / 2 - 4, " Usage ");
 	wattron(vs->usage, COLOR_PAIR(CYAN));
 	mvwprintw(vs->usage, i, IDENT, "%-15s%15s", "Speed up:", "[Arrow up]");
-	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s", "Speed down:", "[Arrow down]");
+	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s",
+			"Speed down:", "[Arrow down]");
 	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s", "Pause:", "[Space]");
 	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s", "Quit:", "[Q]");
 	wattroff(vs->usage, COLOR_PAIR(CYAN));
@@ -57,10 +58,14 @@ void	draw_stat(t_data *data)
 	else
 		mvwprintw(data->vs->info, IDENT + 8, IDENT, "RUNNING");
 	wattroff(data->vs->info, A_BOLD);
-	mvwprintw(data->vs->info, IDENT + 11, IDENT, "%-15s%d", "Delay:", data->vs->delay);
-	mvwprintw(data->vs->info, IDENT + 12, IDENT, "%-15s%d", "Cycle:", data->cycle);
-	mvwprintw(data->vs->info, IDENT + 13, IDENT, "%-15s%d", "Cycle delta:", CYCLE_DELTA);
-	mvwprintw(data->vs->info, IDENT + 14, IDENT, "%-15s%d", "Cycle to die:", data->cycle_to_die);
+	mvwprintw(data->vs->info, IDENT + 11, IDENT,
+			"%-15s%d", "Speed:", data->vs->delay);
+	mvwprintw(data->vs->info, IDENT + 12, IDENT,
+			"%-15s%d", "Cycle:", data->cycle);
+	mvwprintw(data->vs->info, IDENT + 13, IDENT,
+			"%-15s%d", "Cycle delta:", CYCLE_DELTA);
+	mvwprintw(data->vs->info, IDENT + 14, IDENT,
+			"%-15s%d", "Cycle to die:", data->cycle_to_die);
 }
 
 void	draw_processes(t_vs *vs, t_list *processes)
@@ -73,7 +78,8 @@ void	draw_processes(t_vs *vs, t_list *processes)
 	{
 		ptr = (t_process*)processes->content;
 		wattron(vs->info, COLOR_PAIR(vs->map[ptr->position].owner));
-		mvwprintw(vs->info, IDENT + 15 + ++i, IDENT, "#%d %d", ptr->uniq_number, ptr->current_command);
+		mvwprintw(vs->info, IDENT + 15 + ++i, IDENT,
+				"#%d %d", ptr->uniq_number, ptr->current_command);
 		wattroff(vs->info, COLOR_PAIR(vs->map[ptr->position].owner));
 		processes = processes->next;
 	}

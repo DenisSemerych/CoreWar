@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -13,37 +12,9 @@
 
 #include "vm.h"
 
-t_vs	*create_vs(t_data *data)
-{
-	t_vs *vs;
-
-	if (!(vs = (t_vs*)ft_memalloc(sizeof(t_vs))))
-		exit(1);
-	vs->stop = true;
-	vs->data = data;
-	vs->delay = 50;
-	return (vs);
-}
-
-void	init_colors(void)
-{
-	start_color();
-	init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
-	init_pair(RED, COLOR_RED, COLOR_BLACK);
-	init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
-	init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(CYAN, COLOR_CYAN, COLOR_BLACK);
-	init_pair(WHITE_BG, COLOR_BLACK, COLOR_WHITE);
-	init_pair(RED_BG, COLOR_BLACK, COLOR_RED);
-	init_pair(GREEN_BG, COLOR_BLACK, COLOR_GREEN);
-	init_pair(YELLOW_BG, COLOR_BLACK, COLOR_YELLOW);
-	init_pair(CYAN_BG, COLOR_BLACK, COLOR_CYAN);
-}
-
-/*Make map to recognize byte's type on the current position of the map*/
 t_map	*make_map(t_data *data, t_list *champs)
 {
-	int 	i;
+	int		i;
 	int		breakpoint;
 	int		size;
 	size_t	num;
@@ -66,25 +37,6 @@ t_map	*make_map(t_data *data, t_list *champs)
 	return (map);
 }
 
-void	init_visu(t_data *data, t_vs *vs)
-{
-	float info_width;
-
-	initscr();
-	keypad(stdscr, true);
-	nodelay(stdscr, true);
-	curs_set(false);
-	cbreak();
-	noecho();
-	init_colors();
-	getmaxyx(stdscr, vs->heigth, vs->width);
-	data->vs->map = make_map(data, data->champs);
-	info_width = (float)vs->width / 100 * 30 - IDENT * 2;
-	vs->board = create_newwin(HEIGTH, WIDTH, IDENT, IDENT);
-	vs->usage = create_newwin(HEIGTH / 4, info_width, HEIGTH - HEIGTH / 4 + IDENT, vs->width - info_width - IDENT);
-	vs->info = create_newwin(HEIGTH / 4 * 3 - IDENT, info_width, IDENT, vs->width - info_width - IDENT);
-}
-
 void	process_keys(t_data *data, int ch)
 {
 	if (ch == SPACE)
@@ -93,6 +45,11 @@ void	process_keys(t_data *data, int ch)
 		data->vs->delay -= 10;
 	else if (ch == KEY_UP)
 		data->vs->delay += 10;
+}
+
+int		time_delay(t_data *data)
+{
+	return (clock() >= data->vs->time + CLOCKS_PER_SEC / data->vs->delay);
 }
 
 void	draw(t_data *data)
@@ -114,14 +71,13 @@ void	draw(t_data *data)
 void	visualize(t_data *data)
 {
 	setlocale(LC_ALL, "");
-	data->vs = create_vs(data);
-	init_visu(data, data->vs);
+	create_vs(data);
 	while ((data->vs->ch = getch()) != KEY_Q)
 	{
 		process_keys(data, data->vs->ch);
 		if (data->vs->ch == KEY_RIGHT && data->playing)
 			do_turn(data);
-		else if (!data->vs->stop && data->playing && clock() >= data->vs->time + CLOCKS_PER_SEC / data->vs->delay)
+		else if (!data->vs->stop && data->playing && time_delay(data))
 		{
 			do_turn(data);
 			data->vs->time = clock();

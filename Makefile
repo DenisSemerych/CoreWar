@@ -32,7 +32,8 @@ VISU_SRC_LIST = \
 	visu.c\
 	window_funcs.c\
 	draw_board.c\
-	draw_info.c
+	draw_info.c\
+	init.c
 VISU_SRC = $(addprefix $(VISU_SRCDIR), $(VISU_SRC_LIST))
 
 OBJDIR = ./obj/
@@ -100,4 +101,4 @@ re: fclean all
 
 run: all
 	clear
-	./corewar katchup.cor katchup.cor katchup.cor katchup.cor
+	./corewar -v katchup.cor katchup.cor katchup.cor katchup.cor

@@ -62,7 +62,6 @@ typedef struct 		s_data
 
 
 
->>>>>>> master
 	unsigned int	max_process_num;
 	int 			last_alive_champ;
 	int 			checks_amount;

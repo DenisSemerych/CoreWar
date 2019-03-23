@@ -26,19 +26,14 @@ int				check_process(t_data *data, int index)
 	return (0);
 }
 
-/*Sets attributes to recognize player's color and carry color*/
 unsigned int	get_attributes(t_data *data, t_map *map, int pos)
 {
-	if (map[pos].cycles_after_st > 0)
-		map[pos].cycles_after_st--;
-	else if (map[pos].cycles_after_live > 0)
-		map[pos].cycles_after_live--;
-	if (map[pos].cycles_after_live > 0)
-		return (COLOR_PAIR(map[pos].owner + 5) | A_BOLD);
-	else if (map[pos].owner && check_process(data, pos))
+	if (data->cycle <= map[pos].cycles_after_live)
+		return (COLOR_PAIR(map[pos].owner + 10) | A_BOLD);
+	else if (check_process(data, pos))
 		return (COLOR_PAIR(map[pos].owner + 5));
-	else if (map[pos].cycles_after_st > 0)
-		return (COLOR_PAIR(map[pos].owner | A_BOLD));
+	else if (data->cycle <= map[pos].cycles_after_st)
+		return (COLOR_PAIR(map[pos].owner) | A_BOLD);
 	else
 		return (COLOR_PAIR(map[pos].owner));
 }

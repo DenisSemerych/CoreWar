@@ -116,25 +116,25 @@ void	execute_operations(t_data *data)
 		if (!process->waiting_cycles)
 		{
 			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
-            if (process->op_code <= 0 || process->op_code > 0x10 || !write_args_pointers(data, process))
-                process->position = (process->position + 1) % MEM_SIZE;
-            else
-            {
-                execute_opeartion(proc_p->content, data);
-                if (process->op_code != 9)
+			if (process->op_code <= 0 || process->op_code > 0x10 || !write_args_pointers(data, process))
+				process->position = (process->position + 1) % MEM_SIZE;
+			else
+			{
+				execute_opeartion(proc_p->content, data);
+				if (process->op_code != 9)
 				{
-                	offset = get_offset(process);
-                	if (data->n_flag & 16)
+					offset = get_offset(process);
+					if (data->n_flag & 16)
 					{
-                		ft_printf("ADV %d (%#06x -> %#06x)", offset, process->position, (process->position + offset) % IDX_MOD);
-                		n = -1;
-                		while (++n < offset)
-                			ft_printf(" %02x", data->board[(process->position + n) % MEM_SIZE]);
-                		ft_printf("\n");
+						ft_printf("ADV %d (%#06x -> %#06x)", offset, process->position, (process->position + offset) % IDX_MOD);
+						n = -1;
+						while (++n < offset)
+							ft_printf(" %02x", data->board[(process->position + n) % MEM_SIZE]);
+						ft_printf("\n");
 					}
-                	process->position += get_offset(process);
+					process->position += get_offset(process);
 				}
-            }
+			}
 		}
 		proc_p = proc_p->next;
 	}
