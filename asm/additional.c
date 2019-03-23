@@ -1,4 +1,31 @@
 #include "asm.h"
+//while (lables)
+//{
+//t_lable *to_print = lables->content;
+//printf("%s\n", to_print->name);
+//t_inst *inst = to_print->opp;
+//printf("%s %s\n", inst->name, inst->lable->name);
+//lables = lables->next;
+//}
+//while (instructions)
+//{
+//t_inst *pr = instructions->content;
+//printf("%s%s\n%s", MAG, pr->name, RESET);
+//printf("\nNumber:%d\n", pr->nb_arg);
+//int i = 0;
+//while (i < pr->nb_arg)
+//printf(" argument:%s", pr->args[i++]);
+//instructions = instructions->next;
+//printf("\n");
+//}
+
+unsigned int		reverse_byte(unsigned int byte)
+{
+    return (((byte >> 24) & 0x000000ff) |
+            ((byte >> 8) & 0x0000ff00) |
+            ((byte << 8) & 0x00ff0000) |
+            ((byte << 24) & 0xff000000));
+}
 
 void        skip_separators(char **file)
 {
@@ -126,18 +153,19 @@ int						spec_atoi(const char *str)
 {
     char				*tmp;
     unsigned long int	num;
+    int                 sign;
 
     num = 0;
     tmp = (char *)str;
+    sign = ft_strchr(str, '-') ? -1 : 1;
     check_for_add_sym(tmp);
-    while (*tmp > 47 && *tmp < 58)
+    while ((*tmp > 47 && *tmp < 58) || *tmp == '-')
     {
-        num = (*tmp - 48) + (num * 10);
-        if (num > 2147483647)
-            put_err_msg_exit("Error: number more int-max value");
+        if (*tmp != '-')
+            num = (*tmp - 48) + (num * 10);
         tmp++;
     }
-    return ((int)(num));
+    return ((int)(num) * sign);
 }
 
 

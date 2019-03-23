@@ -17,5 +17,6 @@ int main(int argc, char **argv)
     {
         file = read_from_file(argv[i]);
         arguments_list = tokenize(file);
+        write_binary(arguments_list);
     }
 }
