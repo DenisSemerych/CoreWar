@@ -1,33 +1,69 @@
 #include "asm.h"
 
+void       write_args(unsigned char **file, t_inst *inst, size_t *written_bytes, t_list *lables)
+{
+
+}
+
+void       write_argstype(unsigned char **file, t_inst *inst, size_t *written_bytes)
+{
+    int    count;
+    unsigned char code;
+
+    count = -1;
+    code = 0;
+    while(count++ < 2)
+    {
+        if (count < inst->nb_arg)
+            code = code | inst->types[count];
+        code = code << 2;
+    }
+    (*file)[*written_bytes] = code;
+    *written_bytes += 1;
+}
+
+void       write_champ_code(t_list *instructions, unsigned char **file, size_t *written_bytes, t_list *lables)
+{
+    int    index;
+    t_inst *inst;
+
+    while (instructions)
+    {
+        inst = instructions->content;
+        index = give_op_index(inst->name);
+        (*file)[*written_bytes] = g_op_tab[index].opcode;
+        *written_bytes += 1;
+        if (g_op_tab[index].octal)
+            write_argstype(file, inst, written_bytes);
+        write_args(file, inst, written_bytes, lables);
+        instructions = instructions->next;
+    }
+}
+
+
 size_t     code_size(t_list *instructions)
 {
     size_t size;
-    int count;
+    int index;
     size_t current_size;
     t_inst *inst;
     int i;
 
     size = 0;
-    i = -1;
     while (instructions)
     {
         inst = instructions->content;
-        current_size = 1;
-        count = 0;
-        while (count++ < 16)
-        {
-            if (ft_strequ(inst->name, g_op_tab[count].name))
-                break;
-        }
+        current_size = 0;
+        index = give_op_index(inst->name);
+        i = -1;
         inst->nb_arg == 1 && inst->types[0] == T_DIR ? 0 :
         current_size++;
         while (i++ < inst->nb_arg)
         {
-            if ((inst->types[i] == T_DIR && g_op_tab[count].label) ||
+            if ((inst->types[i] == T_DIR && g_op_tab[index].label == 2) ||
             inst->types[i] == T_IND)
                 current_size += 2;
-            else if (inst->types[i] == T_DIR && !g_op_tab[count].label)
+            else if (inst->types[i] == T_DIR && g_op_tab[index].label == 4)
                 current_size += 4;
             else
                 current_size += 1;
@@ -78,5 +114,6 @@ void    write_binary(t_list *arguments)
     file = ft_memalloc(10000);
     ft_memcpy(file, &tmp, writen_bytes);
     write_info(arguments->next->next->content, &file, &writen_bytes, code_size(arguments->content));
+    write_champ_code(arguments->content, &file, &writen_bytes, arguments->next->content);
     write(fd, file, writen_bytes);
 }
