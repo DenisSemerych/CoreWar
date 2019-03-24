@@ -24,10 +24,10 @@ void	mark_data(t_data *data, int pos, int owner)
 	i = -1;
 	while (++i < 4)
 	{
-		data->vs->map[pos].owner = owner;
-		data->vs->map[pos].cycles_after_st = data->cycle + 50;
 		if (pos >= MEM_SIZE)
 			pos = 0;
+		data->vs->map[pos].owner = owner;
+		data->vs->map[pos].cycles_after_st = data->cycle + 50;
 		pos++;
 	}
 }
@@ -193,7 +193,7 @@ void	sti(t_process *process, t_data *data)
 	if (data->n_flag & 4)
 		ft_printf("P%5d | sti r%d %d %d\n       | -> store to %d + %d = %d (with pc and mod %d)\n", process->uniq_number, from, pos1, pos2, pos1, pos2, sum, mod);
 	pos = get_absolute_cord(process->position, sum);
-	if (data->v_flag && data->vs)
+	if (data->v_flag && process)
 		mark_data(data, pos, process->parent_number);
 	write_data(&data->board[pos], read_arg(process, 0, data, INDIRECT), data);
 }

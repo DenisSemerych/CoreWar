@@ -18,7 +18,6 @@
 # include "op.h"
 # include <fcntl.h>
 
-typedef struct s_vs	t_vs;
 # define DIRECT 0
 # define INDIRECT 1
 

@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-	t_data data;
+	t_data	data;
 	t_list	*p;
 
 	ft_bzero(&data, sizeof(t_data));
@@ -11,6 +11,7 @@ int main(int argc, char** argv)
 	arg_valid(argc, argv, &data);
 
 	//ft_printf("%s\n", g_op_tab[0].name);
+	// data.n_flag = 6;
 	introduce_champs(data.champs);
 	data.cycle = 1;
 	data.cycles_fr_lst_check = 1;

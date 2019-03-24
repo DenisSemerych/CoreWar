@@ -12,6 +12,31 @@
 
 #include "vm.h"
 
+t_map	*make_map(t_data *data, t_list *champs)
+{
+	int		i;
+	int		breakpoint;
+	int		size;
+	size_t	num;
+	t_map	*map;
+
+	map = (t_map*)ft_memalloc(sizeof(t_map) * MEM_SIZE);
+	breakpoint = MEM_SIZE / data->champs_amount;
+	i = -1;
+	while (++i < MEM_SIZE)
+	{
+		if (champs && i % breakpoint == 0)
+		{
+			size = ((t_champ*)champs->content)->exec_size;
+			num = ((t_champ*)champs->content)->number;
+			champs = champs->next;
+		}
+		if (size-- >= 0)
+			map[i].owner = num;
+	}
+	return (map);
+}
+
 void	create_vs(t_data *data)
 {
 	float	info_width;

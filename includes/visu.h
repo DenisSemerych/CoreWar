@@ -79,12 +79,14 @@ void			visualize(struct s_data *data);
 void			create_vs(struct s_data *data);
 void			init_colors(void);
 WINDOW			*create_newwin(int height, int width, int y, int x);
-void			destroy_win(WINDOW *win);
+void			process_keys(struct s_data *data, int ch);
 void			set_border(WINDOW *win);
+t_map			*make_map(struct s_data *data, t_list *champs);
+
+void			draw(struct s_data *data);
 void			draw_board(struct s_data *data, t_vs *vs);
 void			draw_usage(t_vs *vs);
 void			draw_info(struct s_data *data);
 void			draw_header(t_vs *vs);
-t_map			*make_map(struct s_data *data, t_list *champs);
 
 #endif

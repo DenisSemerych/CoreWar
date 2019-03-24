@@ -38,11 +38,21 @@ unsigned int	get_attributes(t_data *data, t_map *map, int pos)
 		return (COLOR_PAIR(map[pos].owner));
 }
 
+void			draw_byte(t_data *data, int pos)
+{
+	int attr;
+
+	attr = get_attributes(data, data->vs->map, pos);
+	wattron(data->vs->board, attr);
+	wprintw(data->vs->board, "%02x", data->board[pos]);
+	wattroff(data->vs->board, attr);
+	waddch(data->vs->board, ' ');
+}
+
 void			draw_board(t_data *data, t_vs *vs)
 {
 	int i;
 	int j;
-	int attr;
 
 	i = -1;
 	wattron(vs->board, A_BOLD);
@@ -53,13 +63,7 @@ void			draw_board(t_data *data, t_vs *vs)
 		j = -1;
 		wmove(vs->board, i + 2, j + IDENT + 1);
 		while (++j < BOARD_SIZE)
-		{
-			attr = get_attributes(data, data->vs->map, i * BOARD_SIZE + j);
-			wattron(vs->board, attr);
-			wprintw(vs->board, "%02x", data->board[i * BOARD_SIZE + j]);
-			wattroff(vs->board, attr);
-			waddch(vs->board, ' ');
-		}
+			draw_byte(data, i * BOARD_SIZE + j);
 	}
 	wrefresh(vs->board);
 }

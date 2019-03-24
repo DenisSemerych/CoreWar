@@ -12,23 +12,25 @@
 
 #include "vm.h"
 
-void	draw_header(t_vs *vs)
+void	draw_champs(t_data *data)
 {
-	int x;
-	int y;
+	t_list	*champ;
+	char	*name;
+	int		color;
+	int		i;
 
-	getmaxyx(vs->info, y, x);
-	wattron(vs->info, A_BOLD);
-	mvwprintw(vs->info, 0, x / 2 - 9, " Game Information ");
-	wattroff(vs->info, A_BOLD);
-	wattron(vs->info, COLOR_PAIR(CYAN));
-	mvwprintw(vs->info, IDENT, IDENT, "%ls", COR1);
-	mvwprintw(vs->info, IDENT + 1, IDENT, "%ls", COR2);
-	mvwprintw(vs->info, IDENT + 2, IDENT, "%ls", COR3);
-	mvwprintw(vs->info, IDENT + 3, IDENT, "%ls", COR4);
-	mvwprintw(vs->info, IDENT + 4, IDENT, "%ls", COR5);
-	mvwprintw(vs->info, IDENT + 5, IDENT, "%ls", COR6);
-	wattroff(vs->info, COLOR_PAIR(CYAN));
+	i = 0;
+	champ = data->champs;
+	while (champ)
+	{
+		i++;
+		name = ((t_champ*)champ->content)->name;
+		color = ((t_champ*)champ->content)->number;
+		wattron(data->vs->info, COLOR_PAIR(color) | A_BOLD);
+		mvwprintw(data->vs->info, IDENT + 9 + i, IDENT, "%d. %s", i, name);
+		wattroff(data->vs->info, COLOR_PAIR(color) | A_BOLD);
+		champ = champ->next;
+	}
 }
 
 void	draw_usage(t_vs *vs)
@@ -58,13 +60,13 @@ void	draw_stat(t_data *data)
 	else
 		mvwprintw(data->vs->info, IDENT + 8, IDENT, "RUNNING");
 	wattroff(data->vs->info, A_BOLD);
-	mvwprintw(data->vs->info, IDENT + 11, IDENT,
+	mvwprintw(data->vs->info, IDENT + 15, IDENT,
 			"%-15s%d", "Speed:", data->vs->delay);
-	mvwprintw(data->vs->info, IDENT + 12, IDENT,
+	mvwprintw(data->vs->info, IDENT + 16, IDENT,
 			"%-15s%d", "Cycle:", data->cycle);
-	mvwprintw(data->vs->info, IDENT + 13, IDENT,
+	mvwprintw(data->vs->info, IDENT + 17, IDENT,
 			"%-15s%d", "Cycle delta:", CYCLE_DELTA);
-	mvwprintw(data->vs->info, IDENT + 14, IDENT,
+	mvwprintw(data->vs->info, IDENT + 18, IDENT,
 			"%-15s%d", "Cycle to die:", data->cycle_to_die);
 }
 
@@ -88,5 +90,6 @@ void	draw_processes(t_vs *vs, t_list *processes)
 void	draw_info(t_data *data)
 {
 	draw_header(data->vs);
+	draw_champs(data);
 	draw_stat(data);
 }
