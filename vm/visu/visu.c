@@ -44,11 +44,21 @@ void	draw_winner(t_data *data)
 	while (winner &&
 		((t_champ*)winner->content)->number != data->last_alive_champ)
 		winner = winner->next;
-	winner_color = ((t_champ*)winner->content)->number;
-	winner_name = ((t_champ*)winner->content)->name;
-	wattron(data->vs->info, COLOR_PAIR(winner_color) | A_BOLD);
-	mvwprintw(data->vs->info, IDENT + 20, IDENT, "Winner is: %s", winner_name);
-	wattroff(data->vs->info, COLOR_PAIR(winner_color) | A_BOLD);
+	if (winner)
+	{
+		winner_color = ((t_champ*)winner->content)->number;
+		winner_name = ((t_champ*)winner->content)->name;
+		wattron(data->vs->info, COLOR_PAIR(winner_color) | A_BOLD);
+		mvwprintw(data->vs->info, IDENT + 20,
+			IDENT, "Winner is: %s", winner_name);
+		wattroff(data->vs->info, COLOR_PAIR(winner_color) | A_BOLD);
+	}
+	else
+	{
+		wattron(data->vs->info, COLOR_PAIR(RED_LIVE) | A_BOLD);
+		mvwprintw(data->vs->info, IDENT + 20, IDENT, "NO WINNER!!!");
+		wattron(data->vs->info, COLOR_PAIR(RED_LIVE) | A_BOLD);
+	}
 	wrefresh(data->vs->info);
 }
 
