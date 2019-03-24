@@ -78,7 +78,6 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
     }
     while (i++ < 16)
     {
-        printf("%s haystack looking for %s\n", crawler, g_op_tab[i].name);
         if (ft_strstr(crawler, g_op_tab[i].name))
             op = &g_op_tab[i];
     }

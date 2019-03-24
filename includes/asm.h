@@ -28,9 +28,9 @@ typedef struct s_inst
 typedef struct s_lable
 {
     char *name;
+    unsigned addr;
     t_inst *opp;
 }              t_lable;
-void g_op_test();
 char *read_from_file(char *file_name);
 void        skip_comment(char **file);
 void        skip_separators(char **file);
@@ -50,4 +50,6 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
 void    write_binary(t_list *arguments);
 unsigned int		reverse_byte(unsigned int byte);
 int     give_op_index(char *op_name);
+int						spec_atoi(const char *str);
+extern size_t g_written_bytes;
 #endif

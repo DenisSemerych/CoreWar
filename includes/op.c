@@ -12,6 +12,8 @@
 
 #include "asm.h"
 
+size_t g_written_bytes = 0;
+
 t_op    g_op_tab[17] =
 {
 	{0, 0, {0}, 0, 0, 0, 0, 0},
