@@ -1,4 +1,4 @@
-#include "vm.h"
+#include "../includes/vm.h"
 
 unsigned int	get_champ_4_bytes(int fd)
 {
@@ -41,7 +41,7 @@ unsigned char	*get_champ_exec(int fd, int code_size)
 	tmp = (unsigned char *)malloc(sizeof(unsigned char) * code_size);
 	while (++i < code_size)
 	{
-		if (read(fd, &BUFF, 1) == -1)
+		if (read(fd, &BUFF, 1) <= 0)
 			error_msg("Champion exec code less then defined size!");
 		tmp[i]= BUFF[0];
 	}

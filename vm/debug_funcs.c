@@ -1,4 +1,4 @@
-#include "vm.h"
+#include "../includes/vm.h"
 
 void	print_champ(t_champ * champ, int pr_memory)
 {

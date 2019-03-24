@@ -56,7 +56,7 @@ typedef struct 		s_data
 	unsigned int	next_p_num;
 
 	int 			dump_flag : 1;
-	int 			v_flag : 1;
+	int 			visual_flag : 1;
 	int 			n_flag;
 
 
@@ -95,5 +95,6 @@ int					get_offset(t_process *process);
 void				*get_t_ind_pointer(t_data *data, t_process *process, int arg_num);
 int 				get_type_size(t_process *process, int arg_type);
 void				print_board(const void *addr, size_t size);
+int 				read_arg(t_process *process, int argnum, t_data *data, int dir_flag);
 
 #endif

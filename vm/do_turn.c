@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vm.h"
+#include "../includes/vm.h"
 
 int		is_playing_check(t_data *data)
 {
@@ -59,7 +59,7 @@ void	to_die_check(t_data *data)
 	process = data->processes;
 	while (process)
 	{
-		if (data->cycle - ((t_process *)process->content)->alive_cycle > data->cycle_to_die)
+		if (data->cycle - ((t_process *)process->content)->alive_cycle >= data->cycle_to_die)
 		{
 			if (data->n_flag & 8)
 				ft_printf("Process %d hasn't lived for %d cycles (CTD %d)\n", ((t_process*)process->content)->uniq_number, data->cycle - ((t_process*)process->content)->alive_cycle, data->cycle_to_die);
@@ -91,7 +91,7 @@ void	read_operations(t_data *data)
 		if (!process->waiting_cycles && process->live)
 		{
 			process->op_code = data->board[process->position];
-			if (process->op_code > 0 && process->op_code < 0x10)
+			if (process->op_code > 0 && process->op_code <= 0x10)
 				process->waiting_cycles = g_op_tab[process->op_code].cycles;
 		}
 		if (process->live && process->op_code > 0 && process->op_code <= 0x10)
@@ -100,6 +100,24 @@ void	read_operations(t_data *data)
 	}
 }
 
+int	check_reg(t_process *process, t_data *data)
+{
+	int i;
+	int reg;
+
+	i = -1;
+	while (++i < 3)
+		if (process->op_args_type[i] == T_REG)
+		{
+			reg = read_arg(process, i, data, DIRECT);
+			if (reg < 1 || reg > REG_NUMBER)
+				return (0);
+		}
+	return (1);
+}
+
+
+
 void	execute_operations(t_data *data)
 {
 	t_list	*proc_p;
@@ -107,13 +125,11 @@ void	execute_operations(t_data *data)
 	int			offset;
 	int			n;
 
-
-	if (data->cycle >= 525)
+	if (data->cycle >= 848)
 	{
 		int i = 25;
 		process = process;
 	}
-
 
 	proc_p = data->processes;
 	while (proc_p)
@@ -122,12 +138,13 @@ void	execute_operations(t_data *data)
 		if (!process->waiting_cycles)
 		{
 			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
-			if (process->op_code <= 0 || process->op_code > 0x10 || !write_args_pointers(data, process))
+			if (process->op_code <= 0 || process->op_code > 0x10)
 				process->position = (process->position + 1) % MEM_SIZE;
 			else
 			{
-				execute_opeartion(proc_p->content, data);
-				if (process->op_code != 9)
+				if ((n = write_args_pointers(data, process)) && check_reg(process, data))
+					execute_opeartion(proc_p->content, data);
+				if (!(process->op_code == 9 && n && process->carry))
 				{
 					offset = get_offset(process);
 					if (data->n_flag & 16)
@@ -148,10 +165,10 @@ void	execute_operations(t_data *data)
 
 void	do_turn(t_data *data)
 {
-	if (data->cycles_fr_lst_check >= data->cycle_to_die)
-		to_die_check(data);
 	if (data->n_flag & 2 && data->cycle)
 		ft_printf("It is now cycle %d\n", data->cycle);
+	if (data->cycles_fr_lst_check >= data->cycle_to_die)
+		to_die_check(data);
 	read_operations(data);
 	execute_operations(data);
 	if (!is_playing_check(data))

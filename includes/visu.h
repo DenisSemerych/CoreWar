@@ -13,7 +13,7 @@
 #ifndef VISU_H
 # define VISU_H
 
-# include "../vm/vm.h"
+# include "vm.h"
 # include <ncurses.h>
 # include "stdbool.h"
 # include "libft.h"

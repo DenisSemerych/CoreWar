@@ -1,4 +1,4 @@
-#include "vm.h"
+#include "../includes/vm.h"
 
 void	error_msg(char *str)
 {

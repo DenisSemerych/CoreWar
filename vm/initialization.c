@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vm.h"
+#include "../includes/vm.h"
 
 void	initialization(t_data *data)
 {

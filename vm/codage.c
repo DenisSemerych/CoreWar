@@ -1,4 +1,4 @@
-#include "vm.h"
+#include "../includes/vm.h"
 
 void	codage_proc(t_process *process, unsigned char codage)
 {
@@ -48,8 +48,6 @@ int		get_offset(t_process *process)
 
 	i = 0;
 	offset = 1 + g_op_tab[process->op_code].octal;
-	if (ft_strcmp(g_op_tab[process->op_code].name, "zjmp") == 0)
-		return (0);
 	while (i < g_op_tab[process->op_code].nb_arg)
 	{
 		if (process->op_args_type[i] == T_DIR)

@@ -1,4 +1,4 @@
-#include "vm.h"
+#include "../includes/vm.h"
 
 
 int main(int argc, char** argv)
@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	data.cycle = 1;
 	data.cycles_fr_lst_check = 1;
 	initialization(&data);
-	if (data.v_flag)
+	if (data.visual_flag)
 		visualize(&data);
 	else
 	{
@@ -25,7 +25,10 @@ int main(int argc, char** argv)
 		p = data.champs;
 		while (p && ((t_champ*)p->content)->number != data.last_alive_champ)
 			p = p->next;
-		ft_printf("Contestant %d, \"%s\", has won!\n", data.last_alive_champ, ((t_champ*)p->content)->name);
+		if (data.last_alive_champ)
+			ft_printf("Contestant %d, \"%s\", has won!\n", data.last_alive_champ, ((t_champ*)p->content)->name);
+		else
+			ft_printf("NO WINNER!\n");
 	}
 	return (0);
 }
