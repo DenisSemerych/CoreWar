@@ -71,6 +71,8 @@ void	*get_t_ind_pointer(t_data *data, t_process *process, int arg_num)
 		address = data->board;
 	new_pos = (new_pos << 8) | *address;
 	if (process->op_code >= 13 && process->op_code <= 15)
+		new_pos %= MEM_SIZE;
+	else
 		new_pos %= IDX_MOD;
 	return (&data->board[get_absolute_cord(process->position, new_pos)]);
 

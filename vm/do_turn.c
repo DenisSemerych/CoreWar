@@ -125,7 +125,7 @@ void	execute_operations(t_data *data)
 	int			offset;
 	int			n;
 
-	if (data->cycle >= 848)
+	if (data->cycle >= 1535)
 	{
 		int i = 25;
 		process = process;
@@ -149,11 +149,11 @@ void	execute_operations(t_data *data)
 					offset = get_offset(process);
 					if (data->n_flag & 16)
 					{
-						ft_printf("ADV %d (%#06x -> %#06x)", offset, process->position, (process->position + offset) % IDX_MOD);
+						ft_printf("ADV %d (0x%04x -> 0x%04x)", offset, process->position, (process->position + offset) % MEM_SIZE);
 						n = -1;
 						while (++n < offset)
 							ft_printf(" %02x", data->board[(process->position + n) % MEM_SIZE]);
-						ft_printf("\n");
+						ft_printf(" \n");
 					}
                 	process->position = (process->position + offset) % MEM_SIZE;
 				}
@@ -169,13 +169,13 @@ void	do_turn(t_data *data)
 		ft_printf("It is now cycle %d\n", data->cycle);
 	if (data->cycles_fr_lst_check >= data->cycle_to_die)
 		to_die_check(data);
+	read_operations(data);
+	execute_operations(data);
 	if (data->dump_flag && data->cycle >= data->dump_cycles)
 	{
 		print_board(data->board, MEM_SIZE);
 		exit(0);
 	}
-	read_operations(data);
-	execute_operations(data);
 	if (!is_playing_check(data))
 		return ;
 	data->cycles_fr_lst_check++;

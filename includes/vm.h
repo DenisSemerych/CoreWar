@@ -48,13 +48,6 @@ typedef struct 		s_champ
 	t_list			*processes;
 }					t_champ;
 
-enum e_flags
-{
-	dump = 1,
-	visual = 2,
-	a = 4
-}
-
 typedef struct 		s_data
 {
 	t_list			*champs;

@@ -1,6 +1,6 @@
 #include "../includes/vm.h"
 
-void	write_data(void *position, int value, t_data *data)
+void	write_data(void *position, unsigned int value, t_data *data)
 {
 	int n;
 	unsigned char *p;
@@ -178,9 +178,9 @@ void	zjmp(t_process *process, t_data *data)
 {
 	int value;
 
-	value = read_arg(process, 0, data, INDIRECT) % IDX_MOD;
+	value = read_arg(process, 0, data, INDIRECT);
 	if (process->carry)
-		process->position = get_absolute_cord (process->position, value);
+		process->position = get_absolute_cord (process->position, value % IDX_MOD);
 	if (data->n_flag & 4)
 		ft_printf("P%5d | zjmp %d %s\n", process->uniq_number, value, (process->carry) ? "OK" : "FAILED");
 }
@@ -264,8 +264,10 @@ void	aff(t_process *process, t_data *data)
 
 	c = read_arg(process, 0, data, INDIRECT);
 	reg = read_arg(process, 0, data, DIRECT);
-	if (data->n_flag & 4)
-		ft_printf("P%5d | aff r%d: %c\n", process->uniq_number, reg, c);
+//	if (data->n_flag & 4)
+//		ft_printf("P%5d | aff r%d: %c\n", process->uniq_number, reg, c);
+	if (data->a_flag)
+		ft_printf("Aff: %c\n", c);
 }
 
 void	execute_opeartion(t_process *process, t_data *data)

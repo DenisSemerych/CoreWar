@@ -106,6 +106,8 @@ void	process_champ(int argc, char** argv, int *i, t_data *data)
 //	tmp = ft_lstnew(0, 0);
 //	tmp->content = champ;
 //	ft_lstadd(&(data->champs), tmp);
+	data->last_alive_champ = champ->number;
+
 	insert_champ(data, champ);
 	data->champs_amount++;
 }
@@ -128,7 +130,7 @@ void	arg_valid(int argc, char** argv, t_data *data)
 			data->visual_flag = 1;
 		else if (ft_strcmp(argv[i], "-v") == 0)
 			data->n_flag = fl_process(argc, argv, &i, 3);
-		else if (ft_strcmp(argv[1], "-a") == 0)
+		else if (ft_strcmp(argv[i], "-a") == 0)
 			data->a_flag = 1;
 		else
 			process_champ(argc, argv, &i, data);

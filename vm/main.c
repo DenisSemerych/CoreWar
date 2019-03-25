@@ -25,10 +25,7 @@ int main(int argc, char** argv)
 		p = data.champs;
 		while (p && ((t_champ*)p->content)->number != data.last_alive_champ)
 			p = p->next;
-		if (data.last_alive_champ)
-			ft_printf("Contestant %d, \"%s\", has won!\n", data.last_alive_champ, ((t_champ*)p->content)->name);
-		else
-			ft_printf("NO WINNER!\n");
+		ft_printf("Contestant %d, \"%s\", has won !\n", data.last_alive_champ, ((t_champ*)p->content)->name);
 	}
 	return (0);
 }
