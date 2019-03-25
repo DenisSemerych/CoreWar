@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   additional_lib.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmyslyvy <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/25 23:33:14 by mmyslyvy          #+#    #+#             */
+/*   Updated: 2019/03/25 23:33:15 by mmyslyvy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/vm.h"
 
 void	error_msg(char *str)
@@ -27,9 +39,9 @@ int		parse_int(char *str)
 	}
 }
 
-int 	get_absolute_cord(int cord, int relative_cord)
+int		get_absolute_cord(int cord, int relative_cord)
 {
-	int 	res;
+	int	res;
 
 	if (cord + relative_cord < MEM_SIZE && cord + relative_cord >= 0)
 		res = cord + relative_cord;

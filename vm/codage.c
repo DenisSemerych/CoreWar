@@ -1,19 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   codage.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmyslyvy <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/25 23:35:21 by mmyslyvy          #+#    #+#             */
+/*   Updated: 2019/03/25 23:35:54 by mmyslyvy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/vm.h"
 
 void	codage_proc(t_process *process, unsigned char codage)
 {
 	unsigned char	args[3];
-	int 			i;
+	int				i;
 
 	process->op_args_type[0] = 0;
 	process->op_args_type[1] = 0;
 	process->op_args_type[2] = 0;
-	if (g_op_tab[process->op_code].octal)
+	if (g_op_tab[process->op_code].octal && (i = -1) == -1)
 	{
 		args[0] = (codage & (unsigned char)0b11000000) >> 6;
 		args[1] = (codage & (unsigned char)0b00110000) >> 4;
 		args[2] = (codage & (unsigned char)0b00001100) >> 2;
-		i = -1;
 		while (++i < g_op_tab[process->op_code].nb_arg)
 		{
 			if (args[i] == 0b10)
@@ -30,7 +41,7 @@ void	codage_proc(t_process *process, unsigned char codage)
 		process->op_args_type[0] = T_DIR;
 }
 
-int 	get_type_size(t_process *process, int arg_type)
+int		get_type_size(t_process *process, int arg_type)
 {
 	if (arg_type == T_DIR)
 		return (g_op_tab[process->op_code].label);
@@ -61,7 +72,7 @@ int		get_offset(t_process *process)
 
 void	*get_t_ind_pointer(t_data *data, t_process *process, int arg_num)
 {
-	short	new_pos;
+	short			new_pos;
 	unsigned char	*address;
 
 	address = process->op_args_pointers[arg_num];
@@ -75,7 +86,6 @@ void	*get_t_ind_pointer(t_data *data, t_process *process, int arg_num)
 	else
 		new_pos %= IDX_MOD;
 	return (&data->board[get_absolute_cord(process->position, new_pos)]);
-
 }
 
 int		write_args_pointers(t_data *data, t_process *process)
@@ -92,7 +102,8 @@ int		write_args_pointers(t_data *data, t_process *process)
 		{
 			pos = get_absolute_cord(process->position, offset);
 			process->op_args_pointers[i] = &(data->board[pos]);
-			offset = pos - process->position + get_type_size(process, process->op_args_type[i]);
+			offset = pos - process->position +
+					get_type_size(process, process->op_args_type[i]);
 		}
 		else
 			return (0);
