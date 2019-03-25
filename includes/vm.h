@@ -24,7 +24,7 @@
 typedef struct		s_process
 {
 	unsigned int	uniq_number;
-	unsigned int	alive_cycle;
+	int	alive_cycle;
 	int				parent_number;
 	unsigned int	carry: 1;
 	unsigned int	live: 1;
@@ -66,9 +66,9 @@ typedef struct 		s_data
 	int 			checks_amount;
 	unsigned int	playing: 1;
 	unsigned char	*board;
-	unsigned int	cycle;
+	int	cycle;
 	int			 	cycle_to_die;
-	unsigned int	cycles_fr_lst_check;
+	int				cycles_fr_lst_check;
 	unsigned int	live_op_amount;
 	t_vs			*vs;
 	t_list			*processes;
