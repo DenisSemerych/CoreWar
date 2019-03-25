@@ -98,4 +98,15 @@ void				print_board(const void *addr, size_t size);
 int					read_arg(t_process *process, int argnum,
 	t_data *data, int dir_flag);
 
+void				zjmp(t_process *process, t_data *data);
+void				ldi_lldi(t_process *process, t_data *data);
+void				sti(t_process *process, t_data *data);
+void				fork_lfork(t_process *process, t_data *data);
+void				aff(t_process *process, t_data *data);
+void				live(t_process *process, t_data *data);
+void				st(t_process *process, t_data *data);
+void				ld_lld(t_process *process, t_data *data);
+void				sub_add(t_process *process, t_data *data);
+void				and_or_xor(t_process *process, t_data *data);
+
 #endif

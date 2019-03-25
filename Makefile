@@ -23,6 +23,8 @@ VM_SRC_LIST = \
 	initialization.c\
 	intro_champs.c\
 	operations.c\
+	operations2.c\
+	op_auxiliary.c\
 	print_board.c
 
 VISU_SRCDIR = $(VM_SRCDIR)visu/
