@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_board.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yochered <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/25 23:37:35 by yochered          #+#    #+#             */
+/*   Updated: 2019/03/25 23:37:36 by yochered         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/vm.h"
 
 static void	ft_puthex(unsigned char c)
@@ -27,8 +39,10 @@ static void	ft_do_it(unsigned char *p, size_t size)
 		if (n < size)
 			ft_puthex(p[n]);
 		else
+		{
 			write(1, "  ", 2);
 			write(1, " ", 1);
+		}
 	}
 	write(1, "\n", 1);
 }

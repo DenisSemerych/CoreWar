@@ -1,10 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yochered <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/25 23:39:43 by yochered          #+#    #+#             */
+/*   Updated: 2019/03/25 23:39:45 by yochered         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/vm.h"
 
+void	print_champ(t_data *data)
+{
+	t_list *p;
 
-int main(int argc, char **argv)
+	p = data->champs;
+	while (p && ((t_champ*)p->content)->number != data->last_alive_champ)
+		p = p->next;
+	ft_printf("Contestant %d, \"%s\", has won !\n",
+		data->last_alive_champ, ((t_champ*)p->content)->name);
+}
+
+int		main(int argc, char **argv)
 {
 	t_data	data;
-	t_list	*p;
 
 	if (argc == 1)
 	{
@@ -25,11 +46,7 @@ int main(int argc, char **argv)
 	{
 		while (data.playing)
 			do_turn(&data);
-		p = data.champs;
-		while (p && ((t_champ*)p->content)->number != data.last_alive_champ)
-			p = p->next;
-		ft_printf("Contestant %d, \"%s\", has won !\n", data.last_alive_champ, ((t_champ*)p->content)->name);
+		print_champ(&data);
 	}
-//	system("leaks -q corewar");
 	return (0);
 }

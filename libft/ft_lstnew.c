@@ -21,7 +21,12 @@ t_list	*ft_lstnew(void const *content, size_t content_size)
 	new->next = NULL;
 	if (content)
 	{
-		new->content = (void*)content;
+		if (!(new->content = malloc(content_size)))
+		{
+			free(new);
+			return (NULL);
+		}
+		new->content = ft_memcpy(new->content, content, content_size);
 		new->content_size = content_size;
 	}
 	else
