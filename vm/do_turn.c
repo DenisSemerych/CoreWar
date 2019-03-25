@@ -16,7 +16,7 @@ int		is_playing_check(t_data *data)
 {
 	t_list	*process;
 
-	if (data->cycle_to_die <= 0 || !data->processes)
+	if (!data->processes)
 		data->playing = 0;
 	else
 	{
@@ -125,7 +125,7 @@ void	execute_operations(t_data *data)
 	int			offset;
 	int			n;
 
-	if (data->cycle >= 1535)
+	if (data->cycle >= 5435)
 	{
 		int i = 25;
 		process = process;
@@ -137,11 +137,11 @@ void	execute_operations(t_data *data)
 		process = proc_p->content;
 		if (!process->waiting_cycles)
 		{
-			codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
 			if (process->op_code <= 0 || process->op_code > 0x10)
 				process->position = (process->position + 1) % MEM_SIZE;
 			else
 			{
+				codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
 				if ((n = write_args_pointers(data, process)) && check_reg(process, data))
 					execute_opeartion(proc_p->content, data);
 				if (!(process->op_code == 9 && n && process->carry))
@@ -167,10 +167,11 @@ void	do_turn(t_data *data)
 {
 	if (data->n_flag & 2 && data->cycle)
 		ft_printf("It is now cycle %d\n", data->cycle);
-	if (data->cycles_fr_lst_check >= data->cycle_to_die)
-		to_die_check(data);
 	read_operations(data);
 	execute_operations(data);
+	if (data->cycles_fr_lst_check >= data->cycle_to_die)
+		to_die_check(data);
+
 	if (data->dump_flag && data->cycle >= data->dump_cycles)
 	{
 		print_board(data->board, MEM_SIZE);
