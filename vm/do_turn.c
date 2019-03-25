@@ -47,7 +47,6 @@ void	ft_lstdelcrt(t_list **list, t_list *to_delete)
 			p = p->next;
 		p->next = to_delete->next;
 	}
-	// free(to_delete->content);
 	free(to_delete);
 }
 

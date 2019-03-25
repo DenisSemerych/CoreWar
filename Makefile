@@ -19,7 +19,6 @@ VM_SRC_LIST = \
 	arg_validation.c\
 	champ_data.c\
 	codage.c\
-	debug_funcs.c\
 	do_turn.c\
 	initialization.c\
 	intro_champs.c\
@@ -100,4 +99,4 @@ re: fclean all
 
 run: all
 	clear
-	./corewar -v katchup.cor katchup.cor katchup.cor katchup.cor
+	./corewar -visual ../test_process_1.cor

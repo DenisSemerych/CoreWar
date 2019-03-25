@@ -15,16 +15,13 @@
 void	initialization(t_data *data)
 {
 	unsigned char	*p;
-	int				pos;	
 	t_process		new_process;
 	t_list			*player_p;
 
-	if (!(data->board = (unsigned char*)malloc(MEM_SIZE)))
+	if (!(data->board = (unsigned char*)ft_memalloc(MEM_SIZE)))
 		error_msg("Malloc error while initialization");
-	ft_bzero(data->board, MEM_SIZE);
 	data->cycle_to_die = CYCLE_TO_DIE;
 	data->playing = 1;
-	pos = MEM_SIZE / data->champs_amount;
 	p = data->board;
 	player_p = data->champs;
 	while (player_p)
@@ -35,9 +32,10 @@ void	initialization(t_data *data)
 		new_process.live = 1;
 		new_process.parent_number = ((t_champ*)player_p->content)->number;
 		new_process.reg[1] = ((t_champ*)player_p->content)->number * -1;
-		ft_memcpy(p, ((t_champ*)player_p->content)->exec_code, ((t_champ*)player_p->content)->exec_size);
+		ft_memcpy(p, ((t_champ*)player_p->content)->exec_code,
+			((t_champ*)player_p->content)->exec_size);
 		ft_lstadd(&data->processes, ft_lstnew(&new_process, sizeof(t_process)));
-		p += pos;
+		p += MEM_SIZE / data->champs_amount;
 		player_p = player_p->next;
 	}
 }
