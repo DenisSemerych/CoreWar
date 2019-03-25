@@ -100,7 +100,7 @@ void			insert_champ(t_data *data, t_champ *champ)
 	new_lst->next = prev_next;
 }
 
-void			process_champ(int argc, char **argv, int *i, t_data *data)
+void			process_champ(char **argv, int *i, t_data *data)
 {
 	int		fd;
 	char	*ext;
@@ -150,7 +150,7 @@ void			arg_valid(int argc, char **argv, t_data *data)
 		else if (ft_strcmp(argv[i], "-a") == 0)
 			data->a_flag = 1;
 		else
-			process_champ(argc, argv, &i, data);
+			process_champ(argv, &i, data);
 		i++;
 	}
 }

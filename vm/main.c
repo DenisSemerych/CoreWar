@@ -17,7 +17,8 @@ void	print_champ(t_data *data)
 	t_list *p;
 
 	p = data->champs;
-	while (p && ((t_champ*)p->content)->number != data->last_alive_champ)
+	while (p && ((t_champ*)p->content)->number
+		!= (unsigned int)data->last_alive_champ)
 		p = p->next;
 	ft_printf("Contestant %d, \"%s\", has won !\n",
 		data->last_alive_champ, ((t_champ*)p->content)->name);

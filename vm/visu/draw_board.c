@@ -28,11 +28,11 @@ int				check_process(t_data *data, int index)
 
 unsigned int	get_attributes(t_data *data, t_map *map, int pos)
 {
-	if (data->cycle <= map[pos].cycles_after_live)
+	if ((size_t)data->cycle <= map[pos].cycles_after_live)
 		return (COLOR_PAIR(map[pos].owner + 10) | A_BOLD);
 	else if (check_process(data, pos))
 		return (COLOR_PAIR(map[pos].owner + 5));
-	else if (data->cycle <= map[pos].cycles_after_st)
+	else if ((size_t)data->cycle <= map[pos].cycles_after_st)
 		return (COLOR_PAIR(map[pos].owner) | A_BOLD);
 	else
 		return (COLOR_PAIR(map[pos].owner));

@@ -50,7 +50,7 @@ INCLUDES = \
 	-I ./includes/\
 	-I ./vm/
 
-FLAGS = -O3
+FLAGS = -O2 -Wall -W -Werror
 GREEN = \033[92m
 RESET = \033[0m
 

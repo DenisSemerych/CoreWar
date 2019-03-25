@@ -28,7 +28,7 @@ void	live(t_process *process, t_data *data)
 	champ_num *= -1;
 	while (champ_p)
 	{
-		if (((t_champ*)champ_p->content)->number == champ_num)
+		if ((int)((t_champ*)champ_p->content)->number == champ_num)
 		{
 			data->last_alive_champ = champ_num;
 			if (data->n_flag & 1)

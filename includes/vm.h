@@ -60,7 +60,7 @@ typedef struct		s_data
 	int				a_flag : 1;
 	int				n_flag;
 
-	unsigned int	dump_cycles;
+	int				dump_cycles;
 	unsigned int	max_process_num;
 	int				last_alive_champ;
 	int				checks_amount;
@@ -88,7 +88,7 @@ void				do_turn(t_data *data);
 void				introduce_champs(t_list *champs);
 void				codage_proc(t_process *process, unsigned char codage);
 int					get_absolute_cord(int cord, int relative_cord);
-void				execute_opeartion(t_process *process, t_data *data);
+void				execute_operation(t_process *process, t_data *data);
 int					write_args_pointers(t_data *data, t_process *process);
 int					get_offset(t_process *process);
 void				*get_t_ind_pointer(t_data *data,
@@ -98,6 +98,8 @@ void				print_board(const void *addr, size_t size);
 int					read_arg(t_process *process, int argnum,
 	t_data *data, int dir_flag);
 
+void				write_data(void *position, unsigned int value, t_data *data);
+void				mark_data(t_data *data, int pos, int owner);
 void				zjmp(t_process *process, t_data *data);
 void				ldi_lldi(t_process *process, t_data *data);
 void				sti(t_process *process, t_data *data);
