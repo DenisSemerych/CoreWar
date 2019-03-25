@@ -35,22 +35,16 @@ static void	ft_do_it(unsigned char *p, size_t size)
 
 void		print_board(const void *addr, size_t size)
 {
-	unsigned char *p;
+	unsigned char	*p;
+	size_t			i;
 
+	i = 0;
 	p = (unsigned char*)addr;
 	if (addr)
-		while (size != 0)
+		while (i < size)
 		{
-			if (size >= 64)
-			{
-				ft_do_it(p, 64);
-				size -= 64;
-				p += 64;
-			}
-			else
-			{
-				ft_do_it(p, size);
-				size = 0;
-			}
+			ft_printf("0x%04x : ", i);
+			ft_do_it(&p[i], 64);
+			i += 64;
 		}
 }

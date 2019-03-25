@@ -169,6 +169,11 @@ void	do_turn(t_data *data)
 		ft_printf("It is now cycle %d\n", data->cycle);
 	if (data->cycles_fr_lst_check >= data->cycle_to_die)
 		to_die_check(data);
+	if (data->dump_flag && data->cycle >= data->dump_cycles)
+	{
+		print_board(data->board, MEM_SIZE);
+		exit(0);
+	}
 	read_operations(data);
 	execute_operations(data);
 	if (!is_playing_check(data))

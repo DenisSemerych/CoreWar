@@ -48,6 +48,13 @@ typedef struct 		s_champ
 	t_list			*processes;
 }					t_champ;
 
+enum e_flags
+{
+	dump = 1,
+	visual = 2,
+	a = 4
+}
+
 typedef struct 		s_data
 {
 	t_list			*champs;
@@ -57,10 +64,10 @@ typedef struct 		s_data
 
 	int 			dump_flag : 1;
 	int 			visual_flag : 1;
+	int				a_flag : 1;
 	int 			n_flag;
 
-
-
+	unsigned int	dump_cycles;
 	unsigned int	max_process_num;
 	int 			last_alive_champ;
 	int 			checks_amount;

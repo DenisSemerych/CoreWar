@@ -7,7 +7,7 @@ unsigned int	fl_process(int argc, char** argv, int *i, int op)
 	*i + 1 >= argc ? error_msg("Flag without number!") : 0;
 	n = parse_int(argv[++(*i)]);
 	op == 1 && (n < 1 || n > MAX_PLAYERS) ? error_msg("Player number less then 0 or more then MAX_PLAYERS!") : 0;
-	op == 2 && n <= 0 ? error_msg("Number of cycles cannot be negative or zero!") : 0;
+	op == 2 && n < 0 ? error_msg("Number of cycles cannot be negative or zero!") : 0;
 	op == 3 && (n < 0 || n > 31) ? error_msg("Invalid number after -v flag") : 0;
 	return ((unsigned int)n);
 }
@@ -120,11 +120,16 @@ void	arg_valid(int argc, char** argv, t_data *data)
 		if (ft_strcmp(argv[i], "-n") == 0)
 			data->next_p_num = fl_process(argc, argv, &i, 1);
 		else if (ft_strcmp(argv[i], "-dump") == 0)
-			data->dump_flag = fl_process(argc, argv, &i, 2);
+		{
+			data->dump_flag = 1;
+			data->dump_cycles = fl_process(argc, argv, &i, 2);
+		}
 		else if (ft_strcmp(argv[i], "-visual") == 0)
 			data->visual_flag = 1;
 		else if (ft_strcmp(argv[i], "-v") == 0)
 			data->n_flag = fl_process(argc, argv, &i, 3);
+		else if (ft_strcmp(argv[1], "-a") == 0)
+			data->a_flag = 1;
 		else
 			process_champ(argc, argv, &i, data);
 		i++;
