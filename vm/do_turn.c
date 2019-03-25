@@ -32,12 +32,12 @@ int		is_playing_check(t_data *data)
 	return (data->playing);
 }
 
-void	ft_lstdelcrt(t_list **list, t_list *to_delete, void (*del)(void *, size_t))
+void	ft_lstdelcrt(t_list **list, t_list *to_delete)
 {
 	t_list	*p;
 
 	if (!(list || *list || to_delete))
-		return;
+		return ;
 	if (*list == to_delete)
 		*list = to_delete->next;
 	else
@@ -47,8 +47,7 @@ void	ft_lstdelcrt(t_list **list, t_list *to_delete, void (*del)(void *, size_t))
 			p = p->next;
 		p->next = to_delete->next;
 	}
-	if (del)
-		del(to_delete->content, to_delete->content_size);
+	// free(to_delete->content);
 	free(to_delete);
 }
 
@@ -63,7 +62,7 @@ void	to_die_check(t_data *data)
 		{
 			if (data->n_flag & 8)
 				ft_printf("Process %d hasn't lived for %d cycles (CTD %d)\n", ((t_process*)process->content)->uniq_number, data->cycle - ((t_process*)process->content)->alive_cycle, data->cycle_to_die);
-			ft_lstdelcrt(&data->processes, process, NULL);
+			ft_lstdelcrt(&data->processes, process);
 		}
 		process = process->next;
 	}

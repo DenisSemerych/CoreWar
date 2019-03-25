@@ -30,5 +30,6 @@ int main(int argc, char **argv)
 			p = p->next;
 		ft_printf("Contestant %d, \"%s\", has won !\n", data.last_alive_champ, ((t_champ*)p->content)->name);
 	}
+	system("leaks -q corewar");
 	return (0);
 }

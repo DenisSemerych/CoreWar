@@ -88,9 +88,9 @@ void	insert_champ(t_data *data, t_champ *champ)
 void	process_champ(int argc, char** argv, int *i, t_data *data)
 {
 	int		fd;
-	t_champ	*champ;
-	t_list	*tmp;
 	char	*ext;
+	t_list	*tmp;
+	t_champ	*champ;
 
 	champ = (t_champ *)malloc(sizeof(t_champ));
 	if (!(ext = ft_strrchr(argv[*i], '.')) || !ft_strequ(ext, ".cor"))
@@ -103,7 +103,7 @@ void	process_champ(int argc, char** argv, int *i, t_data *data)
 	get_champ_4_bytes(fd) != 0 ? error_msg("Null zones isn't nulled!") : 0;
 	champ->exec_size = get_champ_4_bytes(fd);
 	champ->exec_size > CHAMP_MAX_SIZE ? error_msg("Size of champion larger then CHAMP_MAX_SIZE!") : 0;
-	champ->comment = ft_strdup(get_champ_comment(fd));
+	champ->comment = get_champ_comment(fd);
 	get_champ_4_bytes(fd) != 0 ? error_msg("Null zones isn't nulled!") : 0;
 	champ->exec_code = get_champ_exec(fd, champ->exec_size);
 	set_champ_num(data, champ);
