@@ -20,6 +20,7 @@ VM_SRC_LIST = \
 	champ_data.c\
 	codage.c\
 	do_turn.c\
+	vm_auxiliary.c\
 	initialization.c\
 	intro_champs.c\
 	operations.c\

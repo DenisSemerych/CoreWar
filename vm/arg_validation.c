@@ -71,35 +71,6 @@ void			set_champ_num(t_data *data, t_champ *champ)
 	}
 }
 
-void			insert_champ(t_data *data, t_champ *champ)
-{
-	t_list	*new_lst;
-	t_list	*tmp;
-	t_list	*prev_next;
-
-	new_lst = ft_lstnew(0, 0);
-	if ((new_lst->content = champ) == champ && data->champs == NULL)
-	{
-		ft_lstadd(&(data->champs), new_lst);
-		return ;
-	}
-	else if (data->champs->next == NULL)
-	{
-		if (((t_champ *)(data->champs->content))->number > champ->number)
-			ft_lstadd(&(data->champs), new_lst);
-		else
-			data->champs->next = new_lst;
-		return ;
-	}
-	tmp = data->champs;
-	while (tmp->next &&
-		((t_champ *)(tmp->next->content))->number < champ->number)
-		tmp = tmp->next;
-	prev_next = tmp->next;
-	tmp->next = new_lst;
-	new_lst->next = prev_next;
-}
-
 void			process_champ(char **argv, int *i, t_data *data)
 {
 	int		fd;

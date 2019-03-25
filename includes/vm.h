@@ -98,7 +98,8 @@ void				print_board(const void *addr, size_t size);
 int					read_arg(t_process *process, int argnum,
 	t_data *data, int dir_flag);
 
-void				write_data(void *position, unsigned int value, t_data *data);
+void				write_data(void *position, unsigned int value,
+	t_data *data);
 void				mark_data(t_data *data, int pos, int owner);
 void				zjmp(t_process *process, t_data *data);
 void				ldi_lldi(t_process *process, t_data *data);
@@ -110,5 +111,10 @@ void				st(t_process *process, t_data *data);
 void				ld_lld(t_process *process, t_data *data);
 void				sub_add(t_process *process, t_data *data);
 void				and_or_xor(t_process *process, t_data *data);
+
+void				ft_lstdelcrt(t_list **list, t_list *to_delete);
+void				insert_champ(t_data *data, t_champ *champ);
+void				to_die_check(t_data *d);
+int					is_playing_check(t_data *data);
 
 #endif
