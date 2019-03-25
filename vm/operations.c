@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   operations.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dzaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/25 23:37:50 by dzaporoz          #+#    #+#             */
+/*   Updated: 2019/03/26 00:10:21 by dzaporoz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/vm.h"
 
 void	write_data(void *position, unsigned int value, t_data *data)
 {
-	int n;
-	unsigned char *p;
+	int				n;
+	unsigned char	*p;
 
 	n = 0;
 	p = position;
@@ -32,14 +44,14 @@ void	mark_data(t_data *data, int pos, int owner)
 	}
 }
 
-int 	read_arg(t_process *process, int argnum, t_data *data, int dir_flag)
+int		read_arg(t_process *process, int argnum, t_data *data, int dir_flag)
 {
-	int arg;
-	int size;
-	int n;
-	unsigned char *p;
+	int				arg;
+	int				size;
+	int				n;
+	unsigned char	*p;
 
-	n = 0;
+	n = -1;
 	arg = 0;
 	p = process->op_args_pointers[argnum];
 	size = get_type_size(process, process->op_args_type[argnum]);
@@ -48,25 +60,17 @@ int 	read_arg(t_process *process, int argnum, t_data *data, int dir_flag)
 		size = 4;
 		p = get_t_ind_pointer(data, process, argnum);
 	}
-	while (n < size)
+	while (++n < size)
 	{
 		arg <<= 8;
 		arg |= (int)*p++;
 		if (p - data->board >= MEM_SIZE)
 			p = data->board;
-		n++;
 	}
 	arg = (size == 2) ? (short)arg : arg;
-	arg = ((dir_flag == INDIRECT && process->op_args_type[argnum] == T_REG) ? process->reg[arg] : arg);
+	arg = ((dir_flag == INDIRECT && process->op_args_type[argnum] == T_REG)
+			? process->reg[arg] : arg);
 	return (arg);
-}
-
-void 	write_arg(t_process *process, int argnum, int value, t_data *data)
-{
-	if (process->op_args_type[argnum] == T_REG)
-		process->reg[argnum] = value;
-	else if (process->op_args_type[argnum] == T_IND)
-		write_data(process->op_args_pointers[argnum], value, data);
 }
 
 void	live(t_process *process, t_data *data)
@@ -89,7 +93,8 @@ void	live(t_process *process, t_data *data)
 		{
 			data->last_alive_champ = champ_num;
 			if (data->n_flag & 1)
-				ft_printf("Player %d (%s) is said to be alive\n", champ_num, ((t_champ*)champ_p->content)->name);
+				ft_printf("Player %d (%s) is said to be alive\n", champ_num,
+						((t_champ*)champ_p->content)->name);
 			return ;
 		}
 		champ_p = champ_p->next;
@@ -116,7 +121,8 @@ void	st(t_process *process, t_data *data)
 		write_data(pos, what, data);
 	}
 	if (data->n_flag & 4)
-		ft_printf("P %4d | st r%d %s%d\n", process->uniq_number, from, (process->op_args_type[1] == T_REG) ? "r" : "", where);
+		ft_printf("P %4d | st r%d %s%d\n", process->uniq_number, from,
+				(process->op_args_type[1] == T_REG) ? "r" : "", where);
 }
 
 void	ld_lld(t_process *process, t_data *data)
@@ -126,9 +132,11 @@ void	ld_lld(t_process *process, t_data *data)
 
 	value = read_arg(process, 0, data, INDIRECT);
 	ind = read_arg(process, 1, data, DIRECT);
-	process->carry = ((process->reg[ind] = value) == 0);
+	process->reg[ind] = value;
+	process->carry = (value == 0);
 	if (data->n_flag & 4)
-		ft_printf("P %4d | %s %d r%d\n", process->uniq_number, (process->op_code == 2) ? "ld" : "lld", value, ind);
+		ft_printf("P %4d | %s %d r%d\n", process->uniq_number,
+				(process->op_code == 2) ? "ld" : "lld", value, ind);
 }
 
 void	sub_add(t_process *process, t_data *data)
@@ -148,15 +156,16 @@ void	sub_add(t_process *process, t_data *data)
 	process->reg[r3] = value1;
 	process->carry = (read_arg(process, 2, data, INDIRECT) == 0);
 	if (data->n_flag & 4)
-		ft_printf("P %4d | %s r%d r%d r%d\n", process->uniq_number, (process->op_code == 4) ? "add" : "sub", r1, r2, r3);
+		ft_printf("P %4d | %s r%d r%d r%d\n", process->uniq_number,
+				(process->op_code == 4) ? "add" : "sub", r1, r2, r3);
 }
 
 void	and_or_xor(t_process *process, t_data *data)
 {
-	int value1;
-	int value2;
-	int where;
-	char *operation;
+	int		value1;
+	int		value2;
+	int		where;
+	char	*operation;
 
 	value1 = read_arg(process, 0, data, INDIRECT);
 	value2 = read_arg(process, 1, data, INDIRECT);
@@ -168,10 +177,12 @@ void	and_or_xor(t_process *process, t_data *data)
 	if (process->op_code == 6)
 		process->reg[where] = value1 & value2;
 	else
-		process->reg[where] = (process->op_code == 7) ? (value1 | value2) : (value1 ^ value2);
+		process->reg[where] = (process->op_code == 7) ? (value1 | value2) :
+			(value1 ^ value2);
 	process->carry = (process->reg[where] == 0);
 	if (data->n_flag & 4)
-		ft_printf("P %4d | %s %d %d r%d\n", process->uniq_number, operation, value1, value2, where);
+		ft_printf("P %4d | %s %d %d r%d\n", process->uniq_number, operation,
+				value1, value2, where);
 }
 
 void	zjmp(t_process *process, t_data *data)
@@ -180,9 +191,11 @@ void	zjmp(t_process *process, t_data *data)
 
 	value = read_arg(process, 0, data, INDIRECT);
 	if (process->carry)
-		process->position = get_absolute_cord (process->position, value % IDX_MOD);
+		process->position = get_absolute_cord(process->position, value %
+				IDX_MOD);
 	if (data->n_flag & 4)
-		ft_printf("P %4d | zjmp %d %s\n", process->uniq_number, value, (process->carry) ? "OK" : "FAILED");
+		ft_printf("P %4d | zjmp %d %s\n", process->uniq_number, value,
+				(process->carry) ? "OK" : "FAILED");
 }
 
 void	ldi_lldi(t_process *process, t_data *data)
@@ -195,17 +208,18 @@ void	ldi_lldi(t_process *process, t_data *data)
 	pos1 = read_arg(process, 0, data, INDIRECT);
 	pos2 = read_arg(process, 1, data, INDIRECT);
 	reg = read_arg(process, 2, data, DIRECT);
-	offset = pos1 + pos2;
-	offset = get_absolute_cord(process->position, (process->op_code == 10) ? (offset % IDX_MOD) : offset);
-
+	offset = get_absolute_cord(process->position, (process->op_code == 10) ?
+			((pos1 + pos2) % IDX_MOD) : (pos1 + pos2));
 	if (data->n_flag & 4)
-		ft_printf("P %4d | %s %d %d r%d\n       | -> load from %d + %d = %d (with pc%s %d)\n", process->uniq_number, (process->op_code == 10) ? "ldi" : "lldi", pos1, pos2, reg, pos1, pos2, pos1 + pos2, (process->op_code == 10) ? " and mod" : "", offset);
+		ft_printf("P %4d | %s %d %d r%d\n       | -> load from %d + %d = %d (w"
+				"ith pc%s %d)\n", process->uniq_number, (process->op_code == 10)
+				? "ldi" : "lldi", pos1, pos2, reg, pos1, pos2, pos1 + pos2,
+				(process->op_code == 10) ? " and mod" : "", offset);
 	pos1 = -1;
 	process->reg[reg] = 0;
 	while (++pos1 < 4)
 	{
-		process->reg[reg] <<= 8;
-		process->reg[reg] |= data->board[offset];
+		process->reg[reg] = (process->reg[reg] << 8) | data->board[offset];
 		if (++offset >= MEM_SIZE)
 			offset = 0;
 	}
@@ -215,7 +229,6 @@ void	ldi_lldi(t_process *process, t_data *data)
 
 void	sti(t_process *process, t_data *data)
 {
-	int sum;
 	int from;
 	int pos1;
 	int pos2;
@@ -225,12 +238,12 @@ void	sti(t_process *process, t_data *data)
 	from = read_arg(process, 0, data, DIRECT);
 	pos1 = read_arg(process, 1, data, INDIRECT);
 	pos2 = read_arg(process, 2, data, INDIRECT);
-	sum = pos1 + pos2;
-	mod = sum % IDX_MOD + process->position;
-
+	mod = (pos1 + pos2) % IDX_MOD + process->position;
 	if (data->n_flag & 4)
-		ft_printf("P %4d | sti r%d %d %d\n       | -> store to %d + %d = %d (with pc and mod %d)\n", process->uniq_number, from, pos1, pos2, pos1, pos2, sum, mod);
-	pos = get_absolute_cord(process->position, sum % IDX_MOD);
+		ft_printf("P %4d | sti r%d %d %d\n       | -> store to %d + %d = %d"
+			" (with pc and mod %d)\n", process->uniq_number, from, pos1,
+			pos2, pos1, pos2, (pos1 + pos2), mod);
+	pos = get_absolute_cord(process->position, (pos1 + pos2) % IDX_MOD);
 	if (data->visual_flag && process)
 		mark_data(data, pos, process->parent_number);
 	write_data(&data->board[pos], read_arg(process, 0, data, INDIRECT), data);
@@ -239,7 +252,7 @@ void	sti(t_process *process, t_data *data)
 void	fork_lfork(t_process *process, t_data *data)
 {
 	t_process	new_process;
-	int 		value;
+	int			value;
 
 	value = read_arg(process, 0, data, INDIRECT);
 	value = (process->op_code == 12) ? (value % IDX_MOD) : value;
@@ -253,20 +266,21 @@ void	fork_lfork(t_process *process, t_data *data)
 	new_process.live = 1;
 	ft_lstadd(&data->processes, ft_lstnew(&new_process, sizeof(t_process)));
 	if (data->n_flag & 4)
-		ft_printf("P %4d | %s %d (%d)\n", process->uniq_number, (process->op_code == 12) ? "fork" : "lfork", value, new_process.position);
-
+		ft_printf("P %4d | %s %d (%d)\n", process->uniq_number,
+				(process->op_code == 12) ? "fork" : "lfork", value,
+				new_process.position);
 }
 
 void	aff(t_process *process, t_data *data)
 {
-	char c;
-	int reg;
+	char	c;
+	int		reg;
 
 	c = read_arg(process, 0, data, INDIRECT);
 	reg = read_arg(process, 0, data, DIRECT);
-//	if (data->n_flag & 4)
-//		ft_printf("P %4d | aff r%d: %c\n", process->uniq_number, reg, c);
-	if (data->a_flag)
+	if (data->n_flag & 4)
+		ft_printf("P %4d | aff r%d: %c\n", process->uniq_number, reg, c);
+	else if (data->a_flag)
 		ft_printf("Aff: %c\n", c);
 }
 
