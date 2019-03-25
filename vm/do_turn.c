@@ -53,7 +53,7 @@ void	ft_lstdelcrt(t_list **list, t_list *to_delete)
 void	to_die_check(t_data *d)
 {
 	t_list		*process;
-	t_process	p;
+	t_process	*p;
 
 	process = d->processes;
 	while (process)

@@ -6,7 +6,7 @@
 /*   By: mmyslyvy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 00:07:49 by mmyslyvy          #+#    #+#             */
-/*   Updated: 2019/03/26 00:07:50 by mmyslyvy         ###   ########.fr       */
+/*   Updated: 2019/03/26 00:23:16 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void			insert_champ(t_data *data, t_champ *champ)
 	t_list	*prev_next;
 
 	new_lst = ft_lstnew(0, 0);
-	if ((new_lst->content = champ == champ) && data->champs == NULL)
+	if ((new_lst->content = champ) == champ && data->champs == NULL)
 	{
 		ft_lstadd(&(data->champs), new_lst);
 		return ;

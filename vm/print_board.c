@@ -39,10 +39,8 @@ static void	ft_do_it(unsigned char *p, size_t size)
 		if (n < size)
 			ft_puthex(p[n]);
 		else
-		{
 			write(1, "  ", 2);
-			write(1, " ", 1);
-		}
+		write(1, " ", 1);
 	}
 	write(1, "\n", 1);
 }
