@@ -50,37 +50,39 @@ void	ft_lstdelcrt(t_list **list, t_list *to_delete)
 	free(to_delete);
 }
 
-void	to_die_check(t_data *data)
+void	to_die_check(t_data *d)
 {
-	t_list	*process;
+	t_list		*process;
+	t_process	p;
 
-	process = data->processes;
+	process = d->processes;
 	while (process)
 	{
-		if (data->cycle - ((t_process *)process->content)->alive_cycle >= data->cycle_to_die)
+		p = (t_process*)process->content;
+		if (d->cycle - p->alive_cycle >= d->cycle_to_die)
 		{
-			if (data->n_flag & 8)
-				ft_printf("Process %d hasn't lived for %d cycles (CTD %d)\n", ((t_process*)process->content)->uniq_number, data->cycle - ((t_process*)process->content)->alive_cycle, data->cycle_to_die);
-			ft_lstdelcrt(&data->processes, process);
+			if (d->n_flag & 8)
+				ft_printf("Process %d hasn't lived for %d cycles (CTD %d)\n",
+				p->uniq_number, d->cycle - p->alive_cycle, d->cycle_to_die);
+			ft_lstdelcrt(&d->processes, process);
 		}
 		process = process->next;
 	}
-	data->checks_amount++;
-	if (data->live_op_amount >= NBR_LIVE || data->checks_amount >= MAX_CHECKS)
+	if (d->live_op_amount >= NBR_LIVE || ++d->checks_amount >= MAX_CHECKS)
 	{
-		data->cycle_to_die -= CYCLE_DELTA;
-		data->checks_amount = 0;
-		if (data->n_flag & 2)
-			ft_printf("Cycle to die is now %d\n", data->cycle_to_die);
+		d->cycle_to_die -= CYCLE_DELTA;
+		d->checks_amount = 0;
+		if (d->n_flag & 2)
+			ft_printf("Cycle to die is now %d\n", d->cycle_to_die);
 	}
-	data->cycles_fr_lst_check = 0;
-	data->live_op_amount = 0;
+	d->cycles_fr_lst_check = 0;
+	d->live_op_amount = 0;
 }
 
 void	read_operations(t_data *data)
 {
-	t_list	*proc_p;
-	t_process *process;
+	t_list		*proc_p;
+	t_process	*process;
 
 	proc_p = data->processes;
 	while (proc_p)
@@ -98,7 +100,7 @@ void	read_operations(t_data *data)
 	}
 }
 
-int	check_reg(t_process *process, t_data *data)
+int		check_reg(t_process *process, t_data *data)
 {
 	int i;
 	int reg;
@@ -114,20 +116,12 @@ int	check_reg(t_process *process, t_data *data)
 	return (1);
 }
 
-
-
 void	execute_operations(t_data *data)
 {
-	t_list	*proc_p;
-	t_process *process;
+	t_list		*proc_p;
+	t_process	*process;
 	int			offset;
 	int			n;
-
-	if (data->cycle >= 5435)
-	{
-		int i = 25;
-		process = process;
-	}
 
 	proc_p = data->processes;
 	while (proc_p)
@@ -153,7 +147,7 @@ void	execute_operations(t_data *data)
 							ft_printf(" %02x", data->board[(process->position + n) % MEM_SIZE]);
 						ft_printf(" \n");
 					}
-                	process->position = (process->position + offset) % MEM_SIZE;
+					process->position = (process->position + offset) % MEM_SIZE;
 				}
 			}
 		}
@@ -169,7 +163,6 @@ void	do_turn(t_data *data)
 	execute_operations(data);
 	if (data->cycles_fr_lst_check >= data->cycle_to_die)
 		to_die_check(data);
-
 	if (data->dump_flag && data->cycle >= data->dump_cycles)
 	{
 		print_board(data->board, MEM_SIZE);
