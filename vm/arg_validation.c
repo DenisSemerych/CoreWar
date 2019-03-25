@@ -87,12 +87,16 @@ void	insert_champ(t_data *data, t_champ *champ)
 
 void	process_champ(int argc, char** argv, int *i, t_data *data)
 {
-	int	fd;
-	t_champ *champ;
+	int		fd;
+	t_champ	*champ;
 	t_list	*tmp;
+	char	*ext;
 
 	champ = (t_champ *)malloc(sizeof(t_champ));
-	fd = open(argv[*i], O_RDONLY);
+	if (!(ext = ft_strrchr(argv[*i], '.')) || !ft_strequ(ext, ".cor"))
+		error_msg("File doesn't have extension .cor");
+	if ((fd = open(argv[*i], O_RDONLY)) == -1)
+		error_msg("Cannot open a file");
 	champ->magic_header = get_champ_4_bytes(fd);
 	champ->magic_header != COREWAR_EXEC_MAGIC ? error_msg("Champion have false magic header!") : 0;
 	champ->name = get_champ_name(fd);
@@ -103,13 +107,10 @@ void	process_champ(int argc, char** argv, int *i, t_data *data)
 	get_champ_4_bytes(fd) != 0 ? error_msg("Null zones isn't nulled!") : 0;
 	champ->exec_code = get_champ_exec(fd, champ->exec_size);
 	set_champ_num(data, champ);
-//	tmp = ft_lstnew(0, 0);
-//	tmp->content = champ;
-//	ft_lstadd(&(data->champs), tmp);
 	data->last_alive_champ = champ->number;
-
 	insert_champ(data, champ);
 	data->champs_amount++;
+	close(fd);
 }
 
 void	arg_valid(int argc, char** argv, t_data *data)

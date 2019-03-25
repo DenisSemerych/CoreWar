@@ -79,7 +79,7 @@ void	live(t_process *process, t_data *data)
 	data->live_op_amount++;
 	champ_p = data->champs;
 	if (data->n_flag & 4)
-		ft_printf("P%5d | live %d\n", process->uniq_number, champ_num);
+		ft_printf("P %4d | live %d\n", process->uniq_number, champ_num);
 	else if (data->visual_flag && data->vs)
 		data->vs->map[process->position].cycles_after_live = data->cycle + 50;
 	champ_num *= -1;
@@ -116,7 +116,7 @@ void	st(t_process *process, t_data *data)
 		write_data(pos, what, data);
 	}
 	if (data->n_flag & 4)
-		ft_printf("P%5d | st r%d %s%d\n", process->uniq_number, from, (process->op_args_type[1] == T_REG) ? "r" : "", where);
+		ft_printf("P %4d | st r%d %s%d\n", process->uniq_number, from, (process->op_args_type[1] == T_REG) ? "r" : "", where);
 }
 
 void	ld_lld(t_process *process, t_data *data)
@@ -128,7 +128,7 @@ void	ld_lld(t_process *process, t_data *data)
 	ind = read_arg(process, 1, data, DIRECT);
 	process->carry = ((process->reg[ind] = value) == 0);
 	if (data->n_flag & 4)
-		ft_printf("P%5d | %s %d r%d\n", process->uniq_number, (process->op_code == 2) ? "ld" : "lld", value, ind);
+		ft_printf("P %4d | %s %d r%d\n", process->uniq_number, (process->op_code == 2) ? "ld" : "lld", value, ind);
 }
 
 void	sub_add(t_process *process, t_data *data)
@@ -148,7 +148,7 @@ void	sub_add(t_process *process, t_data *data)
 	process->reg[r3] = value1;
 	process->carry = (read_arg(process, 2, data, INDIRECT) == 0);
 	if (data->n_flag & 4)
-		ft_printf("P%5d | %s r%d r%d r%d\n", process->uniq_number, (process->op_code == 4) ? "add" : "sub", r1, r2, r3);
+		ft_printf("P %4d | %s r%d r%d r%d\n", process->uniq_number, (process->op_code == 4) ? "add" : "sub", r1, r2, r3);
 }
 
 void	and_or_xor(t_process *process, t_data *data)
@@ -171,7 +171,7 @@ void	and_or_xor(t_process *process, t_data *data)
 		process->reg[where] = (process->op_code == 7) ? (value1 | value2) : (value1 ^ value2);
 	process->carry = (process->reg[where] == 0);
 	if (data->n_flag & 4)
-		ft_printf("P%5d | %s %d %d r%d\n", process->uniq_number, operation, value1, value2, where);
+		ft_printf("P %4d | %s %d %d r%d\n", process->uniq_number, operation, value1, value2, where);
 }
 
 void	zjmp(t_process *process, t_data *data)
@@ -182,7 +182,7 @@ void	zjmp(t_process *process, t_data *data)
 	if (process->carry)
 		process->position = get_absolute_cord (process->position, value % IDX_MOD);
 	if (data->n_flag & 4)
-		ft_printf("P%5d | zjmp %d %s\n", process->uniq_number, value, (process->carry) ? "OK" : "FAILED");
+		ft_printf("P %4d | zjmp %d %s\n", process->uniq_number, value, (process->carry) ? "OK" : "FAILED");
 }
 
 void	ldi_lldi(t_process *process, t_data *data)
@@ -199,7 +199,7 @@ void	ldi_lldi(t_process *process, t_data *data)
 	offset = get_absolute_cord(process->position, (process->op_code == 10) ? (offset % IDX_MOD) : offset);
 
 	if (data->n_flag & 4)
-		ft_printf("P%5d | %s %d %d r%d\n       | -> load from %d + %d = %d (with pc%s %d)\n", process->uniq_number, (process->op_code == 10) ? "ldi" : "lldi", pos1, pos2, reg, pos1, pos2, pos1 + pos2, (process->op_code == 10) ? " and mod" : "", offset);
+		ft_printf("P %4d | %s %d %d r%d\n       | -> load from %d + %d = %d (with pc%s %d)\n", process->uniq_number, (process->op_code == 10) ? "ldi" : "lldi", pos1, pos2, reg, pos1, pos2, pos1 + pos2, (process->op_code == 10) ? " and mod" : "", offset);
 	pos1 = -1;
 	process->reg[reg] = 0;
 	while (++pos1 < 4)
@@ -229,7 +229,7 @@ void	sti(t_process *process, t_data *data)
 	mod = sum % IDX_MOD + process->position;
 
 	if (data->n_flag & 4)
-		ft_printf("P%5d | sti r%d %d %d\n       | -> store to %d + %d = %d (with pc and mod %d)\n", process->uniq_number, from, pos1, pos2, pos1, pos2, sum, mod);
+		ft_printf("P %4d | sti r%d %d %d\n       | -> store to %d + %d = %d (with pc and mod %d)\n", process->uniq_number, from, pos1, pos2, pos1, pos2, sum, mod);
 	pos = get_absolute_cord(process->position, sum % IDX_MOD);
 	if (data->visual_flag && process)
 		mark_data(data, pos, process->parent_number);
@@ -253,7 +253,7 @@ void	fork_lfork(t_process *process, t_data *data)
 	new_process.live = 1;
 	ft_lstadd(&data->processes, ft_lstnew(&new_process, sizeof(t_process)));
 	if (data->n_flag & 4)
-		ft_printf("P%5d | %s %d (%d)\n", process->uniq_number, (process->op_code == 12) ? "fork" : "lfork", value, new_process.position);
+		ft_printf("P %4d | %s %d (%d)\n", process->uniq_number, (process->op_code == 12) ? "fork" : "lfork", value, new_process.position);
 
 }
 
@@ -265,7 +265,7 @@ void	aff(t_process *process, t_data *data)
 	c = read_arg(process, 0, data, INDIRECT);
 	reg = read_arg(process, 0, data, DIRECT);
 //	if (data->n_flag & 4)
-//		ft_printf("P%5d | aff r%d: %c\n", process->uniq_number, reg, c);
+//		ft_printf("P %4d | aff r%d: %c\n", process->uniq_number, reg, c);
 	if (data->a_flag)
 		ft_printf("Aff: %c\n", c);
 }

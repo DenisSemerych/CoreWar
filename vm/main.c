@@ -1,17 +1,20 @@
 #include "../includes/vm.h"
 
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	t_data	data;
 	t_list	*p;
 
+	if (argc == 1)
+	{
+		ft_printf("\x1b[0;36mUsage: ./corewar"
+				"[-a -visual -dump N -v N -n N]\n\x1b[0m");
+		exit(0);
+	}
 	ft_bzero(&data, sizeof(t_data));
 	reserve_numbers(argc, argv, &data);
 	arg_valid(argc, argv, &data);
-
-	//ft_printf("%s\n", g_op_tab[0].name);
-	// data.n_flag = 6;
 	introduce_champs(data.champs);
 	data.cycle = 1;
 	data.cycles_fr_lst_check = 1;
