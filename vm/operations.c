@@ -284,7 +284,7 @@ void	aff(t_process *process, t_data *data)
 		ft_printf("Aff: %c\n", c);
 }
 
-void	execute_opeartion(t_process *process, t_data *data)
+void	execute_operation(t_process *process, t_data *data)
 {
 	static void (*exec_op[17])(t_process*, t_data*);
 

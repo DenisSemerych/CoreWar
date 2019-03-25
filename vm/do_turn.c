@@ -154,7 +154,7 @@ void	execute_operations(t_data *data)
 						data->board[(process->position + 1) % MEM_SIZE]);
 				if ((n = write_args_pointers(data, process)) &&
 					check_reg(process, data))
-					execute_opeartion(proc_p->content, data);
+					execute_operation(proc_p->content, data);
 				if (!(process->op_code == 9 && n && process->carry))
 					exe2(data, process, &n);
 			}
