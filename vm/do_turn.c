@@ -116,11 +116,26 @@ int		check_reg(t_process *process, t_data *data)
 	return (1);
 }
 
+void	exe2(t_data *data, t_process *process, int *n)
+{
+	int offset;
+
+	offset = get_offset(process);
+	if (data->n_flag & 16)
+	{
+		ft_printf("ADV %d (0x%04x -> 0x%04x)", offset, process->position, (process->position + offset) % MEM_SIZE);
+		*n = -1;
+		while (++(*n) < offset)
+			ft_printf(" %02x", data->board[(process->position + *n) % MEM_SIZE]);
+		ft_printf(" \n");
+	}
+	process->position = (process->position + offset) % MEM_SIZE;
+}
+
 void	execute_operations(t_data *data)
 {
 	t_list		*proc_p;
 	t_process	*process;
-	int			offset;
 	int			n;
 
 	proc_p = data->processes;
@@ -137,18 +152,7 @@ void	execute_operations(t_data *data)
 				if ((n = write_args_pointers(data, process)) && check_reg(process, data))
 					execute_opeartion(proc_p->content, data);
 				if (!(process->op_code == 9 && n && process->carry))
-				{
-					offset = get_offset(process);
-					if (data->n_flag & 16)
-					{
-						ft_printf("ADV %d (0x%04x -> 0x%04x)", offset, process->position, (process->position + offset) % MEM_SIZE);
-						n = -1;
-						while (++n < offset)
-							ft_printf(" %02x", data->board[(process->position + n) % MEM_SIZE]);
-						ft_printf(" \n");
-					}
-					process->position = (process->position + offset) % MEM_SIZE;
-				}
+					exe2(data, process, &n);
 			}
 		}
 		proc_p = proc_p->next;
