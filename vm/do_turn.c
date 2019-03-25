@@ -123,10 +123,12 @@ void	exe2(t_data *data, t_process *process, int *n)
 	offset = get_offset(process);
 	if (data->n_flag & 16)
 	{
-		ft_printf("ADV %d (0x%04x -> 0x%04x)", offset, process->position, (process->position + offset) % MEM_SIZE);
+		ft_printf("ADV %d (0x%04x -> 0x%04x)", offset,
+				process->position, (process->position + offset) % MEM_SIZE);
 		*n = -1;
 		while (++(*n) < offset)
-			ft_printf(" %02x", data->board[(process->position + *n) % MEM_SIZE]);
+			ft_printf(" %02x", data->board[(process->position + *n)
+			% MEM_SIZE]);
 		ft_printf(" \n");
 	}
 	process->position = (process->position + offset) % MEM_SIZE;
@@ -148,8 +150,10 @@ void	execute_operations(t_data *data)
 				process->position = (process->position + 1) % MEM_SIZE;
 			else
 			{
-				codage_proc(process, data->board[(process->position + 1) % MEM_SIZE]);
-				if ((n = write_args_pointers(data, process)) && check_reg(process, data))
+				codage_proc(process,
+						data->board[(process->position + 1) % MEM_SIZE]);
+				if ((n = write_args_pointers(data, process)) &&
+					check_reg(process, data))
 					execute_opeartion(proc_p->content, data);
 				if (!(process->op_code == 9 && n && process->carry))
 					exe2(data, process, &n);
