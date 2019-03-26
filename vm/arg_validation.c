@@ -104,16 +104,13 @@ void			arg_valid(int argc, char **argv, t_data *data)
 {
 	int i;
 
-	i = 1;
-	while (i < argc)
+	i = 0;
+	while (++i < argc)
 	{
 		if (ft_strcmp(argv[i], "-n") == 0)
 			data->next_p_num = fl_process(argc, argv, &i, 1);
-		else if (ft_strcmp(argv[i], "-dump") == 0)
-		{
-			data->dump_flag = 1;
+		else if (ft_strcmp(argv[i], "-dump") == 0 && (data->dump_flag = 1))
 			data->dump_cycles = fl_process(argc, argv, &i, 2);
-		}
 		else if (ft_strcmp(argv[i], "-visual") == 0)
 			data->visual_flag = 1;
 		else if (ft_strcmp(argv[i], "-v") == 0)
@@ -122,6 +119,11 @@ void			arg_valid(int argc, char **argv, t_data *data)
 			data->a_flag = 1;
 		else
 			process_champ(argv, &i, data);
-		i++;
+	}
+	if (data->visual_flag)
+	{
+		data->a_flag = 0;
+		data->n_flag = 0;
+		data->dump_flag = 0;
 	}
 }
