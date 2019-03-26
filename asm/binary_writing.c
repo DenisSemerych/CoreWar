@@ -1,32 +1,38 @@
 #include "asm.h"
 
-unsigned lable_addres(t_list *lables, char *arg)
+unsigned label_address(t_list **labels, char *arg)
 {
     t_lable *lable;
     size_t size_arg;
     size_t size_lbl;
+    t_list *crawler;
 
     ft_strchr(arg, '%') ? (arg += 2) :
     (arg += 1);
-    while (lables)
+    crawler = *labels;
+    while (crawler)
     {
         size_arg = ft_strlen(arg);
-        lable = lables->content;
+        lable = crawler->content;
         size_lbl = ft_strlen(lable->name);
         if (ft_strnequ(arg, lable->name, size_lbl > size_arg ? size_lbl : size_arg))
-            return (lable->opp ? lable->addr : g_size);
-        lables = lables->next;
+            return (lable->opp ? lable->opp->lable->addr : g_size);
+        crawler = crawler->next;
     }
-    put_err_msg_exit("No such lable");
+    error_function("One of the labels invalid", NULL, arg);
 }
 
 
-unsigned give_label_addres(t_list *lables, t_inst *inst, size_t *champ_code)
+unsigned give_label_address(t_list **lables, t_inst *inst, unsigned *champ_code)
 {
-    return (lable_addres(lables, inst->args[lables->content_size]) - *champ_code);
+    unsigned add;
+
+    add = label_address(lables, inst->args[g_count]);
+
+    return (add - *champ_code);
 }
 
-size_t      write_arg(unsigned char **file, t_inst *inst, t_list *lables, size_t *champ_code)
+size_t      write_arg(unsigned char **file, t_inst *inst, t_list **lables, unsigned *champ_code)
 {
     unsigned tmp;
     size_t   incr;
@@ -35,12 +41,12 @@ size_t      write_arg(unsigned char **file, t_inst *inst, t_list *lables, size_t
         (*file)[(g_written_bytes)++] = (unsigned char)ft_atoi(inst->args[g_count] + 1);
     else
     {
-        if (!ft_strchr(inst->args[g_count], '%'))
+        if (!ft_strchr(inst->args[g_count], '%') && !ft_strchr(inst->args[g_count], ':'))
             tmp = reverse_byte((unsigned)ft_atoi(inst->args[g_count]));
         else if (!ft_strchr(inst->args[g_count], ':'))
             tmp = reverse_byte((unsigned)ft_atoi(inst->args[g_count] + 1));
         else
-            tmp = reverse_byte(give_label_addres(lables, inst, champ_code));
+            tmp = reverse_byte(give_label_address(lables, inst, champ_code));
         if (ft_strchr(inst->args[g_count], '%') && g_op_tab[give_op_index(inst->name)].label == 4 &&
         (incr = 4))
         {
@@ -82,7 +88,7 @@ size_t       write_argstype(unsigned char **file, t_inst *inst)
     return (1);
 }
 
-void       write_champ_code(t_list *instructions, unsigned char **file, t_list *lables, size_t *champ_code)
+void       write_champ_code(t_list *instructions, unsigned char **file, t_list **lables, unsigned *champ_code)
 {
     int    index;
     t_inst *inst;
@@ -154,7 +160,7 @@ void    write_info(t_list *info, unsigned char **file, size_t code_size)
     while (crawler->content_size != NAME)
         crawler = crawler->next;
     if (ft_strlen(crawler->content) > PROG_NAME_LENGTH)
-        put_err_msg_exit("Name is too long");
+        error_function("Name more than PROG_NAME_LENGTH", NULL, crawler->content);
     ft_memcpy((*file + g_written_bytes), crawler->content, ft_strlen(crawler->content));
     g_written_bytes += 132;
     size = reverse_byte(code_size);
@@ -164,27 +170,28 @@ void    write_info(t_list *info, unsigned char **file, size_t code_size)
     while (crawler->content_size != COMMENT)
         crawler = crawler->next;
     if (ft_strlen(crawler->content) > COMMENT_LENGTH)
-        put_err_msg_exit("Comment is too long");
+        error_function("Comment more than COMMENT_LENGTH", NULL, crawler->content);
     ft_memcpy(*file + g_written_bytes, crawler->content, ft_strlen(crawler->content));
     g_written_bytes += COMMENT_LENGTH + 4;
 }
 
 
-void    write_binary(t_list *arguments)
+void    write_binary(t_list **arguments)
 {
     unsigned char *file;
     unsigned tmp;
     int fd;
-    size_t champ_code;
+    unsigned champ_code;
 
     fd = open(g_champ_name, O_RDWR | O_CREAT, 0666);
     tmp = reverse_byte(COREWAR_EXEC_MAGIC);
     g_written_bytes = 4;
     file = ft_memalloc(10000);
     ft_memcpy(file, &tmp, g_written_bytes);
-    write_info(arguments->next->next->content, &file, code_size(arguments->content));
+    write_info((*arguments)->next->next->content, &file, code_size((*arguments)->content));
+//    lable_to_end(&arguments->next->content);
     champ_code = 0;
-    write_champ_code(arguments->content, &file, arguments->next->content, &champ_code);
+    write_champ_code((*arguments)->content, &file, &(*arguments)->next->content, &champ_code);
     ft_printf("Writting output at %s\n", g_champ_name);
     write(fd, file, g_written_bytes);
     close(fd);

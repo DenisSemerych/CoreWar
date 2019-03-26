@@ -38,8 +38,6 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
 
     args = ft_strsplit(crawler, ',');
     count = 0;
-    if (count_size(args) != op->nb_arg)
-        put_err_msg_exit("Error in number of arguments");
     while (count < op->nb_arg)
     {
         trimed = ft_strtrim(args[count]);
@@ -51,11 +49,13 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
         else
             type = T_IND;
         op->args[count] & type ? ((*inst)->args[count] = trimed) :
-        put_err_msg_exit("Wrong argument type for command");
+        error_function("Wrong argument type for command", line_nbr, crawler);
         free(args[count]);
         (*inst)->types[count] = type;
         count++;
     }
+    if (count != op->nb_arg)
+        error_function("Error in number of arguments", line_nbr, crawler);
     free(args);
     (*inst)->nb_arg = op->nb_arg;
 }
@@ -93,13 +93,14 @@ size_t validate_lable(t_list **lables, char *line, int *line_nbr)
     while (*crawler)
     {
         if (!ft_strchr(LABEL_CHARS, *crawler))
-            put_err_msg_exit("Wrong char in lable name");
+            error_function("Wrong char in lable name", line_nbr, label);
         crawler++;
     }
     new = ft_lstnew(NULL, 0);
     save = (t_lable *)malloc(sizeof(t_lable));
     save->name = label;
     save->opp = NULL;
+    save->addr = g_size;
     new->content = save;
     *lables = add_to_the_end_of_list(*lables, new);
     return (ft_strlen(label) + 1);
@@ -126,7 +127,7 @@ t_list *validate_command(t_op *op, int *line_nbr, char *line)
     }
     skip_separators(&crawler);
     if (*crawler == 'r' && !IS_SEPARATOR(*(crawler - 1)))
-        put_err_msg_exit("missing separator");
+        error_function("Missing separator before r-arg", line_nbr, line);
     parse_arg(&inst, op, line_nbr, crawler);
     inst->lable = NULL;
     command = ft_lstnew(NULL, 0);

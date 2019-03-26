@@ -1,24 +1,13 @@
 #include "asm.h"
-//while (lables)
-//{
-//t_lable *to_print = lables->content;
-//printf("%s\n", to_print->name);
-//t_inst *inst = to_print->opp;
-//printf("%s %s\n", inst->name, inst->lable->name);
-//lables = lables->next;
-//}
-//while (instructions)
-//{
-//t_inst *pr = instructions->content;
-//printf("%s%s\n%s", MAG, pr->name, RESET);
-//printf("\nNumber:%d\n", pr->nb_arg);
-//int i = 0;
-//while (i < pr->nb_arg)
-//printf(" argument:%s", pr->args[i++]);
-//instructions = instructions->next;
-//printf("\n");
-//}
 
+void    error_function(char *msg, int *line_nbr, char *line)
+{
+    if (line_nbr)
+        ft_printf("%s Error in line #%d\n %s%s\n", RED, *line_nbr, MAG, line, RESET);
+    else
+        ft_printf("%sFile name: %s%s%s\n", RED, MAG, line, RESET);
+    put_err_msg(msg);
+}
 
 
 t_op    *find_op(char **crawler)
@@ -109,24 +98,11 @@ t_list		*find_last(t_list *head)
         crawler = crawler->next;
     return (crawler);
 }
-void		put_err_msg_exit(char *str)
+void		put_err_msg(char *str)
 {
     printf("%s", MAG);
     ft_putendl_fd(str, 2);
     exit(0);
-}
-
-int						list_count(t_list *list)
-{
-    int count;
-
-    count = 0;
-    while (list)
-    {
-        count++;
-        list = list->next;
-    }
-    return (count);
 }
 
 int         full(t_list *info)
@@ -171,37 +147,6 @@ int						count_size(char **arr)
         size++;
     return (size);
 }
-
-void					check_for_add_sym(char *str)
-{
-    char				*tmp;
-
-    tmp = str;
-    while (*tmp)
-        !ft_isdigit(*tmp) && *tmp != '-' ?
-        (put_err_msg_exit("Error: found non-integer symbol where should be int"))
-                          : tmp++;
-}
-
-int						spec_atoi(const char *str)
-{
-    char				*tmp;
-    unsigned long int	num;
-    int                 sign;
-
-    num = 0;
-    tmp = (char *)str;
-    sign = ft_strchr(str, '-') ? -1 : 1;
-    check_for_add_sym(tmp);
-    while ((*tmp > 47 && *tmp < 58) || *tmp == '-')
-    {
-        if (*tmp != '-')
-            num = (*tmp - 48) + (num * 10);
-        tmp++;
-    }
-    return ((int)(num) * sign);
-}
-
 
 void					free_str_arr(char **arr, int size)
 {

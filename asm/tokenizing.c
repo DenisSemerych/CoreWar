@@ -14,7 +14,7 @@ int    write_string_tokken(t_list *command, char **file, int *line_nbr)
         crawler++;
         size++;
     }
-    !crawler ? put_err_msg_exit("END (null) don`t close brackets") : size++;
+    !crawler ? error_function("END (null) don`t close brackets", line_nbr, *file) : size++;
     info = (char *)malloc(size);
     info[size-1] = '\0';
     ft_strncpy(info, *file, size-1);
@@ -23,7 +23,7 @@ int    write_string_tokken(t_list *command, char **file, int *line_nbr)
 }
 
 
-t_list *create_arg_list(t_list *lables, t_list *instructions, t_list *info)
+t_list *create_arg_list(t_list **lables, t_list *instructions, t_list *info)
 {
     t_list *new;
 
@@ -33,7 +33,7 @@ t_list *create_arg_list(t_list *lables, t_list *instructions, t_list *info)
     new->next->next = ft_lstnew(NULL, 0);
     new->content = instructions;
     new->content_size = 1;
-    new->next->content = lables;
+    new->next->content = *lables;
     new->next->content_size = 2;
     new->next->next->content = info;
     new->next->next->content_size = 3;
@@ -51,9 +51,9 @@ void    save_info(char **file, t_list **info, int *line_nbr)
     else if (!ft_strncmp(*file, COMMENT_CMD_STRING, 8) && (*file = *file + 8))
         command->content_size = COMMENT;
     else
-        put_err_msg_exit("here");
+        error_function("Not supported command", line_nbr, *file);
     skip_separators(file);
-    *(*file) != '\"' ? put_err_msg_exit("Error expected \"") : ((*file)++);
+    *(*file) != '\"' ? error_function("Error in command line", line_nbr, *file) : ((*file)++);
     *file = *file + write_string_tokken(command, file, line_nbr);
     ft_lstadd(info, command);
 }
@@ -77,9 +77,7 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
 
     op = find_op(&crawler);
     if (!op)
-    {
-        put_err_msg_exit("Error in line");
-    }
+        error_function("Error in line", line_nbr, *file);
    *instructions = add_to_the_end_of_list(*instructions,validate_command(op, line_nbr, crawler));
     give_op_lable(find_last(*instructions), lables);
     *file += ft_strlen(line);
@@ -92,6 +90,7 @@ t_list *tokenize(char *file)
     t_list *instructions;
     t_list *lables;
     t_list *info;
+    t_list *args;
 
     instructions = NULL;
     lables = NULL;
@@ -105,9 +104,10 @@ t_list *tokenize(char *file)
         if (*file == '\n' && *file++)
             line_nbr++;
         skip_comment(&file);
-        if (*file != '\0' || !IS_SEPARATOR(*file))
+        if (*file != '\0' && ft_strchr(file, '\n'))
             full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
     }
-    return (create_arg_list(lables, instructions, info));
+    args = create_arg_list(&lables, instructions, info);
+    return (args);
 }
 

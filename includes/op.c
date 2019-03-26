@@ -12,7 +12,7 @@
 
 #include "asm.h"
 
-size_t g_size = 0;
+unsigned g_size = 0;
 
 int    g_count = 0;
 
