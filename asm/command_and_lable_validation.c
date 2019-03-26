@@ -25,6 +25,7 @@ char    *give_arg(char *trimed)
         *crw_2++ = *crawler++;
         size--;
     }
+    free(trimed);
     return (arg);
 }
 

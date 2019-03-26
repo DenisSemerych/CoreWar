@@ -188,4 +188,5 @@ void    write_binary(t_list *arguments)
     ft_printf("Writting output at %s\n", g_champ_name);
     write(fd, file, g_written_bytes);
     close(fd);
+    free(file);
 }
