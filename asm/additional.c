@@ -19,6 +19,27 @@
 //printf("\n");
 //}
 
+
+
+t_op    *find_op(char **crawler)
+{
+    int count;
+    size_t size;
+    t_op *op;
+
+    count = 0;
+    skip_separators(crawler);
+    op = NULL;
+    while (count++ < 16)
+    {
+        size = ft_strlen(g_op_tab[count].name);
+        if (ft_strnequ(*crawler, g_op_tab[count].name, size))
+            op = &g_op_tab[count];
+    }
+    return (op);
+}
+
+
 int     give_op_index(char *op_name)
 {
     int   count;
@@ -73,7 +94,7 @@ int         is_free(char *line)
     while (*line)
     {
         if (!IS_SEPARATOR(*line))
-            return (0);
+            return (IS_COMMENT(*line) ? 1 : 0);
         line++;
     }
     return (1);

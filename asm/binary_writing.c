@@ -1,20 +1,30 @@
 #include "asm.h"
 
-int lable_addres(t_list *lables, char *arg)
+unsigned lable_addres(t_list *lables, char *arg)
 {
     t_lable *lable;
+    size_t size_arg;
+    size_t size_lbl;
 
-    arg += 2;
+    ft_strchr(arg, '%') ? (arg += 2) :
+    (arg += 1);
     while (lables)
     {
+        size_arg = ft_strlen(arg);
         lable = lables->content;
-        if (ft_strequ(arg, lable->name))
-            return (lable->addr);
+        size_lbl = ft_strlen(lable->name);
+        if (ft_strnequ(arg, lable->name, size_lbl > size_arg ? size_lbl : size_arg))
+            return (lable->opp ? lable->addr : g_size);
         lables = lables->next;
     }
     put_err_msg_exit("No such lable");
 }
 
+
+unsigned give_label_addres(t_list *lables, t_inst *inst, size_t *champ_code)
+{
+    return (lable_addres(lables, inst->args[lables->content_size]) - *champ_code);
+}
 
 size_t      write_arg(unsigned char **file, t_inst *inst, t_list *lables, size_t *champ_code)
 {
@@ -32,7 +42,7 @@ size_t      write_arg(unsigned char **file, t_inst *inst, t_list *lables, size_t
         else if (!ft_strchr(inst->args[count], ':'))
             tmp = reverse_byte((unsigned)ft_atoi(inst->args[count] + 1));
         else
-            tmp = reverse_byte((unsigned)lable_addres(lables, inst->args[count]) - *champ_code);
+            tmp = reverse_byte(give_label_addres(lables, inst, champ_code));
         if (ft_strchr(inst->args[count], '%') && g_op_tab[give_op_index(inst->name)].label == 4 &&
         (incr = 4))
         {
@@ -46,7 +56,6 @@ size_t      write_arg(unsigned char **file, t_inst *inst, t_list *lables, size_t
             g_written_bytes += 2;
         }
     }
-    ft_printf("%d\n", incr);
     return (incr);
 }
 
@@ -55,14 +64,21 @@ size_t       write_argstype(unsigned char **file, t_inst *inst)
     int    count;
     unsigned char code;
 
-    count = -1;
+    count = 0;
     code = 0;
-    while(++count < 3)
+    while(count < 3)
     {
-        inst->types[count] != T_IND ?
-        (code = code | inst->types[count]) :
-        (code = code | IND_CODE);
+        if (inst->types[count] != T_IND && inst->types[count]!= T_DIR &&
+        inst->types[count] != T_REG)
+            ;
+        else if (inst->types[count] == T_IND)
+            code = code | IND_CODE;
+        else if (inst->types[count] == T_DIR)
+            code = code | DIR_CODE;
+        else if (inst->types[count])
+            code = code | REG_CODE;
         code = code << 2;
+        count++;
     }
     (*file)[g_written_bytes++] = code;
     return (1);
@@ -74,7 +90,6 @@ void       write_champ_code(t_list *instructions, unsigned char **file, t_list *
     t_inst *inst;
     int     count;
     size_t  incr;
-
     while (instructions)
     {
         incr = 0;
@@ -84,7 +99,9 @@ void       write_champ_code(t_list *instructions, unsigned char **file, t_list *
         (*file)[g_written_bytes++] = g_op_tab[index].opcode;
         incr += 1;
         if (g_op_tab[index].octal)
+        {
             incr += write_argstype(file, inst);
+        }
         while (++count < inst->nb_arg)
         {
             lables->content_size = count;
@@ -96,15 +113,13 @@ void       write_champ_code(t_list *instructions, unsigned char **file, t_list *
 }
 
 
-size_t     code_size(t_list *instructions, t_list *lables)
+size_t     code_size(t_list *instructions)
 {
-    size_t size;
     int index;
     size_t current_size;
     t_inst *inst;
     int i;
 
-    size = 0;
     while (instructions)
     {
         inst = instructions->content;
@@ -123,12 +138,12 @@ size_t     code_size(t_list *instructions, t_list *lables)
             else
                 current_size += 1;
         }
-        inst->lable ? (inst->lable->addr = size) : 0;
-        size += current_size;
-        instructions->content_size = current_size;
+        inst->lable ? (inst->lable->addr = g_size) : 0;
+        g_size += current_size;
+        inst->size = current_size;
         instructions = instructions->next;
     }
-    return (size);
+    return (g_size);
 }
 
 
@@ -164,13 +179,15 @@ void    write_binary(t_list *arguments)
     int fd;
     size_t champ_code;
 
-    fd = open("test1.cor", O_WRONLY | O_CREAT | O_RDONLY);
+    fd = open(g_champ_name, O_RDWR | O_CREAT, 0666);
     tmp = reverse_byte(COREWAR_EXEC_MAGIC);
     g_written_bytes = 4;
     file = ft_memalloc(10000);
     ft_memcpy(file, &tmp, g_written_bytes);
-    write_info(arguments->next->next->content, &file, code_size(arguments->content, arguments->next->content));
+    write_info(arguments->next->next->content, &file, code_size(arguments->content));
     champ_code = 0;
     write_champ_code(arguments->content, &file, arguments->next->content, &champ_code);
+    ft_printf("Writting output at %s\n", g_champ_name);
     write(fd, file, g_written_bytes);
+    close(fd);
 }

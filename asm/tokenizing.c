@@ -60,14 +60,11 @@ void    save_info(char **file, t_list **info, int *line_nbr)
 
 void    save_instruction(char **file, t_list **instructions, t_list **lables, int *line_nbr)
 {
-    int i;
     t_op *op;
     char *line;
     char *crawler;
 
-    i = 0;
-    op = NULL;
-    line = ft_strsub(*file, 0,ft_strchr(*file, '\n') - *file);
+    line = ft_strsub(*file, 0, ft_strchr(*file, '\n') - *file);
     crawler = line;
     if (is_lable(crawler))
        crawler += validate_lable(lables, crawler, line_nbr);
@@ -76,14 +73,10 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
         *file += crawler - line;
         return ;
     }
-    while (i++ < 16)
-    {
-        if (ft_strstr(crawler, g_op_tab[i].name))
-            op = &g_op_tab[i];
-    }
+
+    op = find_op(&crawler);
     if (!op)
     {
-        free(line);
         put_err_msg_exit("Error in line");
     }
    *instructions = add_to_the_end_of_list(*instructions,validate_command(op, line_nbr, crawler));
@@ -113,7 +106,6 @@ t_list *tokenize(char *file)
         if (*file != '\0')
             full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
     }
-    printf("Lines = %d\n", line_nbr);
     return (create_arg_list(lables, instructions, info));
 }
 

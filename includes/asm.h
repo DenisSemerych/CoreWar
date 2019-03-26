@@ -24,6 +24,7 @@ typedef struct s_inst
     t_arg_type types[3];
     size_t size;
     t_lable *lable;
+    size_t incr;
 }          t_inst;
 typedef struct s_lable
 {
@@ -52,4 +53,7 @@ unsigned int		reverse_byte(unsigned int byte);
 int     give_op_index(char *op_name);
 int						spec_atoi(const char *str);
 extern size_t g_written_bytes;
+extern size_t g_size;
+extern char *g_champ_name;
+t_op    *find_op(char **crawler);
 #endif

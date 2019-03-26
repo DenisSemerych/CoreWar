@@ -12,6 +12,10 @@
 
 #include "asm.h"
 
+size_t g_size = 0;
+
+char *g_champ_name = NULL;
+
 size_t g_written_bytes = 0;
 
 t_op    g_op_tab[17] =

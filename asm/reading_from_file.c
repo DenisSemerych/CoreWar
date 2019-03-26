@@ -5,6 +5,7 @@ void      check_filename(char *path)
     char **splited;
     char *name;
 
+
     splited = ft_strsplit(path, '/');
     name = ft_strdup(splited[count_size(splited) - 1]);
     free_str_arr(splited, count_size(splited));
@@ -19,6 +20,10 @@ void      check_filename(char *path)
         printf("%s%s invalid. ",RED, name);
         put_err_msg_exit(" File can have only one '.'(dot) in name");
     }
+    g_champ_name = ft_strdup(path);
+    g_champ_name = realloc(g_champ_name, ft_strlen(path) + 2);
+    ft_strcpy(g_champ_name + (ft_strlen(path) - 1), "cor");
+    //ft_printf("NAME = %s\n", g_champ_name);
     free_str_arr(splited, count_size(splited));
     free(name);
 }
@@ -52,6 +57,5 @@ char *read_from_file(char *file_name)
         file = (char *)realloc(file, ft_strlen(file) + rd + 1);
         ft_strcat(file, buff);
     }
-    printf("%s\n", file);
     return (file);
 }
