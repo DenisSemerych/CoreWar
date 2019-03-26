@@ -71,6 +71,7 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
     if (is_free(crawler))
     {
         *file += crawler - line;
+        free(line);
         return ;
     }
 
@@ -82,6 +83,7 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
    *instructions = add_to_the_end_of_list(*instructions,validate_command(op, line_nbr, crawler));
     give_op_lable(find_last(*instructions), lables);
     *file += ft_strlen(line);
+    free(line);
 }
 
 t_list *tokenize(char *file)
