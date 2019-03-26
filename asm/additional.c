@@ -71,7 +71,7 @@ void        skip_comment(char **file)
 {
     if (IS_COMMENT(*(*file)))
     {
-        while (*(*file) != '\n')
+        while (*(*file) && *(*file) != '\n')
             (*file)++;
     }
 }

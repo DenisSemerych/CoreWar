@@ -30,20 +30,18 @@ size_t      write_arg(unsigned char **file, t_inst *inst, t_list *lables, size_t
 {
     unsigned tmp;
     size_t   incr;
-    int count;
 
-    count = lables->content_size;
-    if (inst->types[count] == T_REG && (incr = 1))
-        (*file)[(g_written_bytes)++] = (unsigned char)ft_atoi(inst->args[count] + 1);
+    if (inst->types[g_count] == T_REG && (incr = 1))
+        (*file)[(g_written_bytes)++] = (unsigned char)ft_atoi(inst->args[g_count] + 1);
     else
     {
-        if (!ft_strchr(inst->args[count], '%'))
-            tmp = reverse_byte((unsigned)ft_atoi(inst->args[count]));
-        else if (!ft_strchr(inst->args[count], ':'))
-            tmp = reverse_byte((unsigned)ft_atoi(inst->args[count] + 1));
+        if (!ft_strchr(inst->args[g_count], '%'))
+            tmp = reverse_byte((unsigned)ft_atoi(inst->args[g_count]));
+        else if (!ft_strchr(inst->args[g_count], ':'))
+            tmp = reverse_byte((unsigned)ft_atoi(inst->args[g_count] + 1));
         else
             tmp = reverse_byte(give_label_addres(lables, inst, champ_code));
-        if (ft_strchr(inst->args[count], '%') && g_op_tab[give_op_index(inst->name)].label == 4 &&
+        if (ft_strchr(inst->args[g_count], '%') && g_op_tab[give_op_index(inst->name)].label == 4 &&
         (incr = 4))
         {
                 ft_memcpy(*file + g_written_bytes, &tmp, 4);
@@ -104,7 +102,7 @@ void       write_champ_code(t_list *instructions, unsigned char **file, t_list *
         }
         while (++count < inst->nb_arg)
         {
-            lables->content_size = count;
+            g_count = count;
             incr += write_arg(file, inst, lables, champ_code);
         }
         *champ_code += incr;

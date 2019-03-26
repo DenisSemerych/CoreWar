@@ -103,7 +103,7 @@ t_list *tokenize(char *file)
         if (*file == '\n' && *file++)
             line_nbr++;
         skip_comment(&file);
-        if (*file != '\0')
+        if (*file != '\0' || !IS_SEPARATOR(*file))
             full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
     }
     return (create_arg_list(lables, instructions, info));

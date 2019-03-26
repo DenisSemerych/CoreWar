@@ -54,6 +54,7 @@ int     give_op_index(char *op_name);
 int						spec_atoi(const char *str);
 extern size_t g_written_bytes;
 extern size_t g_size;
+extern int    g_count;
 extern char *g_champ_name;
 t_op    *find_op(char **crawler);
 #endif

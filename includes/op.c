@@ -14,6 +14,8 @@
 
 size_t g_size = 0;
 
+int    g_count = 0;
+
 char *g_champ_name = NULL;
 
 size_t g_written_bytes = 0;
