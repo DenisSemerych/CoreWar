@@ -6,7 +6,7 @@
 /*   By: yochered <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 01:01:39 by yochered          #+#    #+#             */
-/*   Updated: 2019/03/26 01:01:40 by yochered         ###   ########.fr       */
+/*   Updated: 2019/03/26 01:49:10 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	ft_lstdelcrt(t_list **list, t_list *to_delete)
 {
 	t_list	*p;
 
-	if (!(list || *list || to_delete))
+	if (!list || !*list || !to_delete)
 		return ;
 	if (*list == to_delete)
-		*list = to_delete->next;
+		*list = (*list)->next;
 	else
 	{
 		p = *list;
@@ -27,6 +27,7 @@ void	ft_lstdelcrt(t_list **list, t_list *to_delete)
 			p = p->next;
 		p->next = to_delete->next;
 	}
+	free(to_delete->content);
 	free(to_delete);
 }
 
@@ -79,6 +80,20 @@ int		is_playing_check(t_data *data)
 	return (data->playing);
 }
 
+t_list	*delete_process(t_data *d, t_list *process)
+{
+	t_process	*p;
+	t_list		*next;
+
+	p = (t_process*)process->content;
+	if (d->n_flag & 8)
+		ft_printf("Process %d hasn't lived for %d cycles (CTD %d)\n",
+				p->uniq_number, d->cycle - p->alive_cycle, d->cycle_to_die);
+	next = process->next;
+	ft_lstdelcrt(&d->processes, process);
+	return (next);
+}
+
 void	to_die_check(t_data *d)
 {
 	t_list		*process;
@@ -89,13 +104,9 @@ void	to_die_check(t_data *d)
 	{
 		p = (t_process*)process->content;
 		if (d->cycle - p->alive_cycle >= d->cycle_to_die)
-		{
-			if (d->n_flag & 8)
-				ft_printf("Process %d hasn't lived for %d cycles (CTD %d)\n",
-				p->uniq_number, d->cycle - p->alive_cycle, d->cycle_to_die);
-			ft_lstdelcrt(&d->processes, process);
-		}
-		process = process->next;
+			process = delete_process(d, process);
+		else
+			process = process->next;
 	}
 	if (d->live_op_amount >= NBR_LIVE || ++d->checks_amount >= MAX_CHECKS)
 	{
