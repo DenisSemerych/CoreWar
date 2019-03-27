@@ -56,11 +56,11 @@
 # define PAUS4 L"|  __/ ___ \\ |_| |___) | |___| |_| |"
 # define PAUS5 L"|_| /_/   \\_\\___/|____/|_____|____/ "
 
-#define RUN1 L" ____  _   _ _   _ _   _ ___ _   _  ____ "
-#define RUN2 L"|  _ \\| | | | \\ | | \\ | |_ _| \\ | |/ ___|"
-#define RUN3 L"| |_) | | | |  \\| |  \\| || ||  \\| | |  _ "
-#define RUN4 L"|  _ <| |_| | |\\  | |\\  || || |\\  | |_| |"
-#define RUN5 L"|_| \\_\\\\___/|_| \\_|_| \\_|___|_| \\_|\\____|"
+# define RUN1 L" ____  _   _ _   _ _   _ ___ _   _  ____ "
+# define RUN2 L"|  _ \\| | | | \\ | | \\ | |_ _| \\ | |/ ___|"
+# define RUN3 L"| |_) | | | |  \\| |  \\| || ||  \\| | |  _ "
+# define RUN4 L"|  _ <| |_| | |\\  | |\\  || || |\\  | |_| |"
+# define RUN5 L"|_| \\_\\\\___/|_| \\_|_| \\_|___|_| \\_|\\____|"
 
 # define SPACE ' '
 # define KEY_Q 'q'
@@ -78,7 +78,7 @@ typedef struct	s_vs
 	int				width;
 	int				heigth;
 	unsigned int	delay;
-	int 			zero_byte_mode;
+	int				zero_byte_mode;
 	clock_t			time;
 	bool			stop;
 	t_map			*map;

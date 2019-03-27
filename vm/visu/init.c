@@ -6,7 +6,7 @@
 /*   By: yochered <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 14:02:26 by yochered          #+#    #+#             */
-/*   Updated: 2019/03/23 14:02:27 by yochered         ###   ########.fr       */
+/*   Updated: 2019/03/27 15:51:05 by dzaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ void	create_vs(t_data *data)
 	getmaxyx(stdscr, data->vs->heigth, data->vs->width);
 	data->vs->map = make_map(data, data->champs);
 	info_width = (float)data->vs->width / 100 * 25 - IDENT * 2;
-	data->vs->board = create_newwin(HEIGTH, WIDTH, IDENT,  (data->vs->width -
-	WIDTH - info_width - 9) / 2);
+	data->vs->board = create_newwin(HEIGTH, WIDTH, IDENT, (data->vs->width -
+			WIDTH - info_width - 9) / 2);
 	data->vs->usage = create_newwin(HEIGTH / 4, info_width,
 			HEIGTH - HEIGTH / 4 + IDENT, (data->vs->width - WIDTH - info_width
-			- 9)	/ 2 + WIDTH + 9);
+			- 9) / 2 + WIDTH + 9);
 	data->vs->info = create_newwin(HEIGTH / 4 * 3 - IDENT,
-		info_width, IDENT, (data->vs->width - WIDTH - info_width - 9) / 2 +
-		WIDTH + 9);
+			info_width, IDENT, (data->vs->width - WIDTH - info_width - 9) / 2 +
+			WIDTH + 9);
 }
 
 void	init_colors(void)
