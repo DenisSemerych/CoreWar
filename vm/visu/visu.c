@@ -42,7 +42,7 @@ void	draw_winner(t_data *data)
 
 	winner = data->champs;
 	while (winner &&
-		((t_champ*)winner->content)->number != data->last_alive_champ)
+		(int)((t_champ*)winner->content)->number != data->last_alive_champ)
 		winner = winner->next;
 	if (winner)
 	{
