@@ -6,7 +6,7 @@
 /*   By: dsemeryc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 07:50:06 by dsemeryc          #+#    #+#             */
-/*   Updated: 2019/03/27 10:47:56 by dsemeryc         ###   ########.fr       */
+/*   Updated: 2019/03/27 12:46:48 by dsemeryc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void					write_info(t_list *info,
 		crawler = crawler->next;
 	if (ft_strlen(crawler->content) > PROG_NAME_LENGTH)
 		error_function("Name more than PROG_NAME_LENGTH", NULL,
-				crawler->content, 1);
+				crawler->content, 0);
 	ft_memcpy((*file + g_written_bytes),
 			crawler->content, ft_strlen(crawler->content));
 	g_written_bytes += 132;
@@ -126,8 +126,6 @@ void					write_binary(t_list **arguments)
 	int					fd;
 	unsigned			champ_code;
 
-	if ((fd = open(g_champ_name, O_RDWR | O_CREAT, 0666)) == -1)
-		error_function("Error in opening file", NULL, g_champ_name, 1);
 	tmp = reverse_byte(COREWAR_EXEC_MAGIC);
 	g_written_bytes = 4;
 	file = ft_memalloc(4 + 132 + COMMENT_LENGTH + 4 + 4);
@@ -138,7 +136,9 @@ void					write_binary(t_list **arguments)
 	file = realloc(file, 4 + 132 + COMMENT_LENGTH + 4 + 4 + g_size);
 	write_champ_code((*arguments)->content, &file,
 			(t_list **)&(*arguments)->next->content, &champ_code);
-	ft_printf("Writting output at %s\n", g_champ_name);
+	if ((fd = open(g_champ_name, O_RDWR | O_CREAT, 0666)) == -1)
+		error_function("Error in opening file", NULL, g_champ_name, 1);
+	ft_printf("%sWritting output program to %s\n%s", GRN, g_champ_name, RESET);
 	write(fd, file, g_written_bytes);
 	close(fd);
 	free(file);

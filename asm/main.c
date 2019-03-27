@@ -56,8 +56,8 @@ void			check_filename(char *path)
 	if (!ft_strequ("s", splited[count_size(splited) - 1]))
 		error_function("File extension must be .s", NULL, path, 1);
 	g_champ_name = ft_strdup(path);
-	g_champ_name = realloc(g_champ_name, ft_strlen(path) + 2);
-	ft_strcpy(g_champ_name + (ft_strlen(path) - 1), "cor");
+	g_champ_name = realloc(g_champ_name, ft_strlen(path) + 3);
+	ft_strcpy(g_champ_name + (ft_strlen(path) - 1), "cor\0");
 	free_str_arr(splited, count_size(splited));
 	free(name);
 }
