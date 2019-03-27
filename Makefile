@@ -37,19 +37,22 @@ VISU_SRC_LIST = \
 	draw_info.c\
 	init.c
 
-ASM_SRCDIR = asm/
+ASM_SRCDIR = asm_dir/
 ASM_SRC_LIST =\
 	main.c\
 	additional.c\
+	additional_2.c\
+	additional_3.c\
 	binary_writing.c\
 	command_and_lable_validation.c\
-	reading_from_file.c\
-	tokenizing.c
+	label_add_and_code_size.c\
+	tokenizing.c\
+	validation.c
 
 OBJDIR = ./obj/
 VM_OBJDIR = $(OBJDIR)vm/
 VISU_OBJDIR = $(VM_OBJDIR)vs/
-ASM_OBJDIR = $(OBJDIR)asm/
+ASM_OBJDIR = $(OBJDIR)asm_dir/
 VM_OBJ = $(addprefix $(VM_OBJDIR), $(VM_SRC_LIST:.c=.o))
 VISU_OBJ = $(addprefix $(VISU_OBJDIR), $(VISU_SRC_LIST:.c=.o))
 ASM_OBJ = $(addprefix $(ASM_OBJDIR), $(ASM_SRC_LIST:.c=.o))
