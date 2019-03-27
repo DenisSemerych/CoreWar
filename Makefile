@@ -65,7 +65,7 @@ INCLUDES = \
 	-I ./includes/\
 	-I ./vm/
 
-FLAGS = -O2 ##FLAGS
+FLAGS = -O2 -Wall -W -Werror
 GREEN = \033[92m
 RESET = \033[0m
 
@@ -128,7 +128,3 @@ fclean: clean
 	@echo "$(GREEN)[Done]$(RESET)"
 
 re: fclean all
-
-run: all
-	clear
-	./corewar -visual ../test_process_1.cor
