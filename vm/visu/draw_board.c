@@ -44,7 +44,12 @@ void			draw_byte(t_data *data, int pos)
 
 	attr = get_attributes(data, data->vs->map, pos);
 	wattron(data->vs->board, attr);
-	wprintw(data->vs->board, "%02x", data->board[pos]);
+	if (data->board[pos] == 0 && data->vs->zero_byte_mode == 1)
+		wprintw(data->vs->board, "..");
+	else if (data->board[pos] == 0 && data->vs->zero_byte_mode == 2)
+		wprintw(data->vs->board, "  ");
+	else
+		wprintw(data->vs->board, "%02x", data->board[pos]);
 	wattroff(data->vs->board, attr);
 	waddch(data->vs->board, ' ');
 }

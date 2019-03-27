@@ -22,12 +22,12 @@ void	draw_header(t_vs *vs)
 	mvwprintw(vs->info, 0, x / 2 - 9, " Game Information ");
 	wattroff(vs->info, A_BOLD);
 	wattron(vs->info, COLOR_PAIR(CYAN));
-	mvwprintw(vs->info, IDENT, IDENT, "%ls", COR1);
-	mvwprintw(vs->info, IDENT + 1, IDENT, "%ls", COR2);
-	mvwprintw(vs->info, IDENT + 2, IDENT, "%ls", COR3);
-	mvwprintw(vs->info, IDENT + 3, IDENT, "%ls", COR4);
-	mvwprintw(vs->info, IDENT + 4, IDENT, "%ls", COR5);
-	mvwprintw(vs->info, IDENT + 5, IDENT, "%ls", COR6);
+	mvwprintw(vs->info, IDENT, x / 2 - 29, "%ls", COR1);
+	mvwprintw(vs->info, IDENT + 1, x / 2 - 29, "%ls", COR2);
+	mvwprintw(vs->info, IDENT + 2, x / 2 - 29, "%ls", COR3);
+	mvwprintw(vs->info, IDENT + 3, x / 2 - 29, "%ls", COR4);
+	mvwprintw(vs->info, IDENT + 4, x / 2 - 29, "%ls", COR5);
+	mvwprintw(vs->info, IDENT + 5, x / 2 - 29, "%ls", COR6);
 	wattroff(vs->info, COLOR_PAIR(CYAN));
 }
 
@@ -55,6 +55,9 @@ void	process_keys(t_data *data, int ch)
 		data->vs->delay -= 10;
 	else if (ch == KEY_UP)
 		data->vs->delay += 10;
+	else if (ch == 'c' || ch == 'C')
+		data->vs->zero_byte_mode = (data->vs->zero_byte_mode == 2) ? 0 :
+				data->vs->zero_byte_mode + 1;
 }
 
 void	draw(t_data *data)

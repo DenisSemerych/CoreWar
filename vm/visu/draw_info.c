@@ -27,7 +27,7 @@ void	draw_champs(t_data *data)
 		name = ((t_champ*)champ->content)->name;
 		color = ((t_champ*)champ->content)->number;
 		wattron(data->vs->info, COLOR_PAIR(color) | A_BOLD);
-		mvwprintw(data->vs->info, IDENT + 9 + i, IDENT, "%d. %s", i, name);
+		mvwprintw(data->vs->info, IDENT + 12 + i, IDENT, "%d. %s", i, name);
 		wattroff(data->vs->info, COLOR_PAIR(color) | A_BOLD);
 		champ = champ->next;
 	}
@@ -47,26 +47,42 @@ void	draw_usage(t_vs *vs)
 	mvwprintw(vs->usage, i, IDENT, "%-15s%15s", "Speed up:", "[Arrow up]");
 	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s",
 			"Speed down:", "[Arrow down]");
+	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s", "Next turn:", "[Right arrow]");
 	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s", "Pause:", "[Space]");
 	mvwprintw(vs->usage, ++i, IDENT, "%-15s%15s", "Quit:", "[Q]");
+	mvwprintw(vs->usage, ++i, IDENT, "%-15s%8s", "Change zero byte mode:", "[C]");
 	wattroff(vs->usage, COLOR_PAIR(CYAN));
 }
 
 void	draw_stat(t_data *data)
 {
-	wattron(data->vs->info, A_BOLD);
+	wattron(data->vs->info, COLOR_PAIR(CYAN));
 	if (data->vs->stop)
-		mvwprintw(data->vs->info, IDENT + 8, IDENT, "STOPPED");
+	{
+		//mvwprintw(data->vs->info, IDENT + 8, IDENT, "STOPPED");
+		mvwprintw(data->vs->info, IDENT + 7, data->vs->width / 8 - 19, PAUS1);
+		mvwprintw(data->vs->info, IDENT + 8, data->vs->width / 8 - 19, PAUS2);
+		mvwprintw(data->vs->info, IDENT + 9, data->vs->width / 8 - 19, PAUS3);
+		mvwprintw(data->vs->info, IDENT + 10, data->vs->width / 8 - 19, PAUS4);
+		mvwprintw(data->vs->info, IDENT + 11, data->vs->width / 8 - 19, PAUS5);
+	}
 	else
-		mvwprintw(data->vs->info, IDENT + 8, IDENT, "RUNNING");
-	wattroff(data->vs->info, A_BOLD);
-	mvwprintw(data->vs->info, IDENT + 15, IDENT,
-			"%-15s%d", "Speed:", data->vs->delay);
-	mvwprintw(data->vs->info, IDENT + 16, IDENT,
-			"%-15s%d", "Cycle:", data->cycle);
-	mvwprintw(data->vs->info, IDENT + 17, IDENT,
-			"%-15s%d", "Cycle delta:", CYCLE_DELTA);
+	{
+		//mvwprintw(data->vs->info, IDENT + 8, IDENT, "RUNNING");
+		mvwprintw(data->vs->info, IDENT + 7, data->vs->width / 8 - 24, RUN1);
+		mvwprintw(data->vs->info, IDENT + 8, data->vs->width / 8 - 24, RUN2);
+		mvwprintw(data->vs->info, IDENT + 9, data->vs->width / 8 - 24, RUN3);
+		mvwprintw(data->vs->info, IDENT + 10, data->vs->width / 8 - 24, RUN4);
+		mvwprintw(data->vs->info, IDENT + 11, data->vs->width / 8 - 24, RUN5);
+	}
+	wattroff(data->vs->info, COLOR_PAIR(CYAN));
 	mvwprintw(data->vs->info, IDENT + 18, IDENT,
+			"%-15s%d", "Speed:", data->vs->delay);
+	mvwprintw(data->vs->info, IDENT + 19, IDENT,
+			"%-15s%d", "Cycle:", data->cycle);
+	mvwprintw(data->vs->info, IDENT + 20, IDENT,
+			"%-15s%d", "Cycle delta:", CYCLE_DELTA);
+	mvwprintw(data->vs->info, IDENT + 21, IDENT,
 			"%-15s%d", "Cycle to die:", data->cycle_to_die);
 }
 
