@@ -1,12 +1,25 @@
 #include "asm.h"
 
-void    error_function(char *msg, int *line_nbr, char *line)
+
+void    error_function(char *msg, int *line_nbr, char *line, int check)
 {
     if (line_nbr)
-        ft_printf("%s Error in line #%d\n %s%s\n", RED, *line_nbr, MAG, line, RESET);
+        ft_printf("%s Error in line #%d\n", RED, *line_nbr);
     else
-        ft_printf("%sFile name: %s%s%s\n", RED, MAG, line, RESET);
-    put_err_msg(msg);
+        ft_printf("%sError in: ", RED);
+    if (check)
+        ft_printf("%s%s%s", FAIL, UNDR, line);
+    else
+    {
+        while (*line && *line != '\n')
+            ft_printf("%s%s%c",FAIL, UNDR, *line++);
+        ft_printf("\n");
+    }
+    ft_printf(RESET);
+    ft_printf(CYN);
+    ft_putendl_fd(msg, 2);
+    ft_printf(RESET);
+    exit(0);
 }
 
 
@@ -66,21 +79,28 @@ void        skip_comment(char **file)
 }
 
 
-int         is_lable(char *line)
+int         is_lable(char *line, int *line_nbr)
 {
-    while (*line)
+    char *crawler;
+
+    crawler = line;
+    while (crawler && *crawler)
     {
-        if (!ft_strchr(LABEL_CHARS, *line))
+        if (!ft_strchr(LABEL_CHARS, *crawler))
             break ;
-        line++;
+        crawler++;
     }
-    return (*line == LABEL_CHAR ? 1 : 0);
+    if (ft_strchr(line, ':') && !ft_strchr(line, DIRECT_CHAR) &&
+    !ft_strchr(line, SEPARATOR_CHAR)
+    && crawler && *crawler != ':')
+        error_function("Wrong char in lable name", line_nbr, line, 1);
+    return (crawler && *crawler == LABEL_CHAR ? 1 : 0);
 }
 
 
 int         is_free(char *line)
 {
-    while (*line)
+    while (line && *line)
     {
         if (!IS_SEPARATOR(*line))
             return (IS_COMMENT(*line) ? 1 : 0);
@@ -98,27 +118,29 @@ t_list		*find_last(t_list *head)
         crawler = crawler->next;
     return (crawler);
 }
-void		put_err_msg(char *str)
-{
-    printf("%s", MAG);
-    ft_putendl_fd(str, 2);
-    exit(0);
-}
 
 int         full(t_list *info)
 {
-    int check;
+    char count_comment;
+    char count_name;
+    t_list *name;
+    t_list *comment;
 
-    check = 0;
+    count_name = 0;
+    count_comment = 0;
     while (info)
     {
-        if (info->content_size == NAME)
-            check++;
-        else if (info->content_size == COMMENT)
-            check++;
+        if (info->content_size == NAME && (name = info))
+            count_name++;
+        else if (info->content_size == COMMENT && (comment = info))
+            count_comment++;
         info = info->next;
     }
-    return (check == 2 ? 1 : 0);
+    if (count_name > 1)
+        error_function(".name command need to be only one", NULL, name->content, 0);
+    else if (count_comment > 1)
+        error_function(".comment command need to be only one", NULL, comment->content, 0);
+    return (count_comment + count_name == 2 ? 1 : 0);
 }
 
 
@@ -148,6 +170,37 @@ int						count_size(char **arr)
     return (size);
 }
 
+void					check_for_add_sym(char *str)
+{
+    char				*tmp;
+
+    tmp = str;
+    while (*tmp)
+        !ft_isdigit(*tmp) && *tmp != '-' ?
+        (error_function("Lexical error", NULL, str, 0))
+                          : tmp++;
+}
+
+int						spec_atoi(const char *str)
+{
+    char				*tmp;
+    unsigned long int	num;
+    int                 sign;
+
+    num = 0;
+    tmp = (char *)str;
+    sign = ft_strchr(str, '-') ? -1 : 1;
+    check_for_add_sym(tmp);
+    while ((*tmp > 47 && *tmp < 58) || *tmp == '-')
+    {
+        if (*tmp != '-')
+            num = (*tmp - 48) + (num * 10);
+        tmp++;
+    }
+    return ((int)(num) * sign);
+}
+
+
 void					free_str_arr(char **arr, int size)
 {
     int					ind;
@@ -156,5 +209,4 @@ void					free_str_arr(char **arr, int size)
     while (ind < size)
         ft_strdel(&arr[ind++]);
     free(arr);
-    arr = NULL;
 }

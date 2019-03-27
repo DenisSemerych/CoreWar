@@ -11,7 +11,7 @@ void      check_filename(char *path)
     free_str_arr(splited, count_size(splited));
     splited = ft_strsplit(name, '.');
     if (!ft_strequ("s", splited[count_size(splited) - 1]))
-        error_function("File extension must be .s", NULL, path);
+        error_function("File extension must be .s", NULL, path, 1);
     g_champ_name = ft_strdup(path);
     g_champ_name = realloc(g_champ_name, ft_strlen(path) + 2);
     ft_strcpy(g_champ_name + (ft_strlen(path) - 1), "cor");
@@ -33,7 +33,7 @@ char *read_from_file(char *file_name)
     }
     file = ft_memalloc(1);
     if (read(fd, buff, 0) != 0)
-        error_function("Error in reading", NULL, file_name);
+        error_function("Error in reading", NULL, file_name, 1);
     while ((rd = read(fd, buff, BUFF_SIZE)))
     {
         buff[rd] = '\0';

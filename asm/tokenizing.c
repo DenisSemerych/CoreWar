@@ -1,5 +1,11 @@
 #include "asm.h"
 
+void   check_file(char *file, int *line_nbr)
+{
+    if (*file != COMMENT_CHAR && *file != ALT_COMMENT_CHAR && !IS_SEPARATOR(*file) && *file != '.' && *file != '\n')
+        error_function("Lexical error", line_nbr, file, 0);
+}
+
 int    write_string_tokken(t_list *command, char **file, int *line_nbr)
 {
     char *crawler;
@@ -14,7 +20,7 @@ int    write_string_tokken(t_list *command, char **file, int *line_nbr)
         crawler++;
         size++;
     }
-    !crawler ? error_function("END (null) don`t close brackets", line_nbr, *file) : size++;
+    !crawler ? error_function("END (null) don`t close brackets", line_nbr, *file, 0) : size++;
     info = (char *)malloc(size);
     info[size-1] = '\0';
     ft_strncpy(info, *file, size-1);
@@ -28,6 +34,8 @@ t_list *create_arg_list(t_list **lables, t_list *instructions, t_list *info)
     t_list *new;
 
 
+    if (!*lables && !instructions)
+        error_function("Add at least one label", NULL, "No champ code and no label", 0);
     new = ft_lstnew(NULL, 0);
     new->next = ft_lstnew(NULL, 0);
     new->next->next = ft_lstnew(NULL, 0);
@@ -51,11 +59,27 @@ void    save_info(char **file, t_list **info, int *line_nbr)
     else if (!ft_strncmp(*file, COMMENT_CMD_STRING, 8) && (*file = *file + 8))
         command->content_size = COMMENT;
     else
-        error_function("Not supported command", line_nbr, *file);
+        error_function("Not supported command", line_nbr, *file, 0);
     skip_separators(file);
-    *(*file) != '\"' ? error_function("Error in command line", line_nbr, *file) : ((*file)++);
+    *(*file) != '\"' ? error_function("Error in command line", line_nbr, *file, 0) : ((*file)++);
     *file = *file + write_string_tokken(command, file, line_nbr);
     ft_lstadd(info, command);
+}
+
+void    cut_comment(char **line, char **file)
+{
+    char *cut;
+
+    cut = NULL;
+    if (ft_strchr(*line, COMMENT_CHAR))
+        cut = ft_strsub(*line, 0, ft_strchr(*file, COMMENT_CHAR) - *file);
+    else if (ft_strchr(*line, ALT_COMMENT_CHAR))
+        cut = ft_strsub(*line, 0, ft_strchr(*file, ALT_COMMENT_CHAR) - *file);
+    if (cut)
+    {
+        free(*line);
+        *line = cut;
+    }
 }
 
 void    save_instruction(char **file, t_list **instructions, t_list **lables, int *line_nbr)
@@ -65,8 +89,9 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
     char *crawler;
 
     line = ft_strsub(*file, 0, ft_strchr(*file, '\n') - *file);
+    cut_comment(&line, file);
     crawler = line;
-    if (is_lable(crawler))
+    if (is_lable(crawler, line_nbr))
        crawler += validate_lable(lables, crawler, line_nbr);
     if (is_free(crawler))
     {
@@ -74,10 +99,9 @@ void    save_instruction(char **file, t_list **instructions, t_list **lables, in
         free(line);
         return ;
     }
-
     op = find_op(&crawler);
     if (!op)
-        error_function("Error in line", line_nbr, *file);
+        error_function("Syntax error", line_nbr, *file, 0);
    *instructions = add_to_the_end_of_list(*instructions,validate_command(op, line_nbr, crawler));
     give_op_lable(find_last(*instructions), lables);
     *file += ft_strlen(line);
@@ -88,12 +112,12 @@ t_list *tokenize(char *file)
 {
     int     line_nbr;
     t_list *instructions;
-    t_list *lables;
+    t_list *labels;
     t_list *info;
     t_list *args;
 
     instructions = NULL;
-    lables = NULL;
+    labels = NULL;
     info = NULL;
     line_nbr = 1;
     while (*file)
@@ -104,10 +128,14 @@ t_list *tokenize(char *file)
         if (*file == '\n' && *file++)
             line_nbr++;
         skip_comment(&file);
+        skip_separators(&file);
         if (*file != '\0' && ft_strchr(file, '\n'))
-            full(info)  ? save_instruction(&file, &instructions, &lables, &line_nbr) : 0;
+            full(info) ? save_instruction(&file, &instructions, &labels, &line_nbr) :
+            check_file(file, &line_nbr);
+        else if (*file != '\0' && !ft_strchr(file, '\n'))
+            error_function("Missing newline after instruction", NULL, file, 1);
     }
-    args = create_arg_list(&lables, instructions, info);
+    args = create_arg_list(&labels, instructions, info);
     return (args);
 }
 

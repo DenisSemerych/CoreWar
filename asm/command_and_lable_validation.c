@@ -29,6 +29,45 @@ char    *give_arg(char *trimed)
     return (arg);
 }
 
+
+t_arg_type define_type(char *command, int *line_nbr)
+{
+    t_arg_type  type;
+    char sym;
+
+    sym = *command;
+    if (sym == '%')
+        type = T_DIR;
+    else if (sym == 'r')
+        type = T_REG;
+    else
+        type = T_IND;
+    if (type == T_DIR)
+        !ft_isdigit(*(ft_strchr(command, '%') + 1)) &&
+        *(ft_strchr(command, '%') + 1) != ':' &&
+        *(ft_strchr(command, '%') + 1) != '-'?
+        error_function("Syntax error", line_nbr, command, 1) :
+        0;
+    return (type);
+}
+
+void    check_commas(char *line, int *line_nbr, int number)
+{
+    int   count;
+    char  *crawler;
+
+    count = 0;
+    crawler = line;
+    while (*crawler)
+    {
+        if (*crawler == SEPARATOR_CHAR)
+            count++;
+        crawler++;
+    }
+    if (count != number - 1)
+        error_function("Syntax error", line_nbr, line, 1);
+}
+
 void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
 {
     char **args;
@@ -37,25 +76,21 @@ void    parse_arg(t_inst **inst, t_op *op, int *line_nbr, char *crawler)
     char *trimed;
 
     args = ft_strsplit(crawler, ',');
-    count = 0;
-    while (count < op->nb_arg)
+    if (count_size(args) != op->nb_arg)
+        error_function("Error in number of arguments", line_nbr, crawler, 1);
+    check_commas(crawler, line_nbr, op->nb_arg);
+    count = -1;
+    while (++count < op->nb_arg)
     {
         trimed = ft_strtrim(args[count]);
         trimed = give_arg(trimed);
-        if (*trimed == '%')
-            type = T_DIR;
-        else if (*trimed == 'r')
-            type = T_REG;
-        else
-            type = T_IND;
-        op->args[count] & type ? ((*inst)->args[count] = trimed) :
-        error_function("Wrong argument type for command", line_nbr, crawler);
+        type = define_type(trimed, line_nbr);
+        if (count < op->nb_arg)
+            op->args[count] & type ? ((*inst)->args[count] = trimed) :
+            error_function("Wrong argument type for command", line_nbr, crawler, 1);
         free(args[count]);
         (*inst)->types[count] = type;
-        count++;
     }
-    if (count != op->nb_arg)
-        error_function("Error in number of arguments", line_nbr, crawler);
     free(args);
     (*inst)->nb_arg = op->nb_arg;
 }
@@ -93,7 +128,7 @@ size_t validate_lable(t_list **lables, char *line, int *line_nbr)
     while (*crawler)
     {
         if (!ft_strchr(LABEL_CHARS, *crawler))
-            error_function("Wrong char in lable name", line_nbr, label);
+            error_function("Wrong char in lable name", line_nbr, label, 1);
         crawler++;
     }
     new = ft_lstnew(NULL, 0);
@@ -127,7 +162,7 @@ t_list *validate_command(t_op *op, int *line_nbr, char *line)
     }
     skip_separators(&crawler);
     if (*crawler == 'r' && !IS_SEPARATOR(*(crawler - 1)))
-        error_function("Missing separator before r-arg", line_nbr, line);
+        error_function("Missing separator before r-arg", line_nbr, line, 1);
     parse_arg(&inst, op, line_nbr, crawler);
     inst->lable = NULL;
     command = ft_lstnew(NULL, 0);

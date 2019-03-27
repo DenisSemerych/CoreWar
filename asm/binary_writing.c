@@ -1,5 +1,12 @@
 #include "asm.h"
 
+unsigned char check_reg_num(int num, char *arg)
+{
+    if (num > 100)
+        error_function("Wrong reg number", NULL, arg, 1);
+    return (num);
+}
+
 unsigned label_address(t_list **labels, char *arg)
 {
     t_lable *lable;
@@ -19,7 +26,7 @@ unsigned label_address(t_list **labels, char *arg)
             return (lable->opp ? lable->opp->lable->addr : g_size);
         crawler = crawler->next;
     }
-    error_function("One of the labels invalid", NULL, arg);
+    error_function("One of the labels invalid", NULL, arg, 1);
 }
 
 
@@ -38,13 +45,13 @@ size_t      write_arg(unsigned char **file, t_inst *inst, t_list **lables, unsig
     size_t   incr;
 
     if (inst->types[g_count] == T_REG && (incr = 1))
-        (*file)[(g_written_bytes)++] = (unsigned char)ft_atoi(inst->args[g_count] + 1);
+        (*file)[(g_written_bytes)++] = check_reg_num(spec_atoi(inst->args[g_count] + 1), inst->args[g_count]);
     else
     {
         if (!ft_strchr(inst->args[g_count], '%') && !ft_strchr(inst->args[g_count], ':'))
-            tmp = reverse_byte((unsigned)ft_atoi(inst->args[g_count]));
+            tmp = reverse_byte((unsigned)spec_atoi(inst->args[g_count]));
         else if (!ft_strchr(inst->args[g_count], ':'))
-            tmp = reverse_byte((unsigned)ft_atoi(inst->args[g_count] + 1));
+            tmp = reverse_byte((unsigned)spec_atoi(inst->args[g_count] + 1));
         else
             tmp = reverse_byte(give_label_address(lables, inst, champ_code));
         if (ft_strchr(inst->args[g_count], '%') && g_op_tab[give_op_index(inst->name)].label == 4 &&
@@ -117,7 +124,7 @@ void       write_champ_code(t_list *instructions, unsigned char **file, t_list *
 }
 
 
-size_t     code_size(t_list *instructions)
+unsigned     code_size(t_list *instructions)
 {
     int index;
     size_t current_size;
@@ -160,7 +167,7 @@ void    write_info(t_list *info, unsigned char **file, size_t code_size)
     while (crawler->content_size != NAME)
         crawler = crawler->next;
     if (ft_strlen(crawler->content) > PROG_NAME_LENGTH)
-        error_function("Name more than PROG_NAME_LENGTH", NULL, crawler->content);
+        error_function("Name more than PROG_NAME_LENGTH", NULL, crawler->content, 1);
     ft_memcpy((*file + g_written_bytes), crawler->content, ft_strlen(crawler->content));
     g_written_bytes += 132;
     size = reverse_byte(code_size);
@@ -170,7 +177,7 @@ void    write_info(t_list *info, unsigned char **file, size_t code_size)
     while (crawler->content_size != COMMENT)
         crawler = crawler->next;
     if (ft_strlen(crawler->content) > COMMENT_LENGTH)
-        error_function("Comment more than COMMENT_LENGTH", NULL, crawler->content);
+        error_function("Comment more than COMMENT_LENGTH", NULL, crawler->content, 1);
     ft_memcpy(*file + g_written_bytes, crawler->content, ft_strlen(crawler->content));
     g_written_bytes += COMMENT_LENGTH + 4;
 }
@@ -183,14 +190,15 @@ void    write_binary(t_list **arguments)
     int fd;
     unsigned champ_code;
 
-    fd = open(g_champ_name, O_RDWR | O_CREAT, 0666);
+    if ((fd = open(g_champ_name, O_RDWR | O_CREAT, 0666)) == -1)
+        error_function("Error in opening file", NULL, g_champ_name, 1);
     tmp = reverse_byte(COREWAR_EXEC_MAGIC);
     g_written_bytes = 4;
-    file = ft_memalloc(10000);
+    file = ft_memalloc(4 + 132 + COMMENT_LENGTH + 4 + 4);
     ft_memcpy(file, &tmp, g_written_bytes);
     write_info((*arguments)->next->next->content, &file, code_size((*arguments)->content));
-//    lable_to_end(&arguments->next->content);
     champ_code = 0;
+    file = realloc(file, 4 + 132 + COMMENT_LENGTH + 4 + 4 + g_size);
     write_champ_code((*arguments)->content, &file, &(*arguments)->next->content, &champ_code);
     ft_printf("Writting output at %s\n", g_champ_name);
     write(fd, file, g_written_bytes);

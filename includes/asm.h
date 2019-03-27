@@ -8,8 +8,11 @@
 #define COMMENT 2
 # define RED   "\x1B[31m"
 # define CYN   "\x1B[36m"
+# define FAIL "\033[91m"
 # define RESET "\x1B[0m"
-# define MAG   "\x1B[35m"
+# define UNDR   "\033[4m"
+# define GRN    "\033[92m"
+#define  BOLD   "\033[1m"
 #define IS_SEPARATOR(a) (a == ' ' || a == '\t' || a == '\v')
 #define SRC_NOT_READ(name) ft_printf("%sCan't read source file %s%s\n%s",CYN, RED, name, RESET); exit(0)
 #define IS_COMMENT(file) (file == COMMENT_CHAR || file ==  ALT_COMMENT_CHAR)
@@ -38,7 +41,7 @@ void        skip_separators(char **file);
 t_list    *tokenize(char *file);
 void	free_str_arr(char **arr, int size);
 int						count_size(char **arr);
-void		put_err_msg(char *str);
+int			spec_atoi(const char *str);
 t_list		*add_to_the_end_of_list(t_list *head, t_list *new);
 t_list *validate_command(t_op *op, int *line_nbr, char *line);
 size_t validate_lable(t_list **lables, char *line, int *line_nbr);
@@ -46,12 +49,12 @@ int         full(t_list *info);
 t_list		*find_last(t_list *head);
 void    give_op_lable(t_list *op, t_list **lables);
 int         is_free(char *line);
-int         is_lable(char *line);
+int         is_lable(char *line, int *line_nbr);
 void    save_instruction(char **file, t_list **instructions, t_list **lables, int *line_nbr);
 void    write_binary(t_list **arguments);
 unsigned int		reverse_byte(unsigned int byte);
 int     give_op_index(char *op_name);
-void    error_function(char *msg, int *line_nbr, char *line);
+void    error_function(char *msg, int *line_nbr, char *line, int check);
 extern size_t g_written_bytes;
 extern unsigned g_size;
 extern int    g_count;
