@@ -32,7 +32,7 @@ t_op			*find_op(char **crawler)
 
 unsigned char	check_reg_num(int num, char *arg)
 {
-	if (num > 100)
+	if (num > 99)
 		error_function("Wrong reg number", NULL, arg, 1);
 	return (num);
 }

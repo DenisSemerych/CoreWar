@@ -56,8 +56,10 @@ void					check_for_add_sym(char *str)
 	char				*tmp;
 
 	tmp = str;
+	if (*tmp == '-')
+		tmp++;
 	while (*tmp)
-		!ft_isdigit(*tmp) && *tmp != '-' ?
+		!ft_isdigit(*tmp) ?
 			(error_function("Lexical error", NULL, str, 0))
 			: tmp++;
 }

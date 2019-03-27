@@ -51,6 +51,7 @@ typedef struct			s_lable
 	t_inst				*opp;
 }						t_lable;
 
+int						only_comment(char *file);
 void					skip_comment(char **file);
 void					skip_separators(char **file);
 t_list					*tokenize(char *file);

@@ -6,7 +6,7 @@
 /*   By: dsemeryc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 08:53:06 by dsemeryc          #+#    #+#             */
-/*   Updated: 2019/03/27 09:02:40 by dsemeryc         ###   ########.fr       */
+/*   Updated: 2019/03/27 19:05:03 by dsemeryc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ t_list				*tokenize(char *file)
 	t_list			*instructions;
 	t_list			*labels;
 	t_list			*info;
-	t_list			*args;
 
 	init_lists(&instructions, &labels, &info);
 	line_nbr = 1;
@@ -107,14 +106,15 @@ t_list				*tokenize(char *file)
 		skip_separators(&file);
 		*file == '\n' && *file++ ? line_nbr++ : 0;
 		skip_comment(&file);
-		skip_separators(&file);
 		if (*file != '\0' && ft_strchr(file, '\n'))
 			full(info) ? save_instruction(&file, &instructions, &labels,
 					&line_nbr) :
 				check_file(file, &line_nbr);
-		else if (*file != '\0' && !ft_strchr(file, '\n'))
+		else if (*file != '\0' && !ft_strchr(file, '\n')
+				&& !ft_strchr(file, COMMENT_CHAR) &&
+				!ft_strchr(file, ALT_COMMENT_CHAR) && !IS_SEPARATOR(*file))
 			error_function("Missing newline after instruction", NULL, file, 1);
+		skip_separators(&file);
 	}
-	args = create_arg_list(&labels, instructions, info);
-	return (args);
+	return (create_arg_list(&labels, instructions, info));
 }

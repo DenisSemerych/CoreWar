@@ -185,4 +185,3 @@ launch:
 	sti r7, r2, r4
 	sti r8, r2, r5
 	sti r13, r2, r6
-	zjmp %487 # jump + jump_cmd_len + live_cmd_len + 0f
