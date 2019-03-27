@@ -49,14 +49,14 @@ void	draw_winner(t_data *data)
 		winner_color = ((t_champ*)winner->content)->number;
 		winner_name = ((t_champ*)winner->content)->name;
 		wattron(data->vs->info, COLOR_PAIR(winner_color) | A_BOLD);
-		mvwprintw(data->vs->info, IDENT + 20,
+		mvwprintw(data->vs->info, IDENT + 25,
 			IDENT, "Winner is: %s", winner_name);
 		wattroff(data->vs->info, COLOR_PAIR(winner_color) | A_BOLD);
 	}
 	else
 	{
 		wattron(data->vs->info, COLOR_PAIR(RED_LIVE) | A_BOLD);
-		mvwprintw(data->vs->info, IDENT + 20, IDENT, "NO WINNER!!!");
+		mvwprintw(data->vs->info, IDENT + 25, IDENT, "NO WINNER!!!");
 		wattron(data->vs->info, COLOR_PAIR(RED_LIVE) | A_BOLD);
 	}
 	wrefresh(data->vs->info);
